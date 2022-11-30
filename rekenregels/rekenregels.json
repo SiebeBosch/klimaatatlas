@@ -1,0 +1,62 @@
+{
+	"indicators":[
+		{
+			"name": "warm_water",
+			"substance":"Tmod",
+			"filters":[
+				{"type":"consecutive_hours_exceeding_threshold", "args":[12,19]}			
+			]
+		},
+		{
+			"name": "invloed_rwzi",
+			"substance": "frac_rwzi",
+			"filters":[
+				{"type":"exceeding_threshold", "args":[0.2]}		
+			]
+		},
+		{
+			"name": "invloed_riooloverstort",
+			"substance": "frac_rio",
+			"filters":[
+				{"type":"exceeding_threshold", "args":[0.1]}		
+			]
+		},
+		{
+			"name":"warm_en_rwzi",
+			"logical_operation":{
+				"operand1":"warm_water",
+				"operand2":"invloed_rwzi",
+				"operator":"AND"
+			}
+		},
+		{
+			"name":"warm_en_overstort",
+			"logical_operation":{
+				"operand1":"warm_water",
+				"operand2":"invloed_riooloverstort",
+				"operator":"AND"
+			}
+		},
+		{
+			"name":"risico_botulisme",
+			"logical_operation":{
+				"operand1":"warm_en_rwzi",
+				"operand2":"warm_en_overstort",
+				"operator":"OR"
+			}
+		}
+	],
+	"statistics":[
+		{
+			"indicator":"risico_botulisme",
+			"quantity":"hours_per_year",
+			"classes": [
+				{"lowerthreshold":0, "upperthreshold":24, "result":"laag"},
+				{"lowerthreshold":24, "upperthreshold":48, "result":"verhoogd"},
+				{"lowerthreshold":48, "upperthreshold":72, "result":"zeer hoog"},
+				{"lowerthreshold":72, "upperthreshold":9000, "result":"extreem"}
+			]		
+		}
+	]
+
+}
