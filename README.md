@@ -11,3 +11,8 @@ De indicatorwaarden worden vervolgens ruimtelijk geïnterpoleerd naar een waterv
 
 Het resultaat wordt gepubliceerd naar een shapefile en kan door de gebruiker worden gepubliceerd in bijv. ArcGIS online.
 
+De volgende dependencies zijn nodig:
+* geopandas
+
+Een handreiking voor de snelste installatie van geopandas: https://medium.com/analytics-vidhya/fastest-way-to-install-geopandas-in-jupyter-notebook-on-windows-8f734e11fa2b
+
