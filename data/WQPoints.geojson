@@ -1,7 +1,7 @@
 	{
 		"type": "FeatureCollection",
 		"name": "DELWAQ",
-		"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::28992"} },
+		"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::4326"} },
 		"extent": {
 			"minLat": 52.0004645574203,
 			"minLng": 4.35270264938144,
