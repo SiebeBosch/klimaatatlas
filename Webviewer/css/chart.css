@@ -1,0 +1,156 @@
+.chartcontainer {
+    padding: 5px;
+    position: absolute;
+    /* height:400px; */
+    width:600px;
+    top:10px;
+    right:10px;
+    background-color: white;
+    border-radius: 5px;
+    z-index: 9999;
+    box-shadow: 5px 2px 4px #888888;
+}
+
+.chartcontainer {
+    text-align: center;
+}
+
+#dambreakcontainer {
+    padding-left:30px;
+    text-align: left;    
+}
+
+.chartbutton {
+    width:70px;
+    height:35px;
+    margin:1px;
+    background-color: #cea5d1;
+    border-color: #8a6d8c;
+    border-radius: 5px;
+    border-width: 0px;
+}
+
+.chartbutton:selected{
+    background-color: "orange";
+}
+
+
+#chart_title {
+	font-family: "Helvetica";
+    color: rgb(70,70,70);
+    font-size: large;
+    font-weight: bold;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#chart {
+    position: relative;
+    top:10px;
+    margin:10px;
+    color: black;
+}
+
+#chartcontent {
+    margin:50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.fixed-height-chart {
+    height: 400px;
+    width: 550px;
+}
+
+.stats_table {
+	font-family: "Helvetica";
+	font-size: medium;
+	color: rgb(70,70,70);
+    padding: 20px;
+    width:100%;
+}
+
+
+#legend {
+    position: absolute;
+    background-color: white;
+    left:65px;
+    border: 1px solid #adadad;
+    padding:10px;
+    border-radius: 5px;
+    top: 100px;
+}   
+
+
+#legenditem {
+    /* position: absolute; */
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+
+#wp {
+    /* border-color:rgba(50, 84, 168, 1); */
+    background-color:rgba(50, 84, 168, 1);
+    border-width: 0px;
+    /* border-width: 2px; */
+    height:2px;
+    width: 20px;
+    margin-left: 1px;
+}
+
+#zp {
+    /* border-color: rgba(242, 183, 56, 1); */
+    background-color: rgba(242, 183, 56, 1);
+    border-width: 0px;
+    /* border-width: 2px; */
+    height:2px;
+    width: 20px;
+    margin-left: 1px;
+}
+
+#mvlaag {
+    /* border-color:rgba(96, 209, 104, 1); */
+    background-color:rgba(96, 209, 104, 1);
+    border-width: 0px;
+    /* border-width: 2px; */
+    height: 2px;
+    width: 20px;
+    align-self: left;
+    margin-left: 1px;
+}
+
+#mvhoog {
+    /* border-color: rgba(60, 133, 65, 1); */
+    background-color: rgba(60, 133, 65, 1);
+    border-width: 0px;
+    /* border-width: 2px; */
+    height: 2px;
+    width: 20px;
+    margin-left: 1px;
+}
+
+#sim {
+    /* border-color:rgba(255, 99, 132, 1); */
+    background-color:rgba(255, 99, 132, 1);
+    /* border-width: 4px; */
+    border-radius: 3px;
+    border-width: 0px;
+    height: 6px;
+    width: 6px;
+    margin-left: 1px;
+}
+
+#sel {
+    /* border-color:rgba(255, 99, 132, 1); */
+    background-color:orange;
+    /* border-width: 4px; */
+    border-radius: 3px;
+    border-width: 0px;
+    height: 10px;
+    width: 6px;
+    margin-left: 1px;
+}
