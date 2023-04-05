@@ -1,0 +1,37 @@
+let Colorgradients = {
+    "Colorgradients":[
+       {
+            "parameter":"depth",
+            "fromColor":{"R":222,"G":235,"B":247,"A":255},
+            "toColor":{"R":8,"G":68,"B":107,"A":255},
+            "fromValue":0,
+            "toValue":100,
+            "transparentBelowLowest":true,
+            "transparentAtLowest":true,
+            "transparentAboveHighest":false,
+            "transparentAtHighest":false,
+        },
+       {
+            "parameter":"velocity",
+            "fromColor":{"R":255,"G":192,"B":203,"A":255},
+            "toColor":{"R":128,"G":0,"B":128,"A":255},
+            "fromValue":0,
+            "toValue":300,
+            "transparentBelowLowest":true,
+            "transparentAtLowest":false,
+            "transparentAboveHighest":false,
+            "transparentAtHighest":false,
+        },
+       {
+            "parameter":"t_flood",
+            "fromColor":{"R":255,"G":0,"B":0,"A":255},
+            "toColor":{"R":255,"G":255,"B":0,"A":255},
+            "fromValue":0,
+            "toValue":48,
+            "transparentBelowLowest":true,
+            "transparentAtLowest":false,
+            "transparentAboveHighest":false,
+            "transparentAtHighest":false,
+        }
+    ]
+}

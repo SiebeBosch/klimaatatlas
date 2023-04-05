@@ -1,0 +1,27 @@
+.flex-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-child {
+    flex: 1;
+}
+
+.controlscontainer {
+    margin: 20px;
+}
+
+.controlgroup {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.right {
+    float:right;
+}
+
+#button {
+    float: right;
+    margin-top: 10px;
+    width:75px;
+    height: 35px;
+}

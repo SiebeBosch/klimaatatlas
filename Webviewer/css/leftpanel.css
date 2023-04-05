@@ -1,0 +1,276 @@
+/* The sidepanel menu */
+.leftpanel {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%; /* Specify a height */
+    width: 0px; /* 0 width - change this with JavaScript */
+    /* position: fixed; Stay in place */
+    z-index: 999; /* Stay on top */
+    background-color: white; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /*Place content 60px from the top*/
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
+    box-shadow: 5px 2px 4px #888888;  /*hor. offset, vert. offset, blur*/
+  }
+  
+  /* The sidepanel links */
+  .leftpanel a {
+    /* padding: 8px 8px 8px 32px; */
+    text-decoration: none;
+    font-size: 16px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .caret {
+	  position:absolute;
+	  right:50px;
+	  color:grey;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+  .leftpanel a:hover {
+    color: #f1f1f1;
+  }
+  
+  /* Position and style the close button (top right corner) */
+  .leftpanel .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  
+  /* Style the button that is used to open the sidepanel */
+  .openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 9999;
+    position:absolute;
+    background-color:white;
+    color: #6e6e6e;
+    padding: 10px 15px;
+    border: none;
+    box-shadow: 5px 2px 4px #888888;  /*hor. offset, vert. offset, blur*/
+  }
+  
+  .openbtn:hover {
+    background-color: rgb(163, 163, 163);
+  }
+  
+  .slidecontainer {
+  width: 100%; /* Width of the outside container */
+}
+
+.range-wrap {
+  width: 90%; /* Full-width */
+}
+
+/* The slider itself */
+.slider {
+  width: 100%;
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  height: 5px;
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+  margin: 20px 0px 20px 0px;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 10px; /* Set a specific slider handle width */
+  height: 10px; /* Slider handle height */
+  border-radius: 5px;  
+  background: #0075FF; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4CAF50; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+
+#leftLegend {
+  position: relative;
+  width: 80%;
+  background-color: white;
+  color: #818181;
+  font-size: 14px;
+  font-family: helvetica;
+  /* left:65px; */
+  border: 1px solid #adadad;
+  padding:10px;
+  border-radius: 5px;
+  /* top: 100px; */
+}   
+
+
+#leftLegenditem {
+  /* position: absolute; */
+  margin: 1px;
+  display: flex;
+  flex-direction: row;
+}
+
+#class1 {
+  /* border-color:rgba(255, 99, 132, 1); */
+  background-color:green;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 4px;
+  border-width: 0px;
+  height: 8px;
+  width: 8px;
+  margin-left: 1px;
+}
+
+#class2 {
+  /* border-color:rgba(255, 99, 132, 1); */
+  background-color:lightgreen;
+  border-width: 1px;
+  border-color: black;
+  border-radius: 5px;
+  border-width: 0px;
+  height: 10px;
+  width: 10px;
+  margin-left: 1px;
+}
+
+#class3 {
+  /* border-color:rgba(255, 99, 132, 1); */
+  background-color:yellow;
+  border-width: 1px;
+  border-color: black;
+  border-radius: 6px;
+  border-width: 0px;
+  height: 12px;
+  width: 12px;
+  margin-left: 1px;
+}
+
+#class4 {
+  /* border-color:rgba(255, 99, 132, 1); */
+  background-color:orange;
+  border-width: 1px;
+  border-color: black;
+  border-radius: 7px;
+  border-width: 0px;
+  height: 14px;
+  width: 14px;
+  margin-left: 1px;
+}
+
+#class5 {
+  /* border-color:rgba(255, 99, 132, 1); */
+  background-color:red;
+  border-width: 1px;
+  border-color: black;
+  border-radius: 8px;
+  border-width: 0px;
+  height: 16px;
+  width: 16px;
+  margin-left: 1px;
+}
+
+.range {
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  margin: 20px 0px 10px 0px;
+}
+
+.bubble {
+  background: #0075FF;
+  color: white;
+  padding: 4px 12px;
+  position: absolute;
+  border-radius: 4px;
+  left: 50%;
+  transform: translateX(-50%) translateY(35px);
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #0075FF;
+  top: -1px;
+  left: 50%;
+}
+
+.checkboxgroup {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+  /* background-color: #eee; */
+  /* color: #444; */
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  font-family: helvetica;
+  background-color: white;
+  color: #6e6e6e;
+  cursor: pointer;
+  padding: 2px;
+  width: 90%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.collapsiblebutton {
+  font-size: 14px;
+  font-family: helvetica;
+  background-color: white;
+  color: #6e6e6e;
+  cursor: pointer;
+  padding: 2px;
+  width: 90%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+/* .active, .collapsible:hover {
+  background-color: #ccc;
+} */
+
+.collapsiblebutton:hover {
+  background-color: rgb(230, 229, 229);
+}
+
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+  padding: 0 5px;
+  display: none;
+  overflow: hidden;
+  /* background-color: #f1f1f1; */
+}

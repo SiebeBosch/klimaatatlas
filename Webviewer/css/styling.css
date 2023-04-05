@@ -1,0 +1,111 @@
+#mapid { 
+    position: absolute;
+    height: 100%; 
+    width: 100% ; 
+    z-index: 888;
+    top: 0px;
+    left:0px;
+}
+
+
+.my-div-icon {
+    /* background-image: url('logo.svg'); */
+    border-radius: 50%;
+    /* background-color: red; */
+    /* border-color: black;
+    border-width: 1px; */
+    /* border-style: solid; */
+  }
+
+  .tooltip {
+      padding: 1em;
+      direction: ltr;
+      width: 20vw;
+      margin:auto;
+      text-align:justify;
+      word-break: break-word;
+      white-space: pre-line;
+      overflow-wrap: break-word;
+      -ms-word-break: break-word;
+      word-break: break-word;
+      -ms-hyphens: auto;
+      -moz-hyphens: auto;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+  }
+
+  #grafiektitel {
+      align-content: center;
+  }
+
+  .divider {
+    margin-top: 15px;
+    margin-bottom: 0px;
+  }
+  
+  .scenarios {
+    margin-top: 0px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    text-align: left;
+    font-size: 17px;
+    font-family: helvetica;
+    color:#6e6e6e;
+    flex-direction:row;
+  }
+
+  .sectionheader{
+    margin-top: 0px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 17px;
+    font-family: helvetica;
+    color:#6e6e6e;
+    flex-direction:row;
+  }
+
+  .radiogroup {
+      margin-top: 15px;
+      margin-left: 15px;
+      display:flex;
+      flex-direction: column;
+  }
+
+
+  .radiobutton {
+      font-size: 14px;
+      font-family: helvetica;
+      color:rgb(70,70,70);
+    }
+
+    #logo {
+      position: absolute;
+      top: 15px;
+      left:15px;
+      width:150px;
+    }
+
+    #logo2 {
+      position: absolute;
+      top: 10px;
+      left:20px;
+      width:140px;
+    }
+
+/* Dropdown Button */
+.dropdown {
+  background-color: white;
+  color: black;
+  /* padding: 16px; */
+  border: none;
+  cursor: pointer;
+  flex-direction: row;
+  /* width: 90%; */
+  height: 14px;
+  margin-top:5px;
+  margin-bottom:5px;
+  text-align: left;
+  font-size: 14px;
+  font-family: helvetica;
+  color:#6e6e6e;
+}

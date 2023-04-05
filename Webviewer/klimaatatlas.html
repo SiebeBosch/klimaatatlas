@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- copyright 2020, Siebe Bosch -->
+  <title>Klimaatatlas Rijnland</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.0.0-beta.7/chart.min.js"></script> -->
+  <script src="https://kit.fontawesome.com/42e5b77852.js" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="js/panels.js"></script>
+  <script type="text/javascript" src="js/Reaches.js"></script>
+  <script type="text/javascript" src="js/Calculationpoints.js"></script>
+  <script type="text/javascript" src="js/CalcpntResults.js"></script>
+  <script type="text/javascript" src="js/Structures.js"></script>
+  <script type="text/javascript" src="js/StructureResults.js"></script>
+  <script type="text/javascript" src="js/measurements.js"></script>
+  <script type="text/javascript" src="js/WQPoints.js"></script>
+  <script type="text/javascript" src="js/WQAreas.js"></script>
+  <script type="text/javascript" src="js/WQResults.js"></script>
+  <script type="text/javascript" src="js/Colorgradients.js"></script>
+  <script type="text/javascript" src="js/subcatchments.js"></script>
+  <script type="text/javascript" src="js/generalfunctions.js"></script>
+  <script type="text/javascript" src="js/meshfunctions.js"></script>
+  <script type="text/javascript" src="js/chartfunctions.js"></script>
+  <script type="text/javascript" src="js/drawingfunctions.js"></script>
+  <script type="text/javascript" src="js/mapfunctions.js"></script>
+  <script type="text/javascript" src="js/validationtables.js"></script>
+  <script type="text/javascript" src="js/Mesh.js"></script>
+  <script type="text/javascript" src="js/Legend.js"></script>
+  <script type="text/javascript" src="js/Settings.js"></script>
+  <script type="text/javascript" src="js/Centroids.js"></script>
+  <script type="text/javascript" src="js/MeshResults.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/chart.css">
+  <link rel="stylesheet" type="text/css" href="css/map.css">
+  <link rel="stylesheet" type="text/css" href="css/legend.css">
+  <link rel="stylesheet" type="text/css" href="css/styling.css">
+  <link rel="stylesheet" type="text/css" href="css/leftpanel.css">
+  <link rel="stylesheet" type="text/css" href="css/timeslider.css">
+  <link rel="stylesheet" type="text/css" href="css/rightpanel.css">
+  <link rel="stylesheet" type="text/css" href="css/validationtable.css">
+  <link rel="stylesheet" type="text/css" href="css/weir-schematics.css">
+
+  <script type="text/javascript">
+
+    // Load the Visualization API and the corechart package.
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart2DDepth);
+
+
+    let show2DresultsInChart = true;
+
+    let scenarioIdx = 0;                        //we initialize the scenarios to be the first scenario from the array
+    let substanceIdx = 0;
+    let opacity = 0.9;                          //we initialize the opacity of our data layer to 0.9
+
+    let viewmode = Settings.viewmode;           //vectors or tiles
+    let minzoomlevel = Settings.minzoomlevel;
+    let maxzoomlevel = Settings.maxzoomlevel;
+    let maxNativeZoom = Settings.maxnativezoom;
+    let zoomthreshold = 12;                     //the zoomlevel above/below which we'll switch between markers and mesh
+    let lastTimestepIdx = WQResults.scenarios[scenarioIdx].timesteps_second.length - 1;
+
+    let active_breach_id;
+    let active_dambreak_parameter = "dambreak_crest_width";
+
+    //read the color gradients from our Colorgradients.js file
+    //first item is for depth
+    //second item is for velocity
+    //third item is for t_inund
+
+    let concentrationGradient = Colorgradients.Colorgradients[substanceIdx];
+
+    // let depthGradient = Colorgradients.Colorgradients[0];
+    // let velocityGradient = Colorgradients.Colorgradients[1];
+    // let tinundGradient = Colorgradients.Colorgradients[2];
+
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+    function movePopup(e, depth, cellidx) {
+      let bubble = document.querySelector("#bubble");
+      bubble.style.left = (e.x) - 115 + "px";
+      bubble.style.top = e.y - 11 + "px";
+      bubble.style.width = "100px";
+      bubble.style.display = "block";
+      // bubble.innerHTML = "<div class='tooltip'>cel: #" + cellidx + "<br>tijdstap: " + getTimestep() + "<br>diepte: " + depth + " cm. " + "<br>t-inundatie: " + MeshResults.scenarios[scenarioIdx].features[cellidx].tinu + " uur.</div>";
+    }
+
+  </script>
+
+</head>
+
+<body>
+
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <button id="openLeftPanel" class="openbtn" onclick="openLeftPanel()">&#9776;</button>
+  <div id="timesliderpanel">
+    <div id="legendtitle">Tijd: 0d 00:00</div>
+    <div class="range-wrap"><input type="range" min="0" max="100" value="0" class="timeslider" id="timeSlider"
+        onchange="setTimestep(value)">
+    </div>
+    <div id="timecontrols">
+      <div class="playcontrols" onclick="rewind()"><i class="fas fa-play fa-flip-horizontal"></i><i
+          class="fas fa-play fa-flip-horizontal"></i></div>
+      <!-- <div class="playcontrols" onclick="playBack()"><i class="fas fa-play fa-flip-horizontal"></i></div> -->
+      <div class="playcontrols" onclick="stepBack()"><i class="fas fa-step-forward fa-flip-horizontal"></i></div>
+      <!-- <div class="playcontrols" onclick="pause()"><i class="fas fa-pause"></i></div> -->
+      <div class="playcontrols" onclick="stepForward()"><i class="fas fa-step-forward"></i></div>
+      <!-- <div class="playcontrols" onclick="playForward()"><i class="fas fa-play"></i></div> -->
+      <div class="playcontrols" onclick="fastforward()"><i class="fas fa-play"></i><i class="fas fa-play"></i></div>
+    </div>
+  </div>
+  <div id="leftpanel" class="leftpanel">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeLeftPanel()">&times;</a>
+    <hr class="divider">
+    <div class="radiogroup">
+      <div class="sectionheader">Achtergrond</div>
+      <div class="radiobutton"><input type="radio" name="backdrop" value="OSM" checked="true"
+          onclick="refreshEntireMap('OSM')">openstreetmap</div>
+      <div class="radiobutton"><input type="radio" name="backdrop" value="LUFO"
+          onclick="refreshEntireMap('LUFO')">luchtfoto</input></div>
+      <div class="radiobutton"><input type="radio" name="backdrop" value="OSM_DARK"
+          onclick="refreshEntireMap('OSM_DARK')">donker</input></div>
+    </div>
+    <hr class="divider">
+    <div class="radiogroup">
+      <div class="sectionheader">Kaartlagen</div>
+      <div class="radiobutton"><input type="checkbox" id="reaches" value="false"
+          onclick="plotReaches()">watergangen</input></div>
+      <div class="radiobutton"><input type="checkbox" id="wqpoints" value="false"
+          onclick="plotWQObjects()">waterkwaliteitspunten</input></div>
+      <div class="radiobutton"><input type="checkbox" id="wqareas" value="true" checked="true"
+          onclick="plotWQObjects()">watervlakken</input></div>
+    </div>
+    <hr class="divider">
+    <div class="radiogroup">
+      <div class="sectionheader">Scenario & Parameter</div>
+      <select class="scenarios" id="scenarioslist" onchange="switchScenario()"></select>
+      <select class="scenarios" id="substanceslist" onchange="switchSubstance()"></select>
+    </div>
+    <hr class="divider">
+    <div class="radiogroup">
+      <div class="sectionheader">Tonen</div>
+      <div class="radiobutton"><input type="radio" name="parameter2D" value="waterdepth" checked="true"
+          onclick="selectedResults = 0;Update1DObjectsStyle()" />Momentane waarde</div>
+      <div class="radiobutton"><input type="radio" name="parameter2D" value="maxdepth"
+          onclick="selectedResults = 1;Update1DObjectsStyle()" />Maximum</input></div>
+      <div class="radiobutton"><input type="radio" name="parameter2D" value="maxdepth"
+          onclick="selectedResults = 2;Update1DObjectsStyle()" />Minimum</input></div>
+      <div class="radiobutton"><input type="radio" name="parameter2D" value="maxdepth"
+          onclick="selectedResults = 3;Update1DObjectsStyle()" />Gemiddelde</input></div>
+    </div>
+    <hr class="divider">
+    <div class="radiogroup">
+      <div class="sectionheader">Opties</div>
+      <div class="radiobutton"><input type="checkbox" id="grafiek" checked="true" onclick="toggleChart()">toon
+        grafiek</input></div>
+      <div class="radiobutton"><input type="checkbox" id="grafiek" checked="true" onclick="toggleSlider()">toon
+        slider</input></div>
+    </div>
+    <hr class="divider">
+    <div class="radiogroup">
+      <div class="sectionheader">Transparantie</div>
+      <div class="range-wrap"><input type="range" min="0" max="100" value="0" class="slider" id="transparency"
+          onChange="changeTransparency()"></div>
+    </div>
+    <hr class="divider">
+    <img id="logo" src="./images/HYDRO_LOGO_DEF.png">
+  </div>
+  <div id="mapid"></div>
+  <div id="bubble"></div>
+  <div class="chartcontainer" id="mychart">
+    <div id="chart_title">Verloop concentratie</div>
+    <div id="chart_div"></div>
+    <div id="dambreakcontainer">
+      <button class="chartbutton" id="cwbutton"
+        onclick="toggleDambreakParameter('dambreak_crest_width')">Breedte</button>
+      <button class="chartbutton" id="clbutton" onclick="toggleDambreakParameter('dambreak_levels')">Hoogtes</button>
+      <button class="chartbutton" id="qbutton" onclick="toggleDambreakParameter('dambreak_discharge')">Debiet</button>
+      <button class="chartbutton" id="cumbutton" onclick="toggleDambreakParameter('dambreak_cumulative_discharge')">Volume</button>
+      <button class="chartbutton" id="headbutton" onclick="toggleDambreakParameter('dambreak_head')">Verval</button>
+      <!-- <button class="chartbutton" id="growthbutton" onclick="toggleDambreakParameter('dambreak_growth')">Groei</button> -->
+    </div>
+    <div id="stats_div" class="stats_table">
+      <table id="stats_table" class="stats_table">
+        <tr>
+          <td>Maximale concentratie (mg/l)</td>
+          <td id="maxd"></td>
+        </tr>
+        <tr>
+          <td>Minimale concentratie (mg/l)</td>
+          <td id="maxv"></td>
+        </tr>
+        <tr>
+          <td>Gemiddelde concentratie (mg/l)</td>
+          <td id="tinund"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div id="legendcontainer">
+    <div id="legendtitle">Legenda</div>
+    <div id="legendlayeritems" class="legenditems">
+      <div id="legendlayer" class="legendunit">Waterdiepte (cm)</div>
+      <div id="legenditem">
+        <div
+          style="background-color: rgb(0,31,43); text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>&le; 100 cm</div>
+      </div>
+      <div id="legenditem">
+        <div
+          style="background-color: rgb(0, 65, 90); text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>&le; 75 cm</div>
+      </div>
+      <div id="legenditem">
+        <div
+          style="background-color: rgb(0, 113,156); text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>&le; 50 cm</div>
+      </div>
+      <div id="legenditem">
+        <div
+          style="background-color: rgb(0, 155, 214); text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>&le; 25 cm</div>
+      </div>
+      <div id="legenditem">
+        <div
+          style="background-color: rgb(0, 184, 255); text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>&le; 5 cm</div>
+      </div>
+      <div id="legenditem">
+        <div
+          style="background-color: white; text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>0 tot 5 cm</div>
+      </div>
+    </div>
+    <br />
+    <div id="legendobjectitems" class="legenditems">
+      <!-- <div id="legendobjects" class="legendunit">Kaartobjecten</div>
+      <div id="legenditem">
+        <div
+          style="background-color: blue; text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>waterhoogte</div>
+      </div>
+      <div id="legenditem">
+        <div
+          style="background-color: red; text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>debiet</div>
+      </div>
+      <div id="legenditem">
+        <div
+          style="background-color: purple; text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>knelpunt</div>
+      </div>
+      <div id="legenditem">
+        <div
+          style="background-color: #cea5d1; text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;">
+        </div>
+        <div>kadebreuk</div>
+      </div> -->
+    </div>
+  </div>
+  <div id="rightpanel" class="rightpanel closed">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeRightPanel()">&times;</a>
+    <div style='margin-top:20px'>
+      <a id="ObjectID">Validation report</a>
+      <div class="parametertable">
+        <table id="parameterstable" style="width:100%">
+          <tr>
+            <th>Parameter</th>
+            <th>Source value</th>
+            <th>Assigned value</th>clsResultsLocation
+          </tr>
+        </table>
+      </div>
+      <div class="rulestable">
+        <table id="rulestable" style="width:100%">
+          <tr>
+            <th>Validation Rule</th>
+            <th>Left val</th>
+            <th>Right val</th>
+            <th>Success</th>
+            <th>Penalty</th>
+            <th>Parameter</th>
+            <th>Original value</th>
+            <th>Overruled by</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    StyleDambreakButtons(active_breach_id, active_dambreak_parameter);
+
+    class clsResultsLocation {
+      constructor(ID, lat, lon, ObjectType, description) {
+        this.ID = ID;
+        this.lat = lat;
+        this.lon = lon;
+        this.ObjectType = ObjectType;
+        this.description = description;
+        this.point = L.latLng(lat, lon);
+        let markerHtmlStyles = `background-color: blue; border-radius: 50%; height:100%; width:100%;box-shadow: 5px 2px 4px #888888;`;
+        this.icon = L.divIcon({ iconSize: 15, className: 'my-div-icon', html: `<div style="${markerHtmlStyles}">&nbsp;</div>` });
+        if (ObjectType === 'calculationpoint') {
+          this.marker = L.circleMarker(this.point, { pane: 'results', renderer: myRenderer, radius: 8, fillColor: "#006AC7", stroke: true, weight: 10, color: "transparent", fillOpacity: 1, draggable: false, icon: this.icon });
+        } else if (ObjectType === 'structure') {
+          this.marker = L.circleMarker(this.point, { pane: 'results', renderer: myRenderer, radius: 8, fillColor: "red", stroke: true, weight: 10, color: "transparent", fillOpacity: 1, draggable: false, icon: this.icon });
+        } else if (ObjectType === 'wqpoint') {
+          this.marker = L.circleMarker(this.point, { pane: 'results', renderer: myRenderer, radius: 6, fillColor: "purple", stroke: true, weight: 10, color: "transparent", fillOpacity: 1, draggable: false, icon: this.icon });
+        } else if (ObjectType === 'dambreak') {
+          this.marker = L.circleMarker(this.point, { pane: 'results', renderer: myRenderer, radius: 8, fillColor: "#b966b9", stroke: true, weight: 1, color: "#b966b9", fillOpacity: 1, draggable: false, icon: this.icon });
+        }
+        this.tooltip = '<div class="tooltip">Locatie-ID: ' + ID + "</div>";
+      }
+    }
+
+
+    document.querySelector("#timeSlider").max = lastTimestepIdx;
+
+    function switchScenario() {
+      scenarioIdx = document.getElementById("scenarioslist").selectedIndex;
+      substanceIdx = document.getElementById("substanceslist").selectedIndex;
+      rebuildLegendItems();
+      BreachLocationPointsAndMarkers = [];
+      // initializeBreachLocationPointAndMarker();
+      // plotBreachLocations();
+      Update1DObjectsStyle();    //new!
+    }
+
+
+    function switchSubstance() {
+      substanceIdx = document.getElementById("substanceslist").selectedIndex;
+      rebuildLegendItems();
+      BreachLocationPointsAndMarkers = [];
+      // // initializeBreachLocationPointAndMarker();
+      // plotBreachLocations();
+      Update1DObjectsStyle();    //new!
+    }
+
+
+    function GetMaxObserved(ModelID, ObjectType) {
+      let myMeas = measurements.locations.find(x => x.ModelID === ModelID);
+      if (myMeas) {
+        if (ObjectType == "calculationpoint") {
+          return Math.max(...myMeas.h.values);
+        } else if (ObjectType == 'structure') {
+          return Math.max(...myMeas.Q.values);
+        }
+      }
+    }
+
+    function GetMeasAliasFromModelID(ModelID) {
+      let myMeas = measurements.locations.find(x => x.ModelID === ModelID);
+      if (myMeas) {
+        return myMeas.Alias;
+      }
+    }
+
+    function GetMeasIDFromModelID(ModelID) {
+      let myMeas = measurements.locations.find(x => x.ModelID === ModelID);
+      if (myMeas) {
+        return myMeas.ID;
+      }
+    }
+
+
+    function GetMaxSimulated(ID, ObjectType, scenarioIdx) {
+
+      if (ObjectType == 'calculationpoint') {
+        let myFeature = CalcpntResults.scenarios[scenarioIdx].features.find(x => x.id === ID);
+        if (myFeature) {
+          return Math.max(...myFeature.waterlevel);
+        }
+      } else if (ObjectType == 'structure') {
+        let myFeature = StructureResults.scenarios[scenarioIdx].features.find(x => x.id === ID);
+        if (myFeature) {
+          return Math.max(...myFeature.discharge);
+        }
+      }
+    }
+
+    function CircleRadiusFromLevelDifference(diff) {
+      let absdiff = Math.abs(diff);
+      if (absdiff >= 1.5) {
+        return 14;
+      } else if (absdiff >= 1) {
+        return 12;
+      } else if (absdiff >= 0.75) {
+        return 10;
+      } else if (absdiff >= 0.5) {
+        return 8;
+      } else if (absdiff >= 0.3) {
+        return 7;
+      } else {
+        return 5;
+      }
+    }
+    function refreshEntireMap(BG) {
+      plotBackgroundMap(BG).then(() => {
+        setTimestep(document.querySelector("#timeSlider").value);
+        Update1DObjectsStyle();
+      })
+    }
+
+    //populate the select item with the available scenario's and populate the substances list with the available substances
+    //we populate the list of substances based on the content of the first scenario we encounter
+    WQResults.scenarios.forEach((item) => this.addScenario(item));
+    WQResults.scenarios[0].substances.forEach((item) => this.addSubstance(item));
+
+    function addScenario(item) {
+      let myscenarios = document.querySelector("#scenarioslist");
+      let option = document.createElement('option');
+      option.setAttribute('value', item.scenario);
+      option.appendChild(document.createTextNode(item.scenario));
+      myscenarios.appendChild(option);
+    }
+
+    function addSubstance(item) {
+      console.log("adding substance ", item);
+      let mysubstances = document.querySelector("#substanceslist");
+      let option = document.createElement('option');
+      option.setAttribute('value', item.scenario);
+      option.appendChild(document.createTextNode(item.substance));
+      mysubstances.appendChild(option);
+    }
+
+
+    function rewind() {
+      document.querySelector("#timeSlider").value = parseInt(document.querySelector("#timeSlider").value) - 10;
+      setTimestep(document.querySelector("#timeSlider").value); //for some reason the onchange event is not triggered by the line above
+      Update1DObjectsStyle();
+    }
+
+    function stepBack() {
+      document.querySelector("#timeSlider").value = parseInt(document.querySelector("#timeSlider").value) - 1;
+      setTimestep(document.querySelector("#timeSlider").value); //for some reason the onchange event is not triggered by the line above 
+      Update1DObjectsStyle();
+    }
+
+    function stepForward() {
+      document.querySelector("#timeSlider").value = parseInt(document.querySelector("#timeSlider").value) + 1;
+      setTimestep(document.querySelector("#timeSlider").value); //for some reason the onchange event is not triggered by the line above
+      Update1DObjectsStyle();
+    }
+
+    function fastforward() {
+      document.querySelector("#timeSlider").value = parseInt(document.querySelector("#timeSlider").value) + 10;
+      setTimestep(document.querySelector("#timeSlider").value); //for some reason the onchange event is not triggered by the line above
+      Update1DObjectsStyle();
+    }
+
+    async function setTimestep(tsIdx) {
+
+      console.log("Setting timestep to ", tsIdx)
+
+      //set the timeslider's title
+      let seconds = WQResults.scenarios[scenarioIdx].timesteps_second[tsIdx];
+      let T0Str = WQResults.scenarios[scenarioIdx].SimulationT0;
+      // let Date = T0Str.addsec
+
+      let timeObject = new Date(T0Str);
+      // timeObject = Date.parse(T0Str);     
+      // timeObject = timeObject + seconds;
+      let curDateTime = new Date(+timeObject + seconds * 1000)
+
+      // let DambreakT0Seconds = MeshResults.scenarios[scenarioIdx].DambreakT0Seconds;
+      let T0 = new Date(T0Str.substr(0, 4), T0Str.substr(5, 2), T0Str.substr(8, 2), '00', '00', '00')
+
+      let dagen = Math.floor(seconds / (3600 * 24));
+      let remaining = seconds % (3600 * 24);
+      let uren = Math.floor(remaining / 3600);
+      remaining = seconds % (60);
+      let minuten = 60 * remaining;
+      // document.querySelector("#legendtitle").innerText = "Tijd: " + dagen + "d " + uren + ":" + minuten; //expressed in d.h.m
+      document.querySelector("#legendtitle").innerText = curDateTime.toLocaleDateString('nl-NL');    //expressed as date + time
+
+      //update the depths map with the current timestep
+      Update1DObjectsStyle();
+
+    }
+
+
+
+    // javascript function to collapse the checkbox groups
+    var coll2 = document.getElementsByClassName("collapsiblebutton");
+    var i;
+
+    for (i = 0; i < coll2.length; i++) {
+      coll2[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        var content = this.parentNode.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+
+    let itemsThreshold = 5000;
+    function countItems() {
+      return calculationpoints.locations.length;
+    }
+
+    function setBubble(range, bubble) {
+      const val = range.value;
+      const min = range.min ? range.min : 0;
+      const max = range.max ? range.max : 100;
+      const percentage = 5 + Number(((val - min) * 85) / (max - min));
+      bubble.innerHTML = val;
+
+      // Sorta magic numbers based on size of the native UI thumb
+      bubble.style.left = `calc(${percentage}% + (${8 - percentage * 0.15}px))`;
+    }
+
+    //global variables for this application
+    let zoomlevel = 12;
+    let activeChartModule = Settings.initialChartModule;  //initialize which results to plot in the chart from our external Settings file
+    let mymap = new L.map('mapid', { minZoom: minzoomlevel, maxZoom: maxzoomlevel, zoomControl: false, scrollWheelZoom: true }).setView([52.1, 5.988751316], zoomlevel).on('moveend', () => { /*console.log("Calling redrawselectedmap from moveend");*/ Update1DObjectsStyle() }).on('zoomend', () => { /*console.log("Calling redrawselectedmap from zoomend");*/ Update1DObjectsStyle() });
+    mymap.on('click', (e) => {
+      drawChartWQForCoordinate(e.latlng);
+    });
+
+
+    //create panes for the layer ordering
+    mymap.createPane('mesh');
+    mymap.createPane('overlays');
+    mymap.createPane('results');
+    // mymap.getPane('mesh').style.zIndex = 650;
+    // mymap.getPane('overlays').style.zIndex = 651;
+    // mymap.getPane('results').style.zIndex = 652;
+
+    window.L.control.zoom({ position: 'bottomleft' }).addTo(mymap);
+    let myRenderer = L.canvas({ padding: 0.5 });
+    let backgroundLayerGroup = window.L.layerGroup().addTo(mymap);  //this group will only contain the background layer
+    let featureLayerGroup = window.L.layerGroup().addTo(mymap);     //this group will contain contextual features such as (sub)catchments
+
+    let calculationPointsLayerGroup = window.L.layerGroup().addTo(mymap);     //this group will contain the 1D calculation points results
+    if (Settings.initialChartModule == "1D") {
+      calculationPointsLayerGroup.on('click', (e) => {
+        drawChart1DForCoordinate(e.properties.ID);
+      });
+    }
+
+    let structuresLayerGroup = window.L.layerGroup().addTo(mymap);  //this group will contain the 1D structures results
+    if (Settings.initialChartModule == "1D") {
+      structuresLayerGroup.on('click', (e) => {
+        drawChart1DForCoordinate(e.properties.ID);
+      });
+    }
+
+
+    let linesLayerGroup = window.L.featureGroup().addTo(mymap);      //this group will only contain line elements such as reaches
+    let meshLayerGroup = window.L.layerGroup().addTo(mymap);     //this group will contain the mesh with water depths
+
+    let markerLayerGroup = window.L.featureGroup().addTo(mymap);      //this group will only contain markers
+    let wqpointsLayerGroup = window.L.featureGroup().addTo(mymap);    //this group will only contain wqpoints
+    let wqareasLayerGroup = window.L.featureGroup().addTo(mymap);     //this group will only contain wq areas
+    let breachesLayerGroup = window.L.featureGroup().addTo(mymap);    //this group will only contain breach locations and has to stay on top!
+    var imageLayerGroup = L.layerGroup().addTo(mymap);                //this
+    var tilesLayerGroup = L.layerGroup().addTo(mymap);                //this group will contain the tiles
+    let pointsAndMarkers = [];
+    let BreachLocationPointsAndMarkers = [];
+    let selectedResults = 0; //initialize the 1D results by showing waterlevel
+
+
+    ResultsLocations = [];
+
+    //initilize our map, zoom extent & objects
+    //first we fit to the extent as specified in Tilemaps.js
+    fitMapToExtents(WQPoints.extent.minLat, WQPoints.extent.minLng, WQPoints.extent.maxLat, WQPoints.extent.maxLng);
+    initializeMap();
+    // initializeBreachLocationPointAndMarker();
+
+    //rebuild the legend items, based on the map selection
+    rebuildLegendItems();
+
+    //add the breach locations
+    plotBreachLocations();
+
+    plotReaches();
+    plotWQObjects();
+    Update1DObjectsStyle();
+
+    function toggleChartResultsModule() {
+      //toggles between 2D mode for chart creation and 1D mode 
+      if (activeChartModule == "2D") {
+        activeChartModule = "1D";
+        mymap.off('click');         //remove the 2D event listener from our 2D enviroment
+        calculationPointsLayerGroup.on('click', (e) => {
+          drawChart1D(e.properties.ID);
+        });
+      } else {
+        activeChartModule = "2D";
+        calculationPointsLayerGroup.off('click'); //remove the 1D event listener from our 1D environment
+        mymap.on('click', (e) => {
+          drawChart2DForCoordinate(e.latlng);
+        });
+      }
+    }
+
+    function rebuildLegendItems() {
+
+      console.log("rebuilding legend items. selectedResults is ", selectedResults, "; substanceIdx is ", substanceIdx);
+
+      //remove all existing children with id 'legenditem'
+      let legendLayerItems = document.getElementById("legendlayeritems");
+      var child = legendLayerItems.lastElementChild;
+      while (child.id === 'legenditem') {
+        legendLayerItems.removeChild(child);
+        child = legendLayerItems.lastElementChild;
+      }
+
+      //set the legend unit
+      let legendUnit = document.getElementById("legendlayer");
+      legendUnit.textContent = Legends.legends[substanceIdx].title;
+
+      Legends.legends[substanceIdx].classes.forEach((element) => {
+        //generate the color classes
+        let legendItem = document.createElement('div');
+        legendItem.id = 'legenditem';
+
+        let legendItemColor = document.createElement('div');
+        legendItemColor.innerHTML = `<div style="background-color: ${element.color}; text-align:center; border:1px solid gray; border-radius: 50%; height:11px; width:11px;box-shadow: 5px 2px 4px #888888;"></div>`;
+
+        let legendItemText = document.createElement('div');
+        legendItemText.textContent = element.title;
+
+        legendItem.appendChild(legendItemColor);
+        legendItem.appendChild(legendItemText);
+        legendLayerItems.appendChild(legendItem);
+
+      })
+    }
+
+
+    function plotMarkerOfType(item) {
+      if (item.ObjectType == 'calculationpoint') {
+        item.marker.addTo(calculationPointsLayerGroup);
+        item.marker.on('mouseover', (e) => {
+          let radius = item.marker.options.radius;
+          radius = radius * 1.5;
+          item.marker.setStyle({ radius: radius });
+          show2DresultsInChart = false;
+        });
+        item.marker.on('mouseout', (e) => {
+          let radius = item.marker.options.radius;
+          radius = radius / 1.5
+          item.marker.setStyle({ radius: radius });
+          show2DresultsInChart = true;
+        });
+        item.marker.on('click', (e) => {
+          active_breach_id = undefined;
+          StyleDambreakButtons(active_breach_id, active_dambreak_parameter);
+          drawChart1D(item.ID, item.ObjectType);
+        });
+      } else if (item.ObjectType == 'structure') {
+        item.marker.addTo(structuresLayerGroup);
+        item.marker.on('mouseover', (e) => {
+          let radius = item.marker.options.radius;
+          radius = radius * 1.5;
+          item.marker.setStyle({ radius: radius });
+          show2DresultsInChart = false;
+        });
+        item.marker.on('mouseout', (e) => {
+          let radius = item.marker.options.radius;
+          radius = radius / 1.5;
+          item.marker.setStyle({ radius: radius });
+          show2DresultsInChart = true;
+        });
+        item.marker.on('click', (e) => {
+          active_breach_id = undefined;
+          StyleDambreakButtons(active_breach_id, active_dambreak_parameter);
+          drawChart1D(item.ID, item.ObjectType);
+        });
+
+      } else if (item.ObjectType == '2DCell') {
+        item.marker.addTo(markerLayerGroup);
+
+      } else if (item.ObjectType == 'dambreak') {
+        item.marker.addTo(breachesLayerGroup);
+        item.marker.on('mouseover', (e) => {
+          let radius = item.marker.options.radius;
+          radius = radius * 1.5;
+          item.marker.setStyle({ radius: radius });
+          show2DresultsInChart = false;
+        })
+        item.marker.on('mouseout', (e) => {
+          let radius = item.marker.options.radius;
+          radius = radius / 1.5;
+          item.marker.setStyle({ radius: radius });
+          show2DresultsInChart = true;
+        });
+        item.marker.on('click', (e) => {
+          active_breach_id = item.ID;
+          StyleDambreakButtons(active_breach_id, active_dambreak_parameter);
+          drawDambreakChart(item.ID, active_dambreak_parameter);
+        });
+
+      } else if (item.ObjectType == 'wqpoint') {
+        item.marker.addTo(wqpointsLayerGroup);
+        item.marker.on('mouseover', (e) => {
+          let radius = item.marker.options.radius;
+          radius = radius * 1.5;
+          item.marker.setStyle({ radius: radius });
+          // show2DresultsInChart = false;
+        });
+        item.marker.on('mouseout', (e) => {
+          let radius = item.marker.options.radius;
+          radius = radius / 1.5
+          item.marker.setStyle({ radius: radius });
+        });
+        item.marker.on('click', (e) => {
+          console.log("wqpoint clicked: ", item);
+          drawChart1D(item.ID, item.ObjectType, substanceIdx);
+        });
+      } else {
+        console.log("Object type not recognized: ", item.ObjectType);
+      }
+    }
+
+    function plotBreachLocations(item) {
+      breachesLayerGroup.clearLayers();
+      BreachLocationPointsAndMarkers.forEach(item => { plotMarkerOfType(item, "dambreak"); });
+    }
+
+
+    function getTimestep() {
+      return document.querySelector("#timeSlider").value;
+    }
+
+
+    function plotReaches() {
+      //remove all existing layers from our layergroup
+      featureLayerGroup.clearLayers();
+
+      if (Reaches && ("features" in Reaches)) {
+        //if checked, add the background reaches
+        if (document.getElementById("reaches").checked) {
+          L.geoJson(Reaches, {
+            // pane: 'top',
+            style: {
+              color: "rgb(245, 113, 234)",
+              weight: 2,
+              pane: 'overlays'
+            }
+          }).addTo(featureLayerGroup);
+        };
+        // mymap.fitBounds(featureLayerGroup.getBounds());
+
+      }
+
+    }
+
+
+    function initializeCalculationpoints() {
+      if (Calculationpoints && "features" in Calculationpoints) {
+        //this function populates the array with all point objects and assigns a marker to each of them
+        let points = Calculationpoints;             //reads the locations from our data.js file
+        points.features.forEach((item) => { initializeResultsLocation(item, "calculationpoint") });
+      }
+    }
+
+    function initializeStructures() {
+      if (Structures && "features" in Structures) {
+        //this function populates the array with all point objects and assigns a marker to each of them
+        let points = Structures;             //reads the locations from our data.js file
+        points.features.forEach((item) => { initializeResultsLocation(item, "structure") });
+      }
+    }
+
+    function initializeWQAreas() {
+
+      // Add the GeoJSON layer to the map
+      L.geoJSON(WQAreas, {
+        onEachFeature: function (feature, layer) {
+          // Bind the onclick event to the feature
+          layer.on('click', function () {
+            // Do something when the feature is clicked
+            alert("polygon clicked");
+            console.log("coordinate ", feature.latlng);
+          });
+        }
+      }).addTo(wqareasLayerGroup);
+
+
+
+      // let areas = WQAreas;
+      // console.log("Number of water surface areas is ", areas.features.length);
+
+      // // your json var: wqareas
+      // WQAreas.features.forEach(function (item) {
+      //   var polygon = L.polygon(item.geometry.coordinates, {
+      //     weight: 1,
+      //     fillOpacity: 0.7,
+      //     color: 'white',
+      //     dashArray: '3'
+      //   }).addTo(mymap);
+      // });
+
+
+    }
+
+
+    function initializewqpoints() {
+
+      console.log("Number of WQPoints is ", WQPoints.length);
+
+      let points = WQPoints;
+
+      console.log("Number of WQPoints is ", points.length);
+      points.features.forEach((item) => { initializeResultsLocation(item, "wqpoint") });
+    }
+
+    function initializeResultsLocation(item, ObjectType, index) {
+      let ResultsLocation = new clsResultsLocation(item.properties.i, item.geometry.coordinates[1], item.geometry.coordinates[0], ObjectType, item.properties.description);
+      // ResultsLocation.marker.bindTooltip(ResultsLocation.tooltip),
+      // ResultsLocation.marker.on('click', (e) => {
+
+      //   //let validationResult = getValidationResult(item.ID);
+
+      //   // PopulateParametersTable(validationResult);
+      //   // populateRulesTable(validationResult);
+
+      //   // let data = getExceedanceData(item.ID);
+      //   // openRightPanel();
+      //   // let centerxy = WGS842RD(item.lat, item.lon);
+
+      //   // //change the object title in the context panel
+      //   // let objectID = document.getElementById("ObjectID");
+      //   // objectID.innerHTML = item.ID + " verdict: " + item.verdict;
+
+      //   //here we are dealing with an asychronous request, so all other actions must wait until the surface levels have been successfully retrieved
+      //   // getElevationPercentilesAndCompleteDataset(item, data, centerxy, 10, [0.05, 0.95]);
+      // });
+      // console.log("Pushing resultslocation ", ResultsLocation);
+      ResultsLocations.push(ResultsLocation);
+    }
+
+    function plotWQObjects() {
+
+      //initialize by clearing all existing layers and the array with results locations
+      wqpointsLayerGroup.clearLayers();
+      wqareasLayerGroup.clearLayers();
+      ResultsLocations = [];
+
+      // initializeCalculationpoints();
+      // initializeStructures();
+
+      if (document.getElementById("wqpoints").checked) {
+        console.log("Initializing wq points");
+        initializewqpoints();
+      } else if (document.getElementById("wqareas").checked) {
+        console.log("Initializing water surface areas");
+        initializeWQAreas();
+      } else {
+        console.log("clearing wqpoints layergroup");
+      }
+      ResultsLocations.forEach(item => plotMarkerOfType(item));
+
+      console.log("Number of resultslocations: ", ResultsLocations.length);
+
+      Update1DObjectsStyle();
+    }
+
+    function Update1DObjectsStyle() {
+      //this function updates the styling of calculation points. For now we only plot the difference beween calculated and observed
+
+      console.log("Updating 1D objects style for  ", ResultsLocations.length, " items");
+      console.log("Active scenario index is ", scenarioIdx);
+      console.log("Active substance index is ", substanceIdx);
+      console.log("selectedResults is ", selectedResults);
+
+
+
+
+      let featureIdx = 0;
+      ResultsLocations.forEach(item => {
+
+        // console.log("Feature Idx is ", featureIdx);
+
+        //depending on the ObjectType will we retrieve data to show in the tooltip
+        if (item.ObjectType === 'hotspot') {
+          let tooltip = '<div class="tooltip">Hotspot ID: ' + item.ID + "<br>Omschrijving: " + item.description + "</div>";
+          item.marker.bindTooltip(tooltip);
+        } else {
+          //get the Alias and ID for the corresponding measurement location 
+          let Alias = GetMeasAliasFromModelID(item.ID);
+          let ID = GetMeasIDFromModelID(item.ID);
+          let cdiff = GetMaxSimulated(item.ID, item.ObjectType, scenarioIdx) - GetMaxObserved(item.ID, item.ObjectType);
+
+
+          if (selectedResults === 0) {
+            //plot current concentration
+            let tsIdx = document.querySelector("#timeSlider").value;
+
+            // console.log("WQResults are ", WQResults);
+            // console.log("scenarioIdx is ", scenarioIdx);
+            // console.log("Scenario results are ", WQResults.scenarios[scenarioIdx]);
+            // console.log("Substance is ", WQResults.scenarios[scenarioIdx].substances[substanceIdx].substance);
+            // console.log("SubstanceIdx is ", substanceIdx);
+
+            // console.log("Number of featues are ", WQResults.scenarios[scenarioIdx].substances[substanceIdx].features.length);
+
+            let myColor = getColorFromGradient(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].values[tsIdx], Colorgradients.Colorgradients[substanceIdx]);
+            item.marker.setStyle({ radius: 7, fillColor: myColor });
+          } else if (selectedResults === 1) {
+            //plot the maximum concentration
+            let myColor = getColorFromGradient(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].max, Colorgradients.Colorgradients[substanceIdx]);
+            item.marker.setStyle({ radius: 7, fillColor: myColor });
+          } else if (selectedResults === 2) {
+            //plot the minimum concentration
+            let myColor = getColorFromGradient(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].min, Colorgradients.Colorgradients[substanceIdx]);
+            item.marker.setStyle({ radius: 7, fillColor: myColor });
+          } else if (selectedResults === 3) {
+            //plot the mean concentration
+            let myColor = getColorFromGradient(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].mean, Colorgradients.Colorgradients[substanceIdx]);
+            item.marker.setStyle({ radius: 7, fillColor: myColor });
+          }
+
+          if (Alias && ID) {
+            let tooltip = '<div class="tooltip">Meetlocatie: '
+              + ID + '<br>Alias: '
+              + Alias + '<br>Knoop-ID: '
+              + item.ID + "<br>" + "Maximum: "
+              + RoundNumber(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].max, 2)
+              + item.ID + "<br>" + "Minimum: "
+              + RoundNumber(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].min, 2)
+              + item.ID + "<br>" + "Average: "
+              + RoundNumber(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].mean, 2)
+              + "</div>";
+            item.marker.bindTooltip(tooltip);
+          } else {
+            let tooltip = '<div class="tooltip">Object-ID: ' + item.ID
+              + "<br>" + "Maximum: " + RoundNumber(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].max, 2)
+              + "<br>" + "Minimum: "
+              + RoundNumber(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].min, 2)
+              + "<br>" + "Average: "
+              + RoundNumber(WQResults.scenarios[scenarioIdx].substances[substanceIdx].features[featureIdx].mean, 2)
+              + "</div>";
+            item.marker.bindTooltip(tooltip);
+          }
+
+        }
+
+
+        featureIdx++;
+
+      })
+    }
+
+
+
+    function styleLines(feature) {
+      return {
+        color: "darkblue",
+        weight: 3,
+      }
+    }
+
+    function onEachFeature(feature, layer) {
+      if (feature.properties && feature.properties.comment) {
+        //layer.bindPopup(feature.properties.comment);
+        layer.bindTooltip(feature.properties.comment);
+      }
+    }
+
+    function toggleChart() {
+      var mychart = document.getElementById("mychart");
+      if (mychart.style.display === "none") {
+        mychart.style.display = "block";
+      } else {
+        mychart.style.display = "none";
+      }
+    }
+
+    function toggleDambreakParameter(parameter_name) {
+      //this function sets the active dambreak parameter so the corresponding parameter is plotted in the chart
+      active_dambreak_parameter = parameter_name;
+      StyleDambreakButtons(active_breach_id, active_dambreak_parameter);
+
+      //if a dambreach id has already been selected before toggling, redraw the chart
+      if (active_breach_id) {
+        drawDambreakChart(active_breach_id, active_dambreak_parameter);
+      }
+
+    }
+
+    function changeTransparency() {
+      var myslider = document.getElementById("transparency");
+      var myval = myslider.value;
+      opacity = (100 - myval) / 100;            //transform transparency into opacity   
+      Update1DObjectsStyle();
+    }
+
+    function toggleSlider() {
+      var myslider = document.getElementById("timesliderpanel");
+      if (myslider.style.display === "none") {
+        myslider.style.display = "block";
+      } else {
+        myslider.style.display = "none";
+      }
+    }
+
+    function plotLines() {
+      if (document.getElementById("watergangen").checked) {
+        L.geoJson(reaches, {
+          onEachFeature: onEachFeature,
+          style: styleLines,
+        }).addTo(linesLayerGroup);
+      } else {
+        linesLayerGroup.clearLayers();
+      };
+    }
+
+    function getExceedanceData(ID) {
+      let record = "dummy" // exceedancedata.locations.find(c => c.ID === ID);
+      return record;
+    }
+
+    function getValidationResult(ID) {
+      let record = locations.locations.find(c => c.ID === ID);
+      return record;
+    }
+
+
+    function makeLine(value) {
+      let json = [
+        { "x": 0.1, "y": value }, { "x": 1000, "y": value }
+      ]
+      return json;
+    }
+
+
+    function removeData(chart) {
+      chart.data.labels.pop();
+      chart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+      });
+      chart.update();
+    }
+
+    let elevations = [];
+    let elevationPercentiles = [];
+    function addElevation(item, index) {
+      elevations.push(item[2]);
+    }
+
+    function calcAddResult(item, index) {
+      let result = percentile(elevations, item)
+      elevationPercentiles.push(result);
+    }
+
+    /* When the user clicks on the button,toggle between hiding and showing the dropdown content */
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+
+    function GetSelectedTextValueAndStyleMarkers(ddlHerhalingstijd) {
+      let selectedText = ddlHerhalingstijd.options[ddlHerhalingstijd.selectedIndex].innerHTML;
+      setMarkersWaterDepthStyle(144);
+      return selectedText;
+    }
+
+  </script>
+
+
+</body>
+
+</html>

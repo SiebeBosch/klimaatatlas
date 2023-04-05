@@ -1,0 +1,26 @@
+
+.rulestable {
+    font-family:'Times New Roman', Times, serif;
+    font-style: normal;
+    font-weight: lighter;
+    font-size: 16px;
+    color: 	#282828;
+    margin: 30px;
+    /* height: 400px; */
+    width: 850px;
+    text-align: left;
+}
+
+.parametertable {
+    font-family:'Times New Roman', Times, serif;
+    font-style: normal;
+    font-weight: lighter;
+    font-size: 16px;
+    color: 	#282828;
+    margin: 30px;
+    /* height: 400px; */
+    width: 450px;
+    text-align: left;
+}
+
+
