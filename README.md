@@ -7,5 +7,8 @@ De klimaatatlas bestaat uit een aantal applicaties:
 Voor de backend is een .NET applicatie ontwikkeld. Deze desktopapplicatie werkt met een SQLite-database en kan rekenregels verwerken die in een JSON-bestand worden aangeleverd. Als de database bijvoorbeeld reeksen met temperatuur, stikstof en fosfor bevat, kunnen via de rekenregels deze reeksen worden geanalyseerd op de combinatie van vermestende stoffen en hoge temperatuur. Op basis hiervan kan dan een 'rapportcijfer' worden uitgedeeld.
 
 ## webviewer
+Om de uitkomsten van de analyses te kunnen tonen op een interactieve kaart is een webviewer ontwikkeld in HTML/CSS/Javascript.
+Deze webviewer wordt op dit moment alleen nog gevuld met puntgegevens.
+
 
 
