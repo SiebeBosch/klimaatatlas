@@ -1,18 +1,8 @@
 # klimaatatlas
-Klimaatatlas voor het berekenen en publiceren van risico's op slechte waterkwaliteit zoals botulisme en drijflagen. 
+Klimaatatlas voor het berekenen en publiceren van risico's op slechte waterkwaliteit zoals eutrofiëringshotspots. 
 
-Deze python-applicatie leest twee bestanden in:
-* een GeoJSON-bestand, bestaande uit puntlocaties
-* een JSON-bestand met voor iedere puntlocatie het tijdsverloop van de concentratie van bepaalde stoffen of fracties
+De klimaatatlas bestaat uit een aantal applicaties:
 
-Vervolgens leest het script een JSON-bestand met rekenregels in. Het gebruikt deze rekenregels om voor iedere locatie indicatorwaarden te berekenen omtrent risico's op slechte waterkwaliteit. Te denken valt aan het risico op botulisme en drijflagen.
-
-De indicatorwaarden worden vervolgens ruimtelijk geïnterpoleerd naar een watervlakkenkaart, rekening houdend met barrières.
-
-Het resultaat wordt gepubliceerd naar een shapefile en kan door de gebruiker worden gepubliceerd in bijv. ArcGIS online.
-
-De volgende dependencies zijn nodig:
-* geopandas
-
-Een handreiking voor de snelste installatie van geopandas: https://medium.com/analytics-vidhya/fastest-way-to-install-geopandas-in-jupyter-notebook-on-windows-8f734e11fa2b
+## backend
+Voor de backend is een .NET applicatie ontwikkeld. Deze desktopapplicatie werkt met een SQLite-database en kan rekenregels verwerken die in een JSON-bestand worden aangeleverd. Als de database bijvoorbeeld reeksen met temperatuur, stikstof en fosfor bevat, kunnen via de rekenregels deze reeksen worden geanalyseerd op de combinatie van vermestende stoffen en hoge temperatuur. Op basis hiervan kan dan een 'rapportcijfer' worden uitgedeeld.
 
