@@ -107,7 +107,7 @@
 		},
 		{
 			"name":"eutrofieringshotspots",
-			"execute":true,
+			"execute":false,
 			"_comment":"this rule classifies the result of our previous rule, viz. 'warm en eutroof'. It calculates the total number of hours per year in which the value from 'warm en eutroof' equals 1. The result should be classified and written to the parameter 'eutrofiering_hotspot'",
 			"operation_type":"timeseries_classification",
 			"input":{"dataset":"derived_series", "parameter_name":"warm_en_eutroof"},
@@ -123,6 +123,25 @@
 				]
 			},
 			"output":{"dataset":"indicators", "parameter_name":"eutrofiering_hotspot"}
-		}
+		},
+		{
+			"name":"watervlakken",
+			"execute":true,
+			"_comment":"We need to project our results on the map. For this we carry out a spatial join with the 'watervlakkenkaart'",
+			"operation_type":"spatial_join",
+			"input":{"dataset":"derived_series", "parameter_name":"warm_en_eutroof"},
+			"filter":{
+				"type":"count_hours_per_year",
+				"value":1,
+				"classes":[
+					{"from":0,"to":1000,"rating":1},
+					{"from":1000,"to":2000,"rating":3},
+					{"from":2000,"to":3000,"rating":5},
+					{"from":3000,"to":5000,"rating":8},
+					{"from":5000,"to":"inf","rating":10}
+				]
+			},
+			"output":{"dataset":"indicators", "parameter_name":"eutrofiering_hotspot"}
+		},
 	]
 }
