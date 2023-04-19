@@ -22,7 +22,6 @@ Partial Class frmKlimaatatlas
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmKlimaatatlas))
         Me.btnExecute = New System.Windows.Forms.Button()
         Me.prProgress = New System.Windows.Forms.ProgressBar()
         Me.lblProgress = New System.Windows.Forms.Label()
@@ -34,7 +33,12 @@ Partial Class frmKlimaatatlas
         Me.lblDatabase = New System.Windows.Forms.Label()
         Me.txtDatabase = New System.Windows.Forms.TextBox()
         Me.dlgOpenFile = New System.Windows.Forms.OpenFileDialog()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GISToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SpatialJoinToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GroupBox1.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnExecute
@@ -80,11 +84,11 @@ Partial Class frmKlimaatatlas
         Me.GroupBox1.Controls.Add(Me.btnDatabase)
         Me.GroupBox1.Controls.Add(Me.lblDatabase)
         Me.GroupBox1.Controls.Add(Me.txtDatabase)
-        Me.GroupBox1.Location = New System.Drawing.Point(17, 20)
+        Me.GroupBox1.Location = New System.Drawing.Point(17, 58)
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4, 5, 4, 5)
-        Me.GroupBox1.Size = New System.Drawing.Size(1109, 620)
+        Me.GroupBox1.Size = New System.Drawing.Size(1109, 582)
         Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Settings"
@@ -155,6 +159,36 @@ Partial Class frmKlimaatatlas
         '
         Me.dlgOpenFile.FileName = "dlgOpenFile"
         '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(24, 24)
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolsToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(1143, 33)
+        Me.MenuStrip1.TabIndex = 4
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'ToolsToolStripMenuItem
+        '
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GISToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(69, 29)
+        Me.ToolsToolStripMenuItem.Text = "Tools"
+        '
+        'GISToolStripMenuItem
+        '
+        Me.GISToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpatialJoinToolStripMenuItem})
+        Me.GISToolStripMenuItem.Name = "GISToolStripMenuItem"
+        Me.GISToolStripMenuItem.Size = New System.Drawing.Size(270, 34)
+        Me.GISToolStripMenuItem.Text = "GIS"
+        '
+        'SpatialJoinToolStripMenuItem
+        '
+        Me.SpatialJoinToolStripMenuItem.Name = "SpatialJoinToolStripMenuItem"
+        Me.SpatialJoinToolStripMenuItem.Size = New System.Drawing.Size(270, 34)
+        Me.SpatialJoinToolStripMenuItem.Text = "Spatial Join"
+        '
         'frmKlimaatatlas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 25.0!)
@@ -164,13 +198,16 @@ Partial Class frmKlimaatatlas
         Me.Controls.Add(Me.lblProgress)
         Me.Controls.Add(Me.prProgress)
         Me.Controls.Add(Me.btnExecute)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
         Me.Name = "frmKlimaatatlas"
         Me.Text = "Klimaatatlas"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -187,4 +224,8 @@ Partial Class frmKlimaatatlas
     Friend WithEvents lblDatabase As Label
     Friend WithEvents txtDatabase As TextBox
     Friend WithEvents dlgOpenFile As OpenFileDialog
+    Friend WithEvents MenuStrip1 As MenuStrip
+    Friend WithEvents ToolsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents GISToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SpatialJoinToolStripMenuItem As ToolStripMenuItem
 End Class

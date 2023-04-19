@@ -109,3 +109,5 @@ C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\obj\Debug\net7.0-windows\Klimaatatla
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\obj\Debug\net7.0-windows\ref\Klimaatatlas.dll
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\obj\Debug\net7.0-windows\Klimaatatlas.frmKlimaatatlas.resources
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\obj\Debug\net7.0-windows\Klimaatatlas.vbproj.GenerateResource.cache
+C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\obj\Debug\net7.0-windows\Interop.MapWinGIS.dll
+C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\obj\Debug\net7.0-windows\Klimaatatlas.vbproj.ResolveComReference.cache

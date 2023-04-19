@@ -4,6 +4,8 @@ Imports Newtonsoft.Json.Linq
 Imports System.Text.RegularExpressions
 Imports NCalc
 Imports MathNet.Symbolics
+Imports MapWinGIS
+
 
 Public Class clsKlimaatatlas
     Private _jsonObj As JObject
@@ -15,12 +17,12 @@ Public Class clsKlimaatatlas
     Public Generalfunctions As New clsGeneralFunctions()
 
     Public myProgressBar As ProgressBar
-    Public myProgressLabel As Label
+    Public myProgressLabel As System.Windows.Forms.Label
 
     Public Sub New()
     End Sub
 
-    Public Sub SetProgressBar(ByRef pr As ProgressBar, ByRef lb As Label)
+    Public Sub SetProgressBar(ByRef pr As ProgressBar, ByRef lb As System.Windows.Forms.Label)
         myProgressBar = pr
         myProgressLabel = lb
     End Sub
@@ -41,6 +43,7 @@ Public Class clsKlimaatatlas
         UpgradeWQTIMESERIESTable(10)
         UpgradeWQDERIVEDSERIESTable(50)
         UpgradeWQINDICATORSTable(90)
+        UpgradeMappingTable(95)
         Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Database successfully upgraded.", 0, 100, True)
     End Function
 
@@ -76,6 +79,13 @@ Public Class clsKlimaatatlas
         Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", clsSQLiteField.enmSQLiteDataType.SQLITEREAL, False))
         CreateOrUpdateSQLiteTable(SQLiteCon, "INDICATORS", Fields)
     End Sub
+    Public Sub UpgradeMappingTable(ProgressPercentage As Integer)
+        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Upgrading Koppeltabel...", ProgressPercentage, 100, True)
+        Dim Fields As New Dictionary(Of String, clsSQLiteField)
+        Fields.Add("CODE", New clsSQLiteField("CODE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
+        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
+        CreateOrUpdateSQLiteTable(SQLiteCon, "KOPPELTABEL", Fields)
+    End Sub
 
     Public Function ProcessRules() As Boolean
         Try
@@ -83,6 +93,8 @@ Public Class clsKlimaatatlas
             For Each rule As JObject In _jsonObj("rules")
                 If rule("execute").Value(Of Boolean)() Then
                     Select Case rule("operation_type").ToString()
+                        Case "polygon_to_point_mapping"
+                            ProcessPolygonToPointMapping(rule)
                         Case "timeseries_transformation"
                             ProcessTimeseriesTransformation(rule)
                         Case "timeseries_filter"
@@ -108,6 +120,94 @@ Public Class clsKlimaatatlas
         End Try
 
     End Function
+
+    Public Sub ProcessPolygonToPointMapping(ByVal rule As JObject)
+        Dim polygons As JObject = GetDatasetById(rule("input")("target_dataset").ToString())
+        Dim points As JObject = GetDatasetById(rule("input")("source_dataset").ToString())
+        Dim koppeltabel As JObject = GetDatasetById(rule("output")("dataset").ToString())
+
+        Dim polygonsPath As String = polygons("path").ToString()
+
+        Dim sf As New Shapefile()
+        If Not sf.Open(polygonsPath) Then
+            Console.WriteLine("Error opening polygons shapefile: " & sf.ErrorMsg(sf.LastErrorCode))
+            Return
+        End If
+
+        If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
+
+        'update the progress bar
+        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Reading point locations from database...", 0, 10, True)
+
+        Dim idFieldName As String = GetFieldNameByType(points, "id")
+        Dim xFieldName As String = GetFieldNameByType(points, "x")
+        Dim yFieldName As String = GetFieldNameByType(points, "y")
+
+        Dim cmd As New SQLiteCommand($"SELECT DISTINCT {idFieldName}, {xFieldName}, {yFieldName} FROM {points("tablename")}", SQLiteCon)
+        Dim dt As New DataTable()
+
+        Using da As New SQLiteDataAdapter(cmd)
+            da.Fill(dt)
+        End Using
+
+        Dim results As New Dictionary(Of Integer, (x As Double, y As Double))
+
+        For Each row As DataRow In dt.Rows
+            Dim locationId As Integer = Convert.ToInt32(row(idFieldName))
+            Dim x As Double = Convert.ToDouble(row(xFieldName))
+            Dim y As Double = Convert.ToDouble(row(yFieldName))
+            results(locationId) = (x, y)
+        Next
+
+        Using koppelCmd As New SQLiteCommand($"DELETE FROM {koppeltabel("tablename")}", SQLiteCon)
+            koppelCmd.ExecuteNonQuery()
+        End Using
+
+        'update the progress bar
+        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Mapping delwaq segments to water surface areas...", 0, 10, True)
+
+        Using koppelTrans = SQLiteCon.BeginTransaction()
+            Using koppelCmd As New SQLiteCommand(SQLiteCon)
+                koppelCmd.Transaction = koppelTrans
+                koppelCmd.CommandText = $"INSERT INTO {koppeltabel("tablename")} ({koppeltabel("fields")(0)("fieldname")}, {koppeltabel("fields")(1)("fieldname")}) VALUES (@targetId, @sourceId)"
+
+                koppelCmd.Parameters.Add("@targetId", DbType.String)
+                koppelCmd.Parameters.Add("@sourceId", DbType.String)
+
+                For i As Integer = 0 To sf.NumShapes - 1
+
+                    'update the progress bar
+                    Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "", i + 1, sf.NumShapes)
+
+                    Dim shape As Shape = sf.Shape(i)
+                    Dim center As Point = shape.Center
+
+                    Dim nearestId As Integer = -1
+                    Dim minDist As Double = Double.MaxValue
+
+                    For Each kvp As KeyValuePair(Of Integer, (x As Double, y As Double)) In results
+                        Dim dist As Double = Math.Sqrt(Math.Pow(center.x - kvp.Value.x, 2) + Math.Pow(center.y - kvp.Value.y, 2))
+                        If dist < minDist Then
+                            minDist = dist
+                            nearestId = kvp.Key
+                        End If
+                    Next
+
+                    If nearestId <> -1 Then
+                        koppelCmd.Parameters("@targetId").Value = sf.CellValue(sf.Table.FieldIndexByName(polygons("fields")(0)("fieldname").ToString()), i)
+                        koppelCmd.Parameters("@sourceId").Value = nearestId
+                        koppelCmd.ExecuteNonQuery()
+                    End If
+                Next
+            End Using
+            koppelTrans.Commit()
+        End Using
+
+        'update the progress bar
+        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Mapping complete.", 0, 10, True)
+
+
+    End Sub
 
     Private Function ProcessTimeseriesTransformation(rule As JObject) As Boolean
         Try

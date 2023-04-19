@@ -5,9 +5,11 @@
 			"id":"watervlakken",
 			"data_type":"polygons",
 			"storage_type":"geojson",
-			"path":"c:\\GITHUB\\klimaatatlas\\rekenregels\\Watervlakken Plus.json",
+			"path":"c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus2.shp",
 			"fields":[
 				{"fieldtype":"id", "fieldname":"CODE"}, 
+				{"fieldtype":"depth", "fieldname":"WATERDIEPT"}, 
+				{"fieldtype":"deadend", "fieldname":"doodlopend"}, 
 			]			
 		},
 		{
@@ -27,6 +29,18 @@
 				{"fieldtype":"x", "fieldname":"X"}, 
 				{"fieldtype":"y", "fieldname":"Y"}
 			]			
+		},
+		{
+			"_comment":"this attribute describes how each water surface area is associated to its corresponding delwaq segment",
+			"id":"koppeltabel",
+			"data_type":"mapping_table",
+			"storage_type":"SQLITE",
+			"tablename":"KOPPELTABEL",
+			"path":"c:\\GITHUB\\klimaatatlas\\rekenregels\\database.db",
+			"fields":[
+				{"fieldtype":"targetid", "fieldname":"CODE","hasindex":true}, 
+				{"fieldtype":"sourceid", "fieldname":"LOCATIONID","hasindex":true} 
+			]						
 		},
 		{
 			"_comment":"this attribute describes where the derived timeseries as produced by the software should be written to",
@@ -59,6 +73,14 @@
 		}
 	],
 	"rules":[
+		{
+			"name":"koppeltabel",
+			"execute":true,
+			"_comment":"associates each water surface area with its nearest delwaq segment.",
+			"operation_type":"polygon_to_point_mapping",
+			"input":{"target_dataset":"watervlakken", "source_dataset":"sobek_results"},
+			"output":{"dataset":"koppeltabel"}
+		},
 		{
 			"name":"vermestende stoffen",
 			"execute":false,
@@ -113,35 +135,16 @@
 			"input":{"dataset":"derived_series", "parameter_name":"warm_en_eutroof"},
 			"filter":{
 				"type":"count_hours_per_year",
-				"value":1,
+				"value":2,
 				"classes":[
-					{"from":0,"to":1000,"rating":1},
-					{"from":1000,"to":2000,"rating":3},
-					{"from":2000,"to":3000,"rating":5},
-					{"from":3000,"to":5000,"rating":8},
-					{"from":5000,"to":"inf","rating":10}
+					{"from":0,"to":10,"rating":1},
+					{"from":100,"to":200,"rating":3},
+					{"from":200,"to":300,"rating":5},
+					{"from":300,"to":500,"rating":8},
+					{"from":500,"to":"inf","rating":10}
 				]
 			},
 			"output":{"dataset":"indicators", "parameter_name":"eutrofiering_hotspot"}
-		},
-		{
-			"name":"watervlakken",
-			"execute":true,
-			"_comment":"We need to project our results on the map. For this we carry out a spatial join with the 'watervlakkenkaart'",
-			"operation_type":"spatial_join",
-			"input":{"dataset":"derived_series", "parameter_name":"warm_en_eutroof"},
-			"filter":{
-				"type":"count_hours_per_year",
-				"value":1,
-				"classes":[
-					{"from":0,"to":1000,"rating":1},
-					{"from":1000,"to":2000,"rating":3},
-					{"from":2000,"to":3000,"rating":5},
-					{"from":3000,"to":5000,"rating":8},
-					{"from":5000,"to":"inf","rating":10}
-				]
-			},
-			"output":{"dataset":"indicators", "parameter_name":"eutrofiering_hotspot"}
-		},
+		}
 	]
 }

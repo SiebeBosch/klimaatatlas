@@ -26,6 +26,7 @@ Public Class frmKlimaatatlas
         Klimaatatlas.setProgressbar(prProgress, lblProgress)
         Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
         Klimaatatlas.ReadConfiguration(txtConfigFile.Text)
+        Klimaatatlas.UpgradeDatabase()
         Klimaatatlas.ProcessRules()
     End Sub
 
