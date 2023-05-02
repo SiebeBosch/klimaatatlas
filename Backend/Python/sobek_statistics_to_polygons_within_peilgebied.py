@@ -16,7 +16,7 @@ percentiles = [5, 25, 50, 75, 95]
 
 # Read shapefiles
 polygons_gdf = gpd.read_file(polygon_shapefile_path)
-boundaries_gdf = gpd.read_file(barrier_shapefile_path)
+subcatchments_gdf = gpd.read_file(subcatchments_shapefile_path)
 
 # Connect to SQLite database
 conn = sqlite3.connect(sqlite_db_path)
@@ -60,12 +60,44 @@ for index, (scenario, substance) in enumerate(unique_combinations, start=1):
             location_data[location_id] = {'coords': (x, y), 'values': []}
         location_data[location_id]['values'].append(data_value)
 
-    percentile_data = {}
+    # Create a spatial index for subcatchments
+    from rtree import index
+    subcatchment_index = index.Index()
+    for idx, row in subcatchments_gdf.iterrows():
+        subcatchment_index.insert(idx, row['geometry'].bounds)
+
+    # Precompute subcatchment relationships
+    location_to_subcatchment = {}
     for location_id, data in location_data.items():
+        point_coords = data['coords']
+        point = Point(point_coords)
+        for idx in subcatchment_index.intersection(point.coords[0]):
+            subcatchment_geometry = subcatchments_gdf.iloc[idx]['geometry']
+            if subcatchment_geometry.contains(point):
+                location_to_subcatchment[location_id] = subcatchments_gdf.iloc[idx]['CODE']
+                break
+
+    # Assign subcatchment codes to each point in the database
+    for location_id, data in location_data.items():
+        location_data[location_id]['subcatchment_code'] = location_to_subcatchment.get(location_id, None)
+
+    # implement a more efficient computation of percentiles 
+    all_values = [data['values'] for location_id, data in location_data.items()]
+    max_len = max(len(values) for values in all_values)
+
+    padded_values = np.full((len(all_values), max_len), np.nan)
+    for i, values in enumerate(all_values):
+        padded_values[i, :len(values)] = values
+
+    all_percentiles = np.percentile(padded_values, percentiles, axis=1, interpolation='linear', keepdims=False)
+
+    percentile_data = {}
+    for i, (location_id, data) in enumerate(location_data.items()):
         coords = data['coords']
         values = data['values']
-        percentiles_values = [np.percentile(values, p) for p in percentiles]
-        percentile_data[location_id] = {'coords': coords, 'percentiles': percentiles_values}
+        subcatchment_code = data.get('subcatchment_code', None)
+        percentiles_values = all_percentiles[:, i]
+        percentile_data[location_id] = {'coords': coords, 'percentiles': percentiles_values, 'subcatchment_code': subcatchment_code}
 
     for feature_idx, polygon in enumerate(polygons_gdf.geometry):
 
@@ -73,14 +105,28 @@ for index, (scenario, substance) in enumerate(unique_combinations, start=1):
         point = polygon.centroid
         x, y = point.x, point.y
 
-        # Pre-filter the points within a buffer distance
+        polygon_subcatchment_code = None
+        for index, row in subcatchments_gdf.iterrows():
+            if row['geometry'].contains(point):
+                polygon_subcatchment_code = row['CODE']
+                break
+
         buffer_distance = 1000  # Adjust the buffer distance as needed
         buffered_polygon = polygon.buffer(buffer_distance)
-        nearby_points = [data['coords'] for data in percentile_data.values() if buffered_polygon.contains(Point(data['coords']))]
-        nearby_percentiles = [data['percentiles'] for data in percentile_data.values() if buffered_polygon.contains(Point(data['coords']))]
+        
+        nearby_points = []
+        nearby_percentiles = []
+
+        for location_id, data in percentile_data.items():
+            point_subcatchment_code = data['subcatchment_code']
+            point_coords = data['coords']
+            point = Point(point_coords)
+
+            if polygon_subcatchment_code == point_subcatchment_code and buffered_polygon.contains(point):
+                nearby_points.append(point_coords)
+                nearby_percentiles.append(data['percentiles'])
 
         if len(nearby_points) > 0:
-            #print(f"Processing feature {feature_idx} on {len(nearby_points)} points")
             n_neighbors = min(len(nearby_points), 3)
             nearby_coords = [np.array(point) for point in nearby_points]
             scaler = StandardScaler().fit(nearby_coords)
