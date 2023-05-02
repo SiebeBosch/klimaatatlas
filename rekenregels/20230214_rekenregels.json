@@ -45,10 +45,25 @@
 		{
 			"_comment":"this attribute describes where the derived timeseries as produced by the software should be written to",
 			"id":"derived_series",
-			"data_type":"timeseries",
+			"data_type":"equidistant_timeseries",
 			"storage_type":"SQLITE",
 			"path":"c:\\GITHUB\\klimaatatlas\\rekenregels\\database.db",
 			"tablename":"WQDERIVEDSERIES",
+			"fields":[
+				{"fieldtype":"date", "fieldname":"DATEANDTIME"}, 
+				{"fieldtype":"scenario", "fieldname":"SCENARIO"}, 
+				{"fieldtype":"parameter_name", "fieldname":"SUBSTANCE"}, 
+				{"fieldtype":"id", "fieldname":"LOCATIONID"}, 
+				{"fieldtype":"parameter_value", "fieldname":"DATAVALUE"}
+			]
+		},
+		{
+			"_comment":"this attribute describes where the derived non-equidistant timeseries as produced by the software should be written to",
+			"id":"non-equidistant_timeseries",
+			"data_type":"non-equidistant_timeseries",
+			"storage_type":"SQLITE",
+			"path":"c:\\GITHUB\\klimaatatlas\\rekenregels\\database.db",
+			"tablename":"WQNONEQUIDISTANTSERIES",
 			"fields":[
 				{"fieldtype":"date", "fieldname":"DATEANDTIME"}, 
 				{"fieldtype":"scenario", "fieldname":"SCENARIO"}, 
@@ -75,7 +90,7 @@
 	"rules":[
 		{
 			"name":"koppeltabel",
-			"execute":true,
+			"execute":false,
 			"_comment":"associates each water surface area with its nearest delwaq segment.",
 			"operation_type":"polygon_to_point_mapping",
 			"input":{"target_dataset":"watervlakken", "source_dataset":"sobek_results"},
@@ -102,11 +117,11 @@
 				"value_true":1,
 				"value_false":0
 			},
-			"output":{"dataset":"derived_series", "parameter_name":"eutroof"}
+			"output":{"dataset":"non-equidistant_timeseries", "parameter_name":"eutroof"}
 		},
 		{
 			"name":"warm",
-			"execute":false,
+			"execute":true,
 			"_comment":"this rule tells us to create a moving window of 12 hours and herewith identify all timespans where the parameter value ModTemp exceeds a value of 19 for the entire window. It also tells us where to write the resulting timeseries to. If the criterium is met, the value 1 should be written to the database. Else the value of 0 should be written.",
 			"operation_type":"timeseries_filter",
 			"input":{"dataset":"sobek_results","parameter_name":"ModTemp"},
@@ -116,16 +131,16 @@
 				"value_true":1,
 				"value_false":0
 			},
-			"output":{"dataset":"derived_series", "parameter_name":"warm"}
+			"output":{"dataset":"non-equidistant_timeseries", "parameter_name":"warm"}
 		},
 		{
 			"name":"warm en eutroof",
 			"execute":false,
 			"_comment":"this rule adds up the results of two previous rules viz. 'warm' + 'eutroof'. In 'equation' the text surrounded by [ and ] refers to a value from the field parameter_name in the dataset.",
 			"operation_type":"timeseries_transformation",
-			"input":{"dataset":"derived_series"},
+			"input":{"dataset":"non-equidistant_timeseries"},
 			"equation":"[warm]+[eutroof]",
-			"output":{"dataset":"derived_series", "parameter_name":"warm_en_eutroof"}
+			"output":{"dataset":"non-equidistant_timeseries", "parameter_name":"warm_en_eutroof"}
 		},
 		{
 			"name":"eutrofieringshotspots",

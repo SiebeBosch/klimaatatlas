@@ -5,6 +5,7 @@ Imports System.Text.RegularExpressions
 Imports NCalc
 Imports MathNet.Symbolics
 Imports MapWinGIS
+Imports System.Globalization
 
 
 Public Class clsKlimaatatlas
@@ -41,6 +42,7 @@ Public Class clsKlimaatatlas
 
     Public Function UpgradeDatabase()
         UpgradeWQTIMESERIESTable(10)
+        UpgradeWQNonEquidistantTimeseriesTable(20)
         UpgradeWQDERIVEDSERIESTable(50)
         UpgradeWQINDICATORSTable(90)
         UpgradeMappingTable(95)
@@ -68,6 +70,17 @@ Public Class clsKlimaatatlas
         Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
         Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", clsSQLiteField.enmSQLiteDataType.SQLITEREAL, False))
         CreateOrUpdateSQLiteTable(SQLiteCon, "WQDERIVEDSERIES", Fields)
+    End Sub
+
+    Public Sub UpgradeWQNonEquidistantTimeseriesTable(ProgressPercentage As Integer)
+        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Upgrading WQNONEQUIDISTANTSERIES table...", ProgressPercentage, 100, True)
+        Dim Fields As New Dictionary(Of String, clsSQLiteField)
+        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
+        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
+        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
+        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
+        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", clsSQLiteField.enmSQLiteDataType.SQLITEREAL, False))
+        CreateOrUpdateSQLiteTable(SQLiteCon, "WQNONEQUIDISTANTSERIES", Fields)
     End Sub
 
     Public Sub UpgradeWQINDICATORSTable(ProgressPercentage As Integer)
@@ -229,6 +242,9 @@ Public Class clsKlimaatatlas
             ' Get all unique combinations of scenario and location ID
             Dim UniqueSeries As List(Of Dictionary(Of String, String)) = GetScenarioLocationCombinations(inputDataset)
 
+            ' Determine if the input dataset has "data_type" of "non-equidistant_timeseries"
+            Dim isNonEquidistant As Boolean = inputDataset("data_type").ToString() = "non-equidistant_timeseries"
+
             ' Process each unique combination
             For i = 0 To UniqueSeries.Count - 1
                 Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "", i + 1, UniqueSeries.Count)
@@ -239,6 +255,20 @@ Public Class clsKlimaatatlas
                 ' Remove old results for the given location ID and scenario
                 DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
 
+
+                ' Create a sorted list of all unique DateTime values in the database table for the variables involved in the equation
+                Dim uniqueDates As New List(Of DateTime)
+                If isNonEquidistant Then
+                    Using cmd As New SQLiteCommand(SQLiteCon)
+                        cmd.CommandText = $"SELECT DISTINCT {GetFieldNameByType(inputDataset, "date")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} IN ('{String.Join("', '", VariablesList)}') ORDER BY {GetFieldNameByType(inputDataset, "date")};"
+                        Using reader As SQLiteDataReader = cmd.ExecuteReader()
+                            While reader.Read()
+                                uniqueDates.Add(DateTime.Parse(reader.GetString(0)))
+                            End While
+                        End Using
+                    End Using
+                End If
+
                 ' Get data for all variables in a single query
                 Dim dt As New DataTable
                 Using cmd As New SQLiteCommand(SQLiteCon)
@@ -248,56 +278,89 @@ Public Class clsKlimaatatlas
                     End Using
                 End Using
 
+
                 ' Process the data and create resultDataTable
                 Dim resultDataTable As New DataTable
                 resultDataTable.Columns.Add("Date", GetType(DateTime))
                 resultDataTable.Columns.Add("Value", GetType(Double))
 
-                For Each row As DataRow In dt.Rows
-                    Dim dateValue As DateTime = row(0)
-                    Dim evaluatedEquation As String = equation
+                ' Dictionary to store the last value for each variable
+                Dim lastValues As New Dictionary(Of String, Double)
 
-                    For Each Variable As String In VariablesList
-                        Dim variableValue As Double
-                        If Not DBNull.Value.Equals(row(Variable)) Then
-                            variableValue = row(Variable)
-                        Else
-                            variableValue = 0 ' Assign a default value if DBNull is encountered
-                        End If
-                        evaluatedEquation = evaluatedEquation.Replace("[" & Variable & "]", variableValue.ToString())
-                    Next
 
-                    Dim expression As New NCalc.Expression(evaluatedEquation)
-                    Dim result As Double = Convert.ToDouble(expression.Evaluate())
-                    resultDataTable.Rows.Add(dateValue, result)
+                ' Debugging lines to print uniqueDates and DataTable
+                Debug.Print("Unique Dates:")
+                For Each d As DateTime In uniqueDates
+                    Debug.Print(d)
                 Next
+                Debug.Print("DataTable:")
+                For Each r As DataRow In dt.Rows
+                    Debug.Print(r(0).ToString())
+                    For Each Variable As String In VariablesList
+                        Debug.Print(" " & Variable & ": " & r(Variable).ToString())
+                    Next
+                    Debug.Print("")
+                Next
+
+
+                If isNonEquidistant Then
+                    'non-equidistant data
+                    Dim dateFieldIndex As Integer = dt.Columns.IndexOf(GetFieldNameByType(inputDataset, "date"))
+
+                    For Each currentDate As DateTime In uniqueDates
+                        Dim evaluatedEquation As String = equation
+
+                        For Each Variable As String In VariablesList
+                            ' Find the row for the current variable and DateTime
+
+
+                            Dim row As DataRow = dt.AsEnumerable().LastOrDefault(Function(r) Not DBNull.Value.Equals(r(Variable)) AndAlso r(Variable).ToString() <> "" AndAlso DateTime.Parse(r.Field(Of String)(0)) <= currentDate)
+
+                            ' If a row is found, update the last value for the variable
+                            If row IsNot Nothing Then
+                                lastValues(Variable) = row.Field(Of Double)(Variable)
+                            ElseIf Not lastValues.ContainsKey(Variable) Then
+                                ' If the variable is not in the lastValues dictionary, add it with a default value of 0
+                                lastValues(Variable) = 0
+                            End If
+
+                            ' Update the equation with the actual variable value
+                            evaluatedEquation = evaluatedEquation.Replace("[" & Variable & "]", lastValues(Variable).ToString())
+                        Next
+
+                        Dim expression As New NCalc.Expression(evaluatedEquation)
+                        Dim result As Double = Convert.ToDouble(expression.Evaluate())
+                        resultDataTable.Rows.Add(currentDate, result)
+                    Next
+                Else
+                    'equidistant data
+                    For Each row As DataRow In dt.Rows
+                        Dim dateValue As DateTime = row(0)
+                        Dim evaluatedEquation As String = equation
+
+                        For Each Variable As String In VariablesList
+                            Dim variableValue As Double
+                            If Not DBNull.Value.Equals(row(Variable)) Then
+                                variableValue = row(Variable)
+                            Else
+                                variableValue = 0 ' Assign a default value if DBNull is encountered
+                            End If
+                            evaluatedEquation = evaluatedEquation.Replace("[" & Variable & "]", variableValue.ToString())
+                        Next
+
+                        Dim expression As New NCalc.Expression(evaluatedEquation)
+                        Dim result As Double = Convert.ToDouble(expression.Evaluate())
+                        resultDataTable.Rows.Add(dateValue, result)
+                    Next
+                End If
 
                 ' Save results to the output dataset
                 Using transaction = SQLiteCon.BeginTransaction()
                     For Each row As DataRow In resultDataTable.Rows
                         Dim dateValue As DateTime = row("Date")
                         Dim dataValue As Double = row("Value")
-
-                        Dim dateFieldName As String = GetFieldNameByType(outputDataset, "date")
-                        Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
-                        Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
-                        Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
-                        Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
-
-                        Using cmd As New SQLiteCommand(SQLiteCon)
-                            cmd.Transaction = transaction
-                            cmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({dateFieldName}, {scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@dateValue, @scenario, @outputParameterName, @locationID, @dataValue);"
-
-                            cmd.Parameters.AddWithValue("@dateValue", dateValue)
-                            cmd.Parameters.AddWithValue("@scenario", Scenario)
-                            cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
-                            cmd.Parameters.AddWithValue("@locationID", LocationID)
-                            cmd.Parameters.AddWithValue("@dataValue", dataValue)
-
-                            cmd.ExecuteNonQuery()
-                        End Using
+                        SaveResultsToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
                     Next
-
                     transaction.Commit()
                 End Using
 
@@ -424,7 +487,6 @@ Public Class clsKlimaatatlas
         Next
         Return ""
     End Function
-
     Private Function ProcessTimeseriesFilter_thresholdExceedance(rule As JObject) As Boolean
         Try
             Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
@@ -433,7 +495,6 @@ Public Class clsKlimaatatlas
 
             Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
             Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
-            Dim filterType = rule("filter")("type").ToString()
             Dim threshold = rule("filter")("args")(0).ToObject(Of Double)()
             Dim valueTrue = rule("filter")("value_true").ToObject(Of Double)()
             Dim valueFalse = rule("filter")("value_false").ToObject(Of Double)()
@@ -454,56 +515,16 @@ Public Class clsKlimaatatlas
                 DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
 
                 ' Get data for the input parameter
-                Dim dt As New DataTable
-                Using cmd As New SQLiteCommand(SQLiteCon)
-                    cmd.CommandText = $"SELECT {GetFieldNameByType(inputDataset, "date")}, {GetFieldNameByType(inputDataset, "parameter_value")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} = '{inputParameterName}' ORDER BY {GetFieldNameByType(inputDataset, "date")};"
-                    Using reader As SQLiteDataReader = cmd.ExecuteReader()
-                        dt.Load(reader)
-                    End Using
-                End Using
+                Dim inputDataTable As DataTable = GetInputData(inputDataset, Scenario, LocationID, inputParameterName)
 
                 ' Process the data and create resultDataTable
-                Dim resultDataTable As New DataTable
-                resultDataTable.Columns.Add("Date", GetType(DateTime))
-                resultDataTable.Columns.Add("Value", GetType(Double))
-
-                For Each row As DataRow In dt.Rows
-                    Dim dateValue As DateTime = row(0)
-                    Dim dataValue As Double = row(1)
-
-                    Dim result As Double = If(dataValue > threshold, valueTrue, valueFalse)
-                    resultDataTable.Rows.Add(dateValue, result)
-                Next
+                Dim resultDataTable As DataTable = CalculateResultDataTable(inputDataTable, threshold, valueTrue, valueFalse)
 
                 ' Save results to the output dataset
-                Using transaction = SQLiteCon.BeginTransaction()
-                    For Each row As DataRow In resultDataTable.Rows
-                        Dim dateValue As DateTime = row("Date")
-                        Dim dataValue As Double = row("Value")
-
-                        Dim dateFieldName As String = GetFieldNameByType(outputDataset, "date")
-                        Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
-                        Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
-                        Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
-                        Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
-                        Using cmd As New SQLiteCommand(SQLiteCon)
-                            cmd.Transaction = transaction
-                            cmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({dateFieldName}, {scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@dateValue, @scenario, @outputParameterName, @locationID, @dataValue);"
-
-                            cmd.Parameters.AddWithValue("@dateValue", dateValue)
-                            cmd.Parameters.AddWithValue("@scenario", Scenario)
-                            cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
-                            cmd.Parameters.AddWithValue("@locationID", LocationID)
-                            cmd.Parameters.AddWithValue("@dataValue", dataValue)
-
-                            cmd.ExecuteNonQuery()
-                        End Using
-                    Next
-
-                    transaction.Commit()
-                End Using
+                SaveTimeseriesToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
 
             Next
+
             Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
 
             SQLiteCon.Close()
@@ -515,10 +536,83 @@ Public Class clsKlimaatatlas
         End Try
     End Function
 
+    Private Function GetInputData(inputDataset As JObject, Scenario As String, LocationID As String, inputParameterName As String) As DataTable
+        Dim dt As New DataTable
+        Using cmd As New SQLiteCommand(SQLiteCon)
+            cmd.CommandText = $"SELECT {GetFieldNameByType(inputDataset, "date")}, {GetFieldNameByType(inputDataset, "parameter_value")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} = '{inputParameterName}' ORDER BY {GetFieldNameByType(inputDataset, "date")};"
+            Using reader As SQLiteDataReader = cmd.ExecuteReader()
+                dt.Load(reader)
+            End Using
+        End Using
+        Return dt
+    End Function
+
+    Private Function CalculateResultDataTable(inputDataTable As DataTable, threshold As Double, valueTrue As Double, valueFalse As Double) As DataTable
+        Dim resultDataTable As New DataTable
+        resultDataTable.Columns.Add("Date", GetType(DateTime))
+        resultDataTable.Columns.Add("Value", GetType(Double))
+
+        For Each row As DataRow In inputDataTable.Rows
+            Dim dateValue = row(0)
+            Dim dataValue = row(1)
+
+            Dim result As Double = If(dataValue > threshold, valueTrue, valueFalse)
+            resultDataTable.Rows.Add(dateValue, result)
+        Next
+
+        Return resultDataTable
+    End Function
+
+    Private Sub SaveTimeseriesToOutputDataset(outputDataset As JObject, Scenario As String, LocationID As String, outputParameterName As String, resultDataTable As DataTable)
+        ' Determine the required database fieldnames
+        Dim dateFieldName As String = GetFieldNameByType(outputDataset, "date")
+        Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
+        Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
+        Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
+        Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
+
+        Using transaction = SQLiteCon.BeginTransaction()
+            Using cmd As New SQLiteCommand(SQLiteCon)
+                cmd.Transaction = transaction
+
+                Dim lastVal As Double = Nothing
+                Dim insertData As Boolean
+
+                For i = 0 To resultDataTable.Rows.Count - 1
+                    Dim row As DataRow = resultDataTable.Rows(i)
+                    Dim dateValue = row("Date")
+                    Dim dataValue = row("Value")
+                    insertData = False
+
+                    Dim dataType As String = outputDataset("data_type").ToString()
+                    If dataType = "equidistant_timeseries" Then
+                        insertData = True
+                    ElseIf dataType = "non-equidistant_timeseries" AndAlso (i = 0 OrElse dataValue <> lastVal) Then
+                        insertData = True
+                        lastVal = dataValue
+                    End If
+
+                    If insertData Then
+                        cmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({dateFieldName}, {scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@dateValue, @scenario, @outputParameterName, @locationID, @dataValue);"
+
+                        cmd.Parameters.Clear()
+                        cmd.Parameters.AddWithValue("@dateValue", dateValue)
+                        cmd.Parameters.AddWithValue("@scenario", Scenario)
+                        cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
+                        cmd.Parameters.AddWithValue("@locationID", LocationID)
+                        cmd.Parameters.AddWithValue("@dataValue", dataValue)
+
+                        cmd.ExecuteNonQuery()
+                    End If
+                Next
+            End Using
+
+            transaction.Commit()
+        End Using
+    End Sub
+
     Private Function ProcessTimeseriesFilter_hoursThresholdExceedance(rule As JObject) As Boolean
         Try
-            Dim i As Integer, j As Integer
-
             'update the progress bar
             Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
 
@@ -528,7 +622,6 @@ Public Class clsKlimaatatlas
             'read all relevant rule aspects from our Json object
             Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
             Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
-            Dim filterType = rule("filter")("type").ToString()
             Dim duration = rule("filter")("args")(0).ToObject(Of Double)()
             Dim threshold = rule("filter")("args")(1).ToObject(Of Double)()
             Dim valueTrue = rule("filter")("value_true").ToObject(Of Double)()
@@ -551,99 +644,13 @@ Public Class clsKlimaatatlas
                 DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
 
                 ' Get data for the input parameter
-                Dim dt As New DataTable
-                Using cmd As New SQLiteCommand(SQLiteCon)
-                    cmd.CommandText = $"SELECT {GetFieldNameByType(inputDataset, "date")}, {GetFieldNameByType(inputDataset, "parameter_value")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} = '{inputParameterName}' ORDER BY {GetFieldNameByType(inputDataset, "date")};"
-                    Using reader As SQLiteDataReader = cmd.ExecuteReader()
-                        dt.Load(reader)
-                    End Using
-                End Using
+                Dim inputDataTable As DataTable = GetInputData(inputDataset, Scenario, LocationID, inputParameterName)
 
-                'create a results DataTable
-                Dim resultDataTable As New DataTable
-                resultDataTable.Columns.Add("Date", GetType(DateTime))
-                resultDataTable.Columns.Add("Value", GetType(Double))
-
-                Dim BlockActive As Boolean = False
-                Dim BlockStartIdx As Integer = 0
-
-                'process the first timestep separately
-                Dim dateValue As DateTime = dt.Rows(0)(0)
-                Dim dataValue As Double = dt.Rows(0)(1)
-                If dataValue > threshold Then
-                    BlockActive = True
-                    BlockStartIdx = 0
-                Else
-                    BlockActive = False
-                End If
-
-                'loop through the remaining timesteps
-                For rowIndex = 1 To dt.Rows.Count - 1
-                    dateValue = dt.Rows(rowIndex)(0)
-                    dataValue = dt.Rows(rowIndex)(1)
-                    If dataValue > threshold Then
-                        If Not BlockActive Then
-                            'start a new block
-                            BlockActive = True
-                            BlockStartIdx = rowIndex
-                        Else
-                            'we're in an ongoing block. it will be written at the end of the block
-                        End If
-                    Else
-                        If BlockActive Then
-                            'the active block ends here, so determine whether it meets the duration threshold and write the outcome accordingly
-                            BlockActive = False
-                            Dim BlockStartDate As DateTime = dt.Rows(BlockStartIdx)(0)
-                            Dim BlockEndDate As DateTime = dt.Rows(rowIndex)(0)
-                            Dim BlockDuration As Double = (BlockEndDate - BlockStartDate).TotalHours
-                            If BlockDuration >= duration Then
-                                'block exceeds minimum duration so write the valueTrue
-                                For j = BlockStartIdx To rowIndex
-                                    Dim blockDate As DateTime = dt.Rows(j)(0)
-                                    resultDataTable.Rows.Add(blockDate, valueTrue)
-                                Next
-                            Else
-                                'block was too short so write the valueFalse
-                                For j = BlockStartIdx To rowIndex
-                                    Dim blockDate As DateTime = dt.Rows(j)(0)
-                                    resultDataTable.Rows.Add(blockDate, valueFalse)
-                                Next
-                            End If
-                        Else
-                            'just a regular data point below threshold
-                            resultDataTable.Rows.Add(dateValue, valueFalse)
-                        End If
-                    End If
-                Next
+                ' Calculate the result data table
+                Dim resultDataTable As DataTable = CalculateResultHoursDataTable(inputDataTable, threshold, duration, valueTrue, valueFalse)
 
                 ' Save results to the output dataset
-                Using transaction = SQLiteCon.BeginTransaction()
-                    For Each row As DataRow In resultDataTable.Rows
-                        dateValue = row("Date")
-                        dataValue = row("Value")
-
-                        Dim dateFieldName As String = GetFieldNameByType(outputDataset, "date")
-                        Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
-                        Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
-                        Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
-                        Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
-                        Using cmd As New SQLiteCommand(SQLiteCon)
-                            cmd.Transaction = transaction
-                            cmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({dateFieldName}, {scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@dateValue, @scenario, @outputParameterName, @locationID, @dataValue);"
-
-                            cmd.Parameters.AddWithValue("@dateValue", dateValue)
-                            cmd.Parameters.AddWithValue("@scenario", Scenario)
-                            cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
-                            cmd.Parameters.AddWithValue("@locationID", LocationID)
-                            cmd.Parameters.AddWithValue("@dataValue", dataValue)
-
-                            cmd.ExecuteNonQuery()
-                        End Using
-                    Next
-
-                    transaction.Commit()
-                End Using
-
+                SaveResultsToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
             Next
             Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
 
@@ -656,7 +663,94 @@ Public Class clsKlimaatatlas
         End Try
     End Function
 
+    Private Function CalculateResultHoursDataTable(inputDataTable As DataTable, threshold As Double, duration As Double, valueTrue As Double, valueFalse As Double) As DataTable
+        Dim resultDataTable As New DataTable
+        resultDataTable.Columns.Add("Date", GetType(DateTime))
+        resultDataTable.Columns.Add("Value", GetType(Double))
 
+        Dim BlockActive As Boolean = False
+        Dim BlockStartIdx As Integer = 0
+
+        ' Process the first timestep separately
+        Dim dateValue As DateTime = inputDataTable.Rows(0)(0)
+        Dim dataValue As Double = inputDataTable.Rows(0)(1)
+        If dataValue > threshold Then
+            BlockActive = True
+            BlockStartIdx = 0
+        Else
+            BlockActive = False
+        End If
+
+        'loop through the remaining timesteps
+        For rowIndex = 1 To inputDataTable.Rows.Count - 1
+            dateValue = inputDataTable.Rows(rowIndex)(0)
+            dataValue = inputDataTable.Rows(rowIndex)(1)
+            If dataValue > threshold Then
+                If Not BlockActive Then
+                    'start a new block
+                    BlockActive = True
+                    BlockStartIdx = rowIndex
+                Else
+                    'we're in an ongoing block. it will be written at the end of the block
+                End If
+            Else
+                If BlockActive Then
+                    'the active block ends here, so determine whether it meets the duration threshold and write the outcome accordingly
+                    BlockActive = False
+                    Dim BlockStartDate As DateTime = inputDataTable.Rows(BlockStartIdx)(0)
+                    Dim BlockEndDate As DateTime = inputDataTable.Rows(rowIndex)(0)
+                    Dim BlockDuration As Double = (BlockEndDate - BlockStartDate).TotalHours
+                    If BlockDuration >= duration Then
+                        'block exceeds minimum duration so write the valueTrue
+                        For j = BlockStartIdx To rowIndex
+                            Dim blockDate As DateTime = inputDataTable.Rows(j)(0)
+                            resultDataTable.Rows.Add(blockDate, valueTrue)
+                        Next
+                    Else
+                        'block was too short so write the valueFalse
+                        For j = BlockStartIdx To rowIndex
+                            Dim blockDate As DateTime = inputDataTable.Rows(j)(0)
+                            resultDataTable.Rows.Add(blockDate, valueFalse)
+                        Next
+                    End If
+                Else
+                    'just a regular data point below threshold
+                    resultDataTable.Rows.Add(dateValue, valueFalse)
+                End If
+            End If
+        Next
+
+        Return resultDataTable
+    End Function
+
+    Private Sub SaveResultsToOutputDataset(outputDataset As JObject, Scenario As String, LocationID As String, outputParameterName As String, resultDataTable As DataTable)
+        Using transaction = SQLiteCon.BeginTransaction()
+            For Each row As DataRow In resultDataTable.Rows
+                Dim dateValue As DateTime = row("Date")
+                Dim dataValue As Double = row("Value")
+
+                Dim dateFieldName As String = GetFieldNameByType(outputDataset, "date")
+                Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
+                Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
+                Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
+                Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
+                Using cmd As New SQLiteCommand(SQLiteCon)
+                    cmd.Transaction = transaction
+                    cmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({dateFieldName}, {scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@dateValue, @scenario, @outputParameterName, @locationID, @dataValue);"
+
+                    cmd.Parameters.AddWithValue("@dateValue", dateValue)
+                    cmd.Parameters.AddWithValue("@scenario", Scenario)
+                    cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
+                    cmd.Parameters.AddWithValue("@locationID", LocationID)
+                    cmd.Parameters.AddWithValue("@dataValue", dataValue)
+
+                    cmd.ExecuteNonQuery()
+                End Using
+            Next
+
+            transaction.Commit()
+        End Using
+    End Sub
 
     Private Function processTimeseriesClassification(rule As JObject) As Boolean
         Try
