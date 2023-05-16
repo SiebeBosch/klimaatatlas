@@ -10,6 +10,7 @@ from db_setup import setup_database
 polygon_shapefile_path = r"c:\GITHUB\klimaatatlas\GIS\Watervlakken Plus2.shp"
 subcatchments_shapefile_path = r"c:\GITHUB\klimaatatlas\GIS\Peilgebied vigerend besluit.shp"
 sqlite_db_path = r"c:\GITHUB\klimaatatlas\data\database.db"
+delete_old_results = False
 
 # Define the list of percentiles as a customizable array of values
 percentiles = [5, 25, 50, 75, 95]
@@ -19,6 +20,7 @@ polygons_gdf = gpd.read_file(polygon_shapefile_path)
 subcatchments_gdf = gpd.read_file(subcatchments_shapefile_path)
 
 # Connect to SQLite database
+print(f"connecting to database")
 conn = sqlite3.connect(sqlite_db_path)
 
 # Create a cursor object
@@ -27,21 +29,36 @@ cur = conn.cursor()
 # Set up the database (table creation, checking fields, and creating indices)
 setup_database(conn)
 
-# Clear the WQPOLYGONSTATISTICS before we start
-cur.execute("DELETE FROM WQPOLYGONSTATISTICS")
-conn.commit()
+if delete_old_results:
+    # Clear the WQPOLYGONSTATISTICS before we start
+    print(f"removing old statistics")
+    cur.execute("DELETE FROM WQPOLYGONSTATISTICS")
+    conn.commit()
 
 # Fetch unique combinations of SCENARIO and SUBSTANCE
+print(f"retrieving unique combinations of scenario and substance from WQTIMESERIES")
 cur.execute("""
     SELECT DISTINCT SCENARIO, SUBSTANCE
     FROM WQTIMESERIES
     WHERE DATASOURCE = 'SOBEK'
 """)
-
 unique_combinations = cur.fetchall()
 
+if not delete_old_results:
+    # Fetch existing combinations of SCENARIO and SUBSTANCE in WQPOLYGONSTATISTICS
+    print(f"identifying existing combinations of scenario and substance")
+    cur.execute("""
+        SELECT DISTINCT SCENARIO, SUBSTANCE
+        FROM WQPOLYGONSTATISTICS
+    """)
+    existing_combinations = set(cur.fetchall())
+    # Filter unique_combinations to exclude existing_combinations
+    unique_combinations = [comb for comb in unique_combinations if comb not in existing_combinations]
+
 for index, (scenario, substance) in enumerate(unique_combinations, start=1):
-    print(f"Processing combination {index}/{len(unique_combinations)}: Scenario={scenario}, Substance={substance}")
+    combination_idx = index
+    n_combinations = len(unique_combinations)
+    print(f"Processing combination {combination_idx}/{n_combinations}: Scenario={scenario}, Substance={substance}")
 
     # Fetch location data and calculate percentiles for each location
     cur.execute("""
@@ -81,7 +98,7 @@ for index, (scenario, substance) in enumerate(unique_combinations, start=1):
     for location_id, data in location_data.items():
         location_data[location_id]['subcatchment_code'] = location_to_subcatchment.get(location_id, None)
 
-    # implement a more efficient computation of percentiles 
+    # Implement a more efficient computation of percentiles 
     all_values = [data['values'] for location_id, data in location_data.items()]
     max_len = max(len(values) for values in all_values)
 
@@ -89,7 +106,8 @@ for index, (scenario, substance) in enumerate(unique_combinations, start=1):
     for i, values in enumerate(all_values):
         padded_values[i, :len(values)] = values
 
-    all_percentiles = np.percentile(padded_values, percentiles, axis=1, interpolation='linear', keepdims=False)
+    #all_percentiles = np.percentile(padded_values, percentiles, axis=1, interpolation='linear', keepdims=False)
+    all_percentiles = np.percentile(padded_values, percentiles, axis=1, method='linear', keepdims=False)
 
     percentile_data = {}
     for i, (location_id, data) in enumerate(location_data.items()):
@@ -101,7 +119,7 @@ for index, (scenario, substance) in enumerate(unique_combinations, start=1):
 
     for feature_idx, polygon in enumerate(polygons_gdf.geometry):
 
-        print(f"Processing feature {feature_idx}")
+        print(f"Processing feature {feature_idx} for combination {combination_idx}/{n_combinations}")
         point = polygon.centroid
         x, y = point.x, point.y
 
@@ -113,7 +131,7 @@ for index, (scenario, substance) in enumerate(unique_combinations, start=1):
 
         buffer_distance = 1000  # Adjust the buffer distance as needed
         buffered_polygon = polygon.buffer(buffer_distance)
-        
+
         nearby_points = []
         nearby_percentiles = []
 

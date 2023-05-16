@@ -1,0 +1,107 @@
+{
+	"datasets":[
+		{
+			"_comment":"this attribute describes the water area polygons",
+			"id":"watervlakken",
+			"data_type":"polygons",
+			"storage_type":"geojson",
+			"path":"c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus2.shp",
+			"fields":[
+				{"fieldtype":"id", "fieldname":"CODE"}, 
+				{"fieldtype":"depth", "fieldname":"WATERDIEPT"}, 
+				{"fieldtype":"deadend", "fieldname":"doodlopend"}, 
+			]			
+		},
+		{
+			"_comment":"this attribute describes where the water quality statistics as derived from SOBEK can be found",
+			"id":"sobek_results",
+			"data_type":"timeseries",
+			"storage_type":"SQLITE",
+			"path":"c:\\GITHUB\\klimaatatlas\\rekenregels\\database.db",
+			"tablename":"WQPOLYGONSTATISTICS",
+			"fields":[
+				{"fieldtype":"origin", "fieldname":"DATASOURCE", "selection":["SOBEK"]}, 
+				{"fieldtype":"scenario", "fieldname":"SCENARIO", "selection":["2014", "2085"]}, 
+				{"fieldtype":"parameter_name", "fieldname":"SUBSTANCE", "selection":["OXY", "Cl", "Nt", "Pt", "ModTemp", "ResTim"]}, 
+				{"fieldtype":"featureidx", "fieldname":"FEATUREIDX"}, 
+				{"fieldtype":"percentile", "fieldname":"PERCENTILE"},
+				{"fieldtype":"datavalue", "fieldname":"DATAVALUE"}, 
+			]			
+		}
+	],
+	"rules":[
+		{
+			"name":"koppeltabel",
+			"execute":false,
+			"_comment":"associates each water surface area with its nearest delwaq segment.",
+			"operation_type":"polygon_to_point_mapping",
+			"input":{"target_dataset":"watervlakken", "source_dataset":"sobek_results"},
+			"output":{"dataset":"koppeltabel"}
+		},
+		{
+			"name":"vermestende stoffen",
+			"execute":false,
+			"_comment":"this rule lets us construct a composite timeseries of nutrient values in the water by weigthing the concentration of phosphate ten times that of ammonia. In 'equation' values that should be taken from the database are surrounded by [].  In 'equation' the text surrounded by [ and ] refers to a value from the field parameter_name in the dataset.",
+			"operation_type":"timeseries_transformation",
+			"input":{"dataset":"sobek_results"},
+			"equation":"[Nt]/10+[Pt]",
+			"output":{"dataset":"derived_series","parameter_name":"vermestende_stoffen"}
+		},
+		{
+			"name":"eutroof",
+			"execute":false,
+			"_comment":"this rule identifies the moments where the composite concentration of nutrients exceeds a value of 6 and tells us where to write the resulting timeseries to. I the criterium is met, a value of 1 should be written; if not, a value of 0 should be written.",
+			"operation_type":"timeseries_filter",
+			"input":{"dataset":"derived_series", "parameter_name":"vermestende_stoffen"},
+			"filter":{
+				"type":"exceeds_threshold", 
+				"args":[5],
+				"value_true":1,
+				"value_false":0
+			},
+			"output":{"dataset":"non-equidistant_timeseries", "parameter_name":"eutroof"}
+		},
+		{
+			"name":"warm",
+			"execute":true,
+			"_comment":"this rule tells us to create a moving window of 12 hours and herewith identify all timespans where the parameter value ModTemp exceeds a value of 19 for the entire window. It also tells us where to write the resulting timeseries to. If the criterium is met, the value 1 should be written to the database. Else the value of 0 should be written.",
+			"operation_type":"timeseries_filter",
+			"input":{"dataset":"sobek_results","parameter_name":"ModTemp"},
+			"filter":{
+				"type":"consecutive_hours_exceeding_threshold", 
+				"args":[12,19],
+				"value_true":1,
+				"value_false":0
+			},
+			"output":{"dataset":"non-equidistant_timeseries", "parameter_name":"warm"}
+		},
+		{
+			"name":"warm en eutroof",
+			"execute":false,
+			"_comment":"this rule adds up the results of two previous rules viz. 'warm' + 'eutroof'. In 'equation' the text surrounded by [ and ] refers to a value from the field parameter_name in the dataset.",
+			"operation_type":"timeseries_transformation",
+			"input":{"dataset":"non-equidistant_timeseries"},
+			"equation":"[warm]+[eutroof]",
+			"output":{"dataset":"non-equidistant_timeseries", "parameter_name":"warm_en_eutroof"}
+		},
+		{
+			"name":"eutrofieringshotspots",
+			"execute":false,
+			"_comment":"this rule classifies the result of our previous rule, viz. 'warm en eutroof'. It calculates the total number of hours per year in which the value from 'warm en eutroof' equals 1. The result should be classified and written to the parameter 'eutrofiering_hotspot'",
+			"operation_type":"timeseries_classification",
+			"input":{"dataset":"derived_series", "parameter_name":"warm_en_eutroof"},
+			"filter":{
+				"type":"count_hours_per_year",
+				"value":2,
+				"classes":[
+					{"from":0,"to":10,"rating":1},
+					{"from":100,"to":200,"rating":3},
+					{"from":200,"to":300,"rating":5},
+					{"from":300,"to":500,"rating":8},
+					{"from":500,"to":"inf","rating":10}
+				]
+			},
+			"output":{"dataset":"indicators", "parameter_name":"eutrofiering_hotspot"}
+		}
+	]
+}
