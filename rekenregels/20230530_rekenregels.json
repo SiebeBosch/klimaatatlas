@@ -1,0 +1,70 @@
+{
+	"datasets":[
+		{
+			"_comment":"this attribute describes the water area polygons",
+			"id":"watervlakken",
+			"data_type":"polygons",
+			"storage_type":"shapefile",
+			"path":"c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus2.shp",
+			"fields":[
+				{"fieldtype":"id", "fieldname":"CODE"}, 
+				{"fieldtype":"featureidx", "fieldname":"FEATUREIDX"}, 
+				{"fieldtype":"depth", "fieldname":"WATERDIEPT"}, 
+				{"fieldtype":"deadend", "fieldname":"doodlopend"} 
+			]			
+		},
+		{
+			"_comment":"this attribute describes where the water quality statistics as derived from SOBEK can be found",
+			"id":"sobek_results",
+			"data_type":"percentiles",
+			"storage_type":"SQLITE",
+			"path":"c:\\GITHUB\\klimaatatlas\\data\\database.db",
+			"tablename":"WQPOLYGONSTATISTICS",
+			"fields":[
+				{"fieldtype":"origin", "fieldname":"DATASOURCE", "selection":["SOBEK"]}, 
+				{"fieldtype":"scenario", "fieldname":"SCENARIO", "selection":["2014", "2085"]}, 
+				{"fieldtype":"parameter_name", "fieldname":"SUBSTANCE", "selection":["OXY", "Cl", "Nt", "Pt", "ModTemp", "ResTim"]}, 
+				{"fieldtype":"featureidx", "fieldname":"FEATUREIDX"}, 
+				{"fieldtype":"percentile", "fieldname":"PERCENTILE"},
+				{"fieldtype":"datavalue", "fieldname":"DATAVALUE"} 
+			]			
+		}
+	],
+	"classifications":[
+		{
+			"id":"mediaan_stikstof",
+			"classes":[
+				{"lbound":0, "ubound":10, "penalty":0, "result_text":""},
+				{"lbound":10, "ubound":15, "penalty":1, "result_text":"mediaan stikstof tussen 10 en 15 mg/l"},
+				{"lbound":15, "ubound":20, "penalty":2, "result_text":"mediaan stikstof tussen 15 en 20 mg/l"},
+				{"lbound":20, "ubound":25, "penalty":4, "result_text":"mediaan stikstof tussen 20 en 25 mg/l"},
+				{"lbound":25, "ubound":999, "penalty":6, "result_text":"mediaan stikstof hoger dan 25 mg/l"}
+			]
+		}
+	],
+	"rules":[
+		{
+			"order":1,
+			"execute":true,
+			"name":"Mediaan Stikstof Totaal",
+			"input_dataset":"sobek_results",
+			"subset":[
+				{"fieldtype":"origin", "values":["SOBEK"]},
+				{"fieldtype":"parameter_name", "values":["Nt"]}				
+			],
+			"filter":{
+				"field_type":"percentile",
+				"evaluation":"=",
+				"value":50
+			},
+			"rule_execution":{
+				"method":"classification", 
+				"id":"mediaan_stikstof"
+			},			
+			"output_dataset":"watervlakken",
+			"origin":"rekenregels",
+			"result_fieldnames": {"text_field":"TXT", "penalty_field":"PEN"},
+			"scenarios": ["2014", "2085"]			
+		}
+	]
+}
