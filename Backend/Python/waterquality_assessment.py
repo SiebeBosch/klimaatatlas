@@ -69,7 +69,7 @@ class RuleExecution:
         self.id = id
 
 class Rule:
-    def __init__(self, order, execute, name, input_dataset, subset, filter, rule_execution, output_dataset, origin, result_fieldnames, scenarios):
+    def __init__(self, order, execute, name, input_dataset, subset, filter, rule_execution, origin, scenarios):
         self.order = order
         self.execute = execute
         self.name = name
@@ -77,46 +77,64 @@ class Rule:
         self.subset = {s['fieldtype']: s['values'] for s in subset}
         self.filter = Filter(**filter)  # Filter instance
         self.rule_execution = RuleExecution(**rule_execution)  # Rule instance
-        self.output_dataset = output_dataset
         self.origin = origin
-        # Instead of creating a ResultFieldNames instance, create a dictionary where keys are scenarios and values are dictionaries of field names
-        self.result_fieldnames = {scenario: {k: v + scenario for k, v in result_fieldnames.items()} for scenario in scenarios}
-  
+        self.scenarios = scenarios
+
 ###################################################################################################################
 
+
+###################################################################################################################
+# the function for determining the results field name for a given scenario, rule and results type!
+###################################################################################################################
+def get_results_field_name(scenario, rule, results_type):
+    if isinstance(rule.order, int):
+        order = str(rule.order)
+    else:
+        order = rule.order
+
+    if results_type == "TXT":
+        print(f"Setting results field to ", scenario + 'TXT' + order)
+        return scenario + 'TXT' + order
+    elif results_type == "PEN":
+        print(f"Setting results field to ", scenario + 'PEN' + order)
+        return scenario + 'PEN' + order
+    else:
+        print(f"Invalid results_type {results_type}. Expected 'TXT' or 'PEN'.")
+        return None
 
 ###################################################################################################################
 # the function for processing rules!
 ###################################################################################################################
-def process_rules(rules, datasets, classifications):
-    for rule in rules:
-        if not rule.execute:
-            continue
+def process_rules(rules, datasets, classifications, results_dataset):
 
-        print(f"Processing rule {rule.name}...")
+    # Iterate over scenarios
+    for scenario in scenarios:
 
-        # Get input dataset
-        input_dataset = datasets.get(rule.input_dataset, None)
-        if input_dataset is None:
-            print(f"Input dataset {rule.input_dataset} not found.")
-            continue
+        print(f"Processing scenario {scenario}...")
+ 
+        for rule in rules:
+            if not rule.execute:
+                continue
 
-        # Read the input dataset and set the fieldname containing the datavalue we'll be processing
-        input_dataset.read()
-        datavalue_fieldname = input_dataset.fields['datavalue']['fieldname']
+            print(f"Processing rule {rule.name}...")
 
-        # Get output dataset
-        output_dataset = datasets.get(rule.output_dataset, None)
-        if output_dataset is None:
-            print(f"Output dataset {rule.output_dataset} not found.")
-            continue
+            # Get input dataset
+            input_dataset = datasets.get(rule.input_dataset, None)
+            if input_dataset is None:
+                print(f"Input dataset {rule.input_dataset} not found.")
+                continue
 
-        # Read the output dataset
-        output_dataset.read()
+            # Read the input dataset and set the fieldname containing the datavalue we'll be processing
+            input_dataset.read()
+            datavalue_fieldname = input_dataset.fields['datavalue']['fieldname']
 
-        # Iterate over scenarios
-        for scenario in input_dataset.fields['scenario']['selection']:
-            
+            # Read the output dataset
+            results_dataset.read()
+
+            # Check if the current scenario is also present in the current rule's scenarios list
+            if scenario not in rule.scenarios:
+                continue
+             
             # Apply subset filters to input dataset
             subset_data = input_dataset.data
 
@@ -137,11 +155,9 @@ def process_rules(rules, datasets, classifications):
                     subset_data = subset_data[subset_data[fieldname] == rule.filter.value]
                 # add other evaluation conditions here (>, <, !=, etc.)
 
-            print(f"Subset is ", subset_data)
-
             # Initialize 'penalty' and 'result_text' columns for this rule with default values
-            subset_data[rule.result_fieldnames[scenario]['penalty_field']] = np.nan
-            subset_data[rule.result_fieldnames[scenario]['text_field']] = None
+            subset_data[get_results_field_name(scenario, rule, "PEN")] = np.nan
+            subset_data[get_results_field_name(scenario, rule, "TXT")] = None
 
             # Apply classification method and calculate penalty
             if rule.rule_execution.method == "classification":
@@ -154,24 +170,20 @@ def process_rules(rules, datasets, classifications):
             for cls in classification.classes:
                 print(f"Class bounds: {cls.lbound} to {cls.ubound}, penalty: {cls.penalty}, result text: {cls.result_text}")
                 print(f"fieldname ", fieldname)
-                print(f"value ", subset_data[datavalue_fieldname])
+                #print(f"value ", subset_data[datavalue_fieldname])
                 condition = (subset_data[datavalue_fieldname] >= cls.lbound) & (subset_data[datavalue_fieldname] < cls.ubound)
-                subset_data.loc[condition, rule.result_fieldnames[scenario]['penalty_field']] = cls.penalty
-                subset_data.loc[condition, rule.result_fieldnames[scenario]['text_field']] = cls.result_text
-
-
-            #print(f"Subset after implementation of rule is ", subset_data)
-
-
-            #exit()
+                subset_data.loc[condition, get_results_field_name(scenario, rule, "PEN")] = cls.penalty
+                subset_data.loc[condition, get_results_field_name(scenario, rule, "TXT")] = cls.result_text
 
             # Now that we have the penalties and text results, we can append this data back to the original dataset
             # Update only the fields related to the current rule and scenario in the output dataset
-            for field in [rule.result_fieldnames[scenario]['penalty_field'], rule.result_fieldnames[scenario]['text_field']]:
-                output_dataset.data.loc[subset_data.index, field] = subset_data[field]
+            for field in [get_results_field_name(scenario, rule, "PEN"), get_results_field_name(scenario, rule, "TXT")]:
+                results_dataset.data.loc[subset_data.index, field] = subset_data[field]
+
+            results_dataset.data[scenario] -= subset_data[get_results_field_name(scenario, rule, "PEN")]  # update the rating
 
             # Write the updated output dataset
-            output_dataset.write()
+            results_dataset.write()
 
 ###################################################################################################################
 
@@ -182,15 +194,21 @@ def process_rules(rules, datasets, classifications):
 ###################################################################################################################
 json_file_path = r"c:\GITHUB\klimaatatlas\rekenregels\20230530_rekenregels.json"
 
+scenarios = []                  # create a list to store all scenarios
 datasets = {}                   # Create a dictionary to store all datasets
 classifications = {}            # Create a dictionary to store all classifications
 rules = []                      # Create a list to store all rules
 
 # read the JSON file, which contains the datasets and the rules to assess
+print(f"reading json file")
 with open(json_file_path) as json_file:
     schema = json.load(json_file)
 
+# read scenarios from the schema
+scenarios = schema['scenarios']    
+
 # populate the datasets
+print(f"populating the datasets")
 for dataset in schema['datasets']:
     tablename = dataset.get('tablename', None)  # Get the 'tablename' if it exists
     fields = dataset['fields']
@@ -203,14 +221,33 @@ for dataset in schema['datasets']:
     datasets[dataset['id']] = Dataset(id, path, fields, storage_type, data_type, tablename)
 
 # populate the classifications
+print(f"populating the classification schemas")
 for classification in schema['classifications']:
     classifications[classification['id']] = Classification(classification['id'], classification['classes'])
 
 # populate the validation rules to be assessed
+print(f"populating the list of rules")
 for rule in schema['rules']:
     rules.append(Rule(**rule))
 
+#---------------------------------------------------------------------------------------------------------
+# read results_dataset from the schema
+print(f"initializing the results dataset")
+results_dataset = None  # Create a variable to store the results dataset
+results_dataset_id = schema['results']['dataset']
+results_dataset = datasets[results_dataset_id]
+results_dataset.read()  # read the results_dataset
+
+# Create a field for the results in the results_dataset for each scenario and initialize its rating to 10
+for scenario in scenarios:
+    results_dataset.data[scenario] = 10
+
+# save the initialized results dataset
+results_dataset.write()
+#---------------------------------------------------------------------------------------------------------
+
 # now start processing the rules!
-process_rules(rules, datasets, classifications)
+print(f"processing the rules")
+process_rules(rules, datasets, classifications, results_dataset)
 
 ###################################################################################################################

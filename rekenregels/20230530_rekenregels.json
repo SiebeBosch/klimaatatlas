@@ -1,4 +1,5 @@
 {
+	"scenarios":["2014","2085"],
 	"datasets":[
 		{
 			"_comment":"this attribute describes the water area polygons",
@@ -61,10 +62,11 @@
 				"method":"classification", 
 				"id":"mediaan_stikstof"
 			},			
-			"output_dataset":"watervlakken",
 			"origin":"rekenregels",
-			"result_fieldnames": {"text_field":"TXT", "penalty_field":"PEN"},
-			"scenarios": ["2014", "2085"]			
+			"scenarios": ["2014","2085"]			
 		}
-	]
+	],
+	"results":{
+		"dataset":"watervlakken"
+	}		
 }
