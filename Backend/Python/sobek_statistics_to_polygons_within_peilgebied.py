@@ -10,7 +10,7 @@ from db_setup import setup_database
 polygon_shapefile_path = r"c:\GITHUB\klimaatatlas\GIS\Watervlakken Plus2.shp"
 subcatchments_shapefile_path = r"c:\GITHUB\klimaatatlas\GIS\Peilgebied vigerend besluit.shp"
 sqlite_db_path = r"c:\GITHUB\klimaatatlas\data\database.db"
-delete_old_results = False
+delete_old_results = True
 
 # Define the list of percentiles as a customizable array of values
 percentiles = [5, 25, 50, 75, 95]
@@ -117,6 +117,7 @@ for index, (scenario, substance) in enumerate(unique_combinations, start=1):
         percentiles_values = all_percentiles[:, i]
         percentile_data[location_id] = {'coords': coords, 'percentiles': percentiles_values, 'subcatchment_code': subcatchment_code}
 
+    #iterate through each feature in the shapefile and determine the polygon's center
     for feature_idx, polygon in enumerate(polygons_gdf.geometry):
 
         print(f"Processing feature {feature_idx} for combination {combination_idx}/{n_combinations}")

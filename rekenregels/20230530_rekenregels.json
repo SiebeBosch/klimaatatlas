@@ -41,6 +41,17 @@
 				{"lbound":20, "ubound":25, "penalty":4, "result_text":"mediaan stikstof tussen 20 en 25 mg/l"},
 				{"lbound":25, "ubound":999, "penalty":6, "result_text":"mediaan stikstof hoger dan 25 mg/l"}
 			]
+		},
+		{
+			"id":"waterdiepte",
+			"classes":[
+				{"lbound":0, "ubound":0.2, "penalty":5, "result_text":"waterdiepte tussen 0 en 20 cm"},
+				{"lbound":0.2, "ubound":0.4, "penalty":4, "result_text":"waterdiepte tussen 20 en 40 cm"},
+				{"lbound":0.4, "ubound":0.6, "penalty":3, "result_text":"waterdiepte tussen 40 en 60 cm"},
+				{"lbound":0.6, "ubound":1.0, "penalty":2, "result_text":"waterdiepte tussen 60 en 100 cm"},
+				{"lbound":1.0, "ubound":1.5, "penalty":1, "result_text":"waterdiepte tussen 1.0 en 1.5 m"},
+				{"lbound":1.5, "ubound":999, "penalty":0, "result_text":""}
+			]
 		}
 	],
 	"rules":[
@@ -60,11 +71,44 @@
 			},
 			"rule_execution":{
 				"method":"classification", 
-				"id":"mediaan_stikstof"
+				"field_type":"datavalue",
+				"classification_id":"mediaan_stikstof"
 			},			
 			"origin":"rekenregels",
 			"scenarios": ["2014","2085"]			
-		}
+		},
+		{
+			"order":2,
+			"execute":true,
+			"name":"Waterdiepte",
+			"input_dataset":"watervlakken",
+			"input_field":"depth",
+			"rule_execution":{
+				"method":"classification", 
+				"field_type":"depth",
+				"classification_id":"waterdiepte"
+			},			
+			"origin":"rekenregels",
+			"scenarios": ["2014","2085"]			
+		},
+		{
+			"order":3,
+			"execute":true,
+			"name":"Doodlopend",
+			"input_dataset":"watervlakken",
+			"input_field":"doodlopend",
+			"filter":{
+				"field_type":"doodlopend",
+				"evaluation":"=",
+				"value":"ja"
+			},
+			"rule_execution":{
+				"method":"constant",
+				"value":2
+			},			
+			"origin":"rekenregels",
+			"scenarios": ["2014","2085"]			
+		}		
 	],
 	"results":{
 		"dataset":"watervlakken"
