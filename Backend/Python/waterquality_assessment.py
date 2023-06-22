@@ -144,6 +144,12 @@ def process_rules(rules, datasets, classifications, results_dataset):
              
             # Apply subset filters to input dataset
             subset_data = input_dataset.data
+            print("subset_data length is ", len(subset_data))
+
+            # Initialize 'penalty' and 'result_text' columns for this rule with default values
+            subset_data[get_results_field_name(scenario, rule, "PEN")] = 0
+            subset_data[get_results_field_name(scenario, rule, "TXT")] = None
+
             if rule.subset:
                 for subset in rule.subset:
                     fieldtype = subset.fieldtype
@@ -164,9 +170,6 @@ def process_rules(rules, datasets, classifications, results_dataset):
                     subset_data = subset_data[subset_data[fieldname] == rule.filter.value]
                 # add other evaluation conditions here (>, <, !=, etc.)
 
-            # Initialize 'penalty' and 'result_text' columns for this rule with default values
-            subset_data[get_results_field_name(scenario, rule, "PEN")] = np.nan
-            subset_data[get_results_field_name(scenario, rule, "TXT")] = None
 
             if rule.rule_execution.method == "classification":
                 classification = classifications.get(rule.rule_execution.classification_id, None)
@@ -188,6 +191,14 @@ def process_rules(rules, datasets, classifications, results_dataset):
 
             # Now that we have the penalties and text results, we can append this data back to the original dataset
             # Update only the fields related to the current rule and scenario in the output dataset
+            print("writing the results back to the source. Source records: ", len(results_dataset.data), ", subset records: ", len(subset_data))
+            #exit()
+
+            #SIEBE: creating a subset unfotunately reduces the records by more than desired.
+            #common_indices = results_dataset.data.index.intersection(subset_data.index)
+            #for field in [get_results_field_name(scenario, rule, "PEN"), get_results_field_name(scenario, rule, "TXT")]:
+            #        results_dataset.data.loc[common_indices, field] = subset_data.loc[common_indices, field]
+
             for field in [get_results_field_name(scenario, rule, "PEN"), get_results_field_name(scenario, rule, "TXT")]:
                 results_dataset.data.loc[subset_data.index, field] = subset_data[field]
 
@@ -245,6 +256,7 @@ results_dataset.read()  # read the results_dataset
 # Create a field for the results in the results_dataset for each scenario and initialize its rating to 10
 for scenario in scenarios:
     results_dataset.data[scenario] = 10
+    print("results_dataset initialized to rating 10: ", len(results_dataset.data[scenario]))
 
 # save the initialized results dataset
 results_dataset.write()

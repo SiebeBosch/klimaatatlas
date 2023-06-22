@@ -18,6 +18,36 @@ Public Class clsGeneralFunctions
         Log = New clsLog()
     End Sub
 
+    Public Enum enmRatingMethod
+        constant = 1
+        classification = 2
+    End Enum
+
+    Public Enum enmFieldType
+        featureidx = 0
+        id = 1
+        origin = 2
+        scenario = 3
+        parameter_name = 4
+        percentile = 5
+        datavalue = 6
+        depth = 7
+        deadend = 8
+    End Enum
+
+    Public Enum enmStorageType
+        shapefile = 0
+        sqlite = 1
+    End Enum
+
+    Public Enum enmDataType
+        points = 1
+        polylines = 2
+        polygons = 3
+        percentiles = 4
+    End Enum
+
+
     Public Function CreateSqlConnection(ByVal path As String) As SQLiteConnection
         ' Replace single backslashes with double backslashes
         path = path.Replace("\", "\\")
