@@ -1,9 +1,15 @@
 ﻿Imports System.Data.SQLite
 Imports System.Text
+Imports Klimaatatlas.clsGeneralFunctions
 
-Module SQLiteFunctions
+Public Module SQLiteFunctions
+
 
     Public Class clsSQLiteField
+
+        Public sourceFieldIdx As Integer = -1 'the original field index of the source dataset this field comes from (if applicable)
+        Public FieldType As enmFieldType 'a specific fieldtype designed for klimaatatlas
+
         Public Enum enmSQLiteDataType
             SQLITETEXT
             SQLITEINT
@@ -33,10 +39,10 @@ Module SQLiteFunctions
             End Select
         End Function
 
-        Public Sub New(myFieldName As String, myDataType As enmSQLiteDataType, myHasIndex As Boolean)
+        Public Sub New(myFieldName As String, myFieldType As enmFieldType, myDataType As enmSQLiteDataType)
             FieldName = myFieldName
+            FieldType = myFieldType
             DataType = myDataType
-            HasIndex = myHasIndex
         End Sub
 
     End Class

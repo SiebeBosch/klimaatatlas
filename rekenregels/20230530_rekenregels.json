@@ -1,19 +1,19 @@
 {
 	"scenarios":["2014","2085"],
+	"features_dataset":{
+		"_comment":"this attribute describes the water area polygons",
+		"id":"watervlakken",
+		"data_type":"polygons",
+		"storage_type":"shapefile",
+		"path":"c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus2.shp",
+		"fields":[
+			{"fieldtype":"id", "fieldname":"CODE"}, 
+			{"fieldtype":"featureidx", "fieldname":"FEATUREIDX"}, 
+			{"fieldtype":"depth", "fieldname":"WATERDIEPT"}, 
+			{"fieldtype":"deadend", "fieldname":"doodlopend"} 
+		]			
+	},
 	"datasets":[
-		{
-			"_comment":"this attribute describes the water area polygons",
-			"id":"watervlakken",
-			"data_type":"polygons",
-			"storage_type":"shapefile",
-			"path":"c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus2.shp",
-			"fields":[
-				{"fieldtype":"id", "fieldname":"CODE"}, 
-				{"fieldtype":"featureidx", "fieldname":"FEATUREIDX"}, 
-				{"fieldtype":"depth", "fieldname":"WATERDIEPT"}, 
-				{"fieldtype":"deadend", "fieldname":"doodlopend"} 
-			]			
-		},
 		{
 			"_comment":"this attribute describes where the water quality statistics as derived from SOBEK can be found",
 			"id":"sobek_results",
@@ -57,7 +57,7 @@
 	"rules":[
 		{
 			"order":1,
-			"execute":true,
+			"apply":false,
 			"name":"Mediaan Stikstof Totaal",
 			"input_dataset":"sobek_results",
 			"subset":[
@@ -69,7 +69,7 @@
 				"evaluation":"=",
 				"value":50
 			},
-			"rule_execution":{
+			"rating":{
 				"method":"classification", 
 				"field_type":"datavalue",
 				"classification_id":"mediaan_stikstof"
@@ -79,11 +79,11 @@
 		},
 		{
 			"order":2,
-			"execute":true,
+			"apply":false,
 			"name":"Waterdiepte",
 			"input_dataset":"watervlakken",
 			"input_field":"depth",
-			"rule_execution":{
+			"rating":{
 				"method":"classification", 
 				"field_type":"depth",
 				"classification_id":"waterdiepte"
@@ -93,21 +93,21 @@
 		},
 		{
 			"order":3,
-			"execute":true,
+			"apply":true,
 			"name":"Doodlopend",
 			"input_dataset":"watervlakken",
 			"input_field":"doodlopend",
 			"filter":{
-				"field_type":"doodlopend",
+				"field_type":"deadend",
 				"evaluation":"=",
 				"value":"ja"
 			},
-			"rule_execution":{
+			"rating":{
 				"method":"constant",
 				"value":2
 			},			
 			"origin":"rekenregels",
-			"scenarios": ["2014","2085"]			
+			"scenarios": ["2014"]			
 		}		
 	],
 	"results":{

@@ -6,6 +6,7 @@ Imports NCalc
 Imports MathNet.Symbolics
 Imports MapWinGIS
 Imports System.Globalization
+Imports Klimaatatlas.clsGeneralFunctions
 
 
 Public Class clsKlimaatatlas
@@ -19,6 +20,11 @@ Public Class clsKlimaatatlas
 
     Public myProgressBar As ProgressBar
     Public myProgressLabel As System.Windows.Forms.Label
+
+    Public featuresDataset As clsDataset                        'this is the dataset containing our features
+    Public Datasets As New Dictionary(Of String, clsDataset)
+    Public Rules As New SortedDictionary(Of Integer, clsRule)
+
 
     Public Sub New()
     End Sub
@@ -100,30 +106,153 @@ Public Class clsKlimaatatlas
         CreateOrUpdateSQLiteTable(SQLiteCon, "KOPPELTABEL", Fields)
     End Sub
 
-    Public Function ProcessRules() As Boolean
+    Public Function readFeaturesDataset() As Boolean
+        Try
+            'this function reads the key dataset containing our features. This is also the dataset to which our results will be written
+            featuresDataset = New clsDataset(Me)
+
+            Dim dataset As JObject = _jsonObj("features_dataset")
+            featuresDataset.Comment = dataset("_comment").ToString
+            featuresDataset.ID = dataset("id").ToString
+            featuresDataset.dataType = CType([Enum].Parse(GetType(enmDataType), dataset("data_type").ToString), enmDataType)
+            featuresDataset.storageType = CType([Enum].Parse(GetType(enmStorageType), dataset("storage_type").ToString), enmStorageType)
+            featuresDataset.path = dataset("path").ToString
+            For Each field In dataset("fields")
+                Dim fieldType As enmFieldType = CType([Enum].Parse(GetType(enmFieldType), field("fieldtype").ToString()), enmFieldType)
+                Dim fieldName As String = field("fieldname").ToString()
+                Dim newField As New clsSQLiteField(fieldName, fieldType, clsSQLiteField.enmSQLiteDataType.SQLITETEXT)
+                If Not featuresDataset.Fields.ContainsKey(fieldName.Trim.ToUpper) Then
+                    featuresDataset.Fields.Add(fieldName.Trim.ToUpper, newField)
+                End If
+            Next
+
+            'we will read this entire dataset to memory. This allows us to perform filtering, classify and assign penalties
+            featuresDataset.readToDictionary()
+
+
+            Return True
+        Catch ex As Exception
+
+            Return False
+        End Try
+
+    End Function
+
+
+    Public Function PopulateDatasets() As Boolean
+        Try
+            For Each dataset As JObject In _jsonObj("datasets")
+
+                Dim myDataset As New clsDataset(Me)
+                myDataset.Comment = dataset("_comment").ToString
+                myDataset.ID = dataset("id").ToString
+                myDataset.dataType = CType([Enum].Parse(GetType(enmDataType), dataset("data_type").ToString), enmDataType)
+                myDataset.storageType = CType([Enum].Parse(GetType(enmStorageType), dataset("storage_type").ToString), enmStorageType)
+                myDataset.path = dataset("path").ToString
+                For Each field In dataset("fields")
+                    Dim fieldType As enmFieldType = CType([Enum].Parse(GetType(enmFieldType), field("fieldtype").ToString()), enmFieldType)
+                    Dim fieldName As String = field("fieldname").ToString()
+                    Dim DataType As enmSQLiteDataType
+
+                    Select Case fieldType
+                        Case enmFieldType.datavalue
+                            DataType = enmSQLiteDataType.SQLITEREAL
+                        Case enmFieldType.deadend
+                            DataType = enmSQLiteDataType.SQLITETEXT
+                        Case enmFieldType.depth
+                            DataType = enmSQLiteDataType.SQLITEREAL
+                        Case enmFieldType.featureidx
+                            DataType = enmSQLiteDataType.SQLITEINT
+                        Case enmFieldType.origin
+                            DataType = enmSQLiteDataType.SQLITETEXT
+                        Case enmFieldType.parameter_name
+                            DataType = enmSQLiteDataType.SQLITETEXT
+                        Case enmFieldType.id
+                            DataType = enmSQLiteDataType.SQLITETEXT
+                        Case enmFieldType.percentile
+                            DataType = enmSQLiteDataType.SQLITEREAL
+                        Case enmFieldType.scenario
+                            DataType = enmSQLiteDataType.SQLITETEXT
+                    End Select
+
+                    Dim myField As New clsSQLiteField(fieldName, fieldType, DataType)
+
+                    If Not myDataset.Fields.ContainsKey(fieldType) Then
+                        myDataset.Fields.Add(fieldName.Trim.ToUpper, myField)
+                    End If
+                Next
+
+                Datasets.Add(myDataset.ID.Trim.ToUpper, myDataset)
+
+            Next
+        Catch ex As Exception
+
+        End Try
+    End Function
+    Public Function PopulateRules() As Boolean
         Try
             SQLiteCon.Open()
             For Each rule As JObject In _jsonObj("rules")
-                If rule("execute").Value(Of Boolean)() Then
-                    Select Case rule("operation_type").ToString()
-                        Case "polygon_to_point_mapping"
-                            ProcessPolygonToPointMapping(rule)
-                        Case "timeseries_transformation"
-                            ProcessTimeseriesTransformation(rule)
-                        Case "timeseries_filter"
-                            Dim filterType = rule("filter")("type").ToString()
-                            Select Case filterType
-                                Case "exceeds_threshold"
-                                    ProcessTimeseriesFilter_thresholdExceedance(rule)
-                                Case "consecutive_hours_exceeding_threshold"
-                                    ProcessTimeseriesFilter_hoursThresholdExceedance(rule)
-                                Case Else
-                                    Throw New Exception("filterType not yet supported: " & filterType)
-                            End Select
-                        Case "timeseries_classification"
-                            processTimeseriesClassification(rule)
-                    End Select
+
+                'create a new instance of clsRule
+                Dim myRule As New clsRule()
+
+                'set the general properties
+                myRule.Order = Convert.ToInt16(rule("order").ToString)
+                myRule.Apply = Convert.ToBoolean(rule("apply"))
+                myRule.Name = rule("name").ToString
+                myRule.InputDataset = GetDatasetObjectByID(rule("input_dataset").ToString)
+
+                'set the subset, if specified
+                myRule.Subset = New Dictionary(Of enmFieldType, List(Of String))
+                If rule.ContainsKey("subset") Then
+                    For Each subset In rule("subset")
+                        Dim fieldType As enmFieldType = CType([Enum].Parse(GetType(enmFieldType), subset("fieldtype").ToString()), enmFieldType)
+
+                        ' Iterate over each value in the "values" array
+                        Dim vals As JArray = subset.Value(Of JArray)("values")
+                        Dim Values As New List(Of String)
+                        For Each value As JToken In vals
+                            ' Add the value to the list
+                            Values.Add(value.Value(Of String))
+                        Next
+                        myRule.Subset.Add(fieldType, Values)
+                    Next
                 End If
+
+                'set the filter, if specified
+                myRule.Filter = New clsFilter()
+                If rule.ContainsKey("filter") Then
+                    Dim myFilter As JObject = rule("filter")
+                    myRule.Filter.fieldType = CType([Enum].Parse(GetType(enmFieldType), myFilter("field_type").ToString()), enmFieldType)
+                    myRule.Filter.evaluation = myFilter("evaluation")
+                    myRule.Filter.value = myFilter("value")
+                End If
+
+                'set the rule's execution methodology
+                myRule.Rating = New clsRating()
+                Dim myExecution As JObject = rule("rule_execution")
+                myRule.Rating.Method = CType([Enum].Parse(GetType(enmRatingMethod), myExecution("method").ToString()), enmRatingMethod)
+                If myExecution.ContainsKey("fieldtype") Then
+                    myRule.Rating.FieldType = CType([Enum].Parse(GetType(enmFieldType), myExecution("field_type").ToString()), enmFieldType)
+                End If
+                If myExecution.ContainsKey("classification_id") Then
+                    myRule.Rating.classificationId = myExecution("classification_id")
+                End If
+
+                'set the rule's origin
+                myRule.Origin = rule("origin")
+
+                'set the rule's scenarios
+                Dim scens As JArray = rule.Value(Of JArray)("scenarios")
+                For Each scen As JToken In scens
+                    myRule.Scenarios.Add(scen.ToString)
+                Next
+
+                'add our rule to the list
+                If Rules.ContainsKey(myRule.Order) Then Throw New Exception("Error: two or more rules with the same order number in the JSON configuration file. Please correct this before proceedng.")
+                Rules.Add(myRule.Order, myRule)
+
             Next
             SQLiteCon.Close()
             Return True
@@ -132,6 +261,24 @@ Public Class clsKlimaatatlas
             Return False
         End Try
 
+    End Function
+
+    Public Function ProcessRules() As Boolean
+        'this function processes all rules we have just read and computes the penalties for each feature
+        Try
+            'Iterate over each key-value pair in the sorted dictionary
+            For Each kvp As KeyValuePair(Of Integer, clsRule) In Rules
+                Dim ruleOrder As Integer = kvp.Key
+                Dim myRule As clsRule = kvp.Value
+
+                myRule.Execute()
+
+            Next
+            Return True
+
+        Catch ex As Exception
+
+        End Try
     End Function
 
     Public Sub ProcessPolygonToPointMapping(ByVal rule As JObject)
@@ -918,6 +1065,13 @@ Public Class clsKlimaatatlas
     '    Return Convert.ToDouble(e.Evaluate())
     'End Function
 
+    Private Function GetDatasetObjectByID(id As String) As clsDataset
+        If Datasets.ContainsKey(id.Trim.ToUpper) Then
+            Return Datasets.Item(id.Trim.ToUpper)
+        Else
+            Return Nothing
+        End If
+    End Function
     Private Function GetDatasetById(id As String) As JObject
         For Each dataset As JObject In _config("datasets")
             If dataset("id").ToString() = id Then

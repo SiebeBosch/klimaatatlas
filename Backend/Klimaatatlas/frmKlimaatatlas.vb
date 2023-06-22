@@ -27,6 +27,12 @@ Public Class frmKlimaatatlas
         Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
         Klimaatatlas.ReadConfiguration(txtConfigFile.Text)
         Klimaatatlas.UpgradeDatabase()
+
+        Klimaatatlas.readFeaturesDataset()
+
+        Klimaatatlas.PopulateDatasets()
+        Klimaatatlas.PopulateRules()
+
         Klimaatatlas.ProcessRules()
     End Sub
 
