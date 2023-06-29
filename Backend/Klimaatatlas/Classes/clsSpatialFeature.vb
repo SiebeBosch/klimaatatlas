@@ -10,4 +10,7 @@ Public Class clsSpatialFeature
         WKT = myWKT
     End Sub
 
+    Public Function getWKTString()
+        Return WKT
+    End Function
 End Class
