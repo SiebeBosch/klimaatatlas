@@ -29,6 +29,19 @@
 				{"fieldtype":"percentile", "fieldname":"PERCENTILE"},
 				{"fieldtype":"datavalue", "fieldname":"DATAVALUE"} 
 			]			
+		},
+		{
+			"_comment":"dit bestand bevat tijdreeksen met temperatuur voor diverse soorten waterlichamen",
+			"id":"temperatuur_waterlichamen",
+			"data_type":"timeseries",
+			"storage_type":"EXCEL",
+			"path":"c:\\GITHUB\\klimaatatlas\\data\\maxtemp.xlsx",
+			"tablename":"maxtemp",
+			"fields":[
+				{"fieldtype":"datetime", "fieldname":"datum"}, 
+				{"fieldtype":"watertype", "fieldname":"watertype"}, 
+				{"fieldtype":"datavalue", "fieldname":"Temperatuur"}
+			]				
 		}
 	],
 	"classifications":[
@@ -104,11 +117,12 @@
 			},
 			"rating":{
 				"method":"constant",
-				"value":2
+				"penalty":2,
+				"result_text":"watervlak doodlopend."
 			},			
 			"origin":"rekenregels",
 			"scenarios": ["2014"]			
-		}		
+		}
 	],
 	"results":{
 		"dataset":"watervlakken"

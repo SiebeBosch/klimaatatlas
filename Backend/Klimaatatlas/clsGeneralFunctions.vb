@@ -33,6 +33,7 @@ Public Class clsGeneralFunctions
         datavalue = 6
         depth = 7
         deadend = 8
+        comment = 9
     End Enum
 
     Public Enum enmStorageType
@@ -46,6 +47,22 @@ Public Class clsGeneralFunctions
         polygons = 3
         percentiles = 4
     End Enum
+
+
+    Public Sub DeleteShapeFile(ByVal ShpPath As String)
+        Dim myPath As String = ShpPath
+        If System.IO.File.Exists(myPath) Then System.IO.File.Delete(myPath)
+        myPath = Replace(ShpPath, ".shp", ".shx", , , CompareMethod.Text)
+        If System.IO.File.Exists(myPath) Then System.IO.File.Delete(myPath)
+        myPath = Replace(ShpPath, ".shp", ".dbf", , , CompareMethod.Text)
+        If System.IO.File.Exists(myPath) Then System.IO.File.Delete(myPath)
+        myPath = Replace(ShpPath, ".shp", ".prj", , , CompareMethod.Text)
+        If System.IO.File.Exists(myPath) Then System.IO.File.Delete(myPath)
+        myPath = Replace(ShpPath, ".shp", ".mwd", , , CompareMethod.Text)
+        If System.IO.File.Exists(myPath) Then System.IO.File.Delete(myPath)
+        myPath = Replace(ShpPath, ".shp", ".mwx", , , CompareMethod.Text)
+        If System.IO.File.Exists(myPath) Then System.IO.File.Delete(myPath)
+    End Sub
 
 
     Public Function CreateSqlConnection(ByVal path As String) As SQLiteConnection

@@ -20,6 +20,37 @@ Public Class clsDataset
         Features = New Dictionary(Of Integer, clsSpatialFeature)
     End Sub
 
+    Public Function AddField(FieldName As String, FieldType As enmFieldType, DataType As enmSQLiteDataType)
+
+        'create a new field
+        Dim myField As New clsSQLiteField(FieldName, FieldType, DataType, Fields.Count)
+        Fields.Add(FieldName.Trim.ToUpper, myField)
+
+
+        'redim the values array in order to make place for values in this field
+        ReDimPreserve(Values, Fields.Count)
+
+    End Function
+
+    Public Sub ReDimPreserve(ByRef arr As Object(,), newSize1 As Integer)
+        ' Save the old array size
+        Dim oldSize1 As Integer = arr.GetUpperBound(0) + 1
+        Dim oldSize2 As Integer = arr.GetUpperBound(1) + 1
+
+        ' Create a new array with the new size
+        Dim newArr(newSize1 - 1, oldSize2 - 1) As Object
+
+        ' Copy the old values into the new array
+        For i As Integer = 0 To Math.Min(oldSize1, newSize1) - 1
+            For j As Integer = 0 To oldSize2 - 1
+                newArr(i, j) = arr(i, j)
+            Next
+        Next
+
+        ' Update the original array reference
+        arr = newArr
+    End Sub
+
 
     Public Function readToDictionary() As Boolean
         Try
@@ -75,6 +106,34 @@ Public Class clsDataset
         Catch ex As Exception
 
         End Try
+    End Function
+
+    Public Function getFeatureIndexList() As List(Of Integer)
+        Try
+            Dim IdxList As New List(Of Integer)
+            Dim IdxField As clsSQLiteField = getFeatureIndexField()
+            If IdxField Is Nothing Then Throw New Exception($"no feature index nmbers field found in dataset {ID}")
+            For i = 0 To Features.Count - 1
+                IdxList.Add(Values(IdxField.fieldIdx, i))
+            Next
+            Return IdxList
+        Catch ex As Exception
+            Me.Setup.Log.AddError("Error in function getFeatureIndexList of class clsDataset: " & ex.Message)
+        End Try
+    End Function
+
+    Public Function getFeatureIndexField() As clsSQLiteField
+        For Each myField As clsSQLiteField In Fields.Values
+            If myField.FieldType = enmFieldType.featureidx Then Return myField
+        Next
+        Return Nothing
+    End Function
+
+    Public Function getFieldByType(myType As enmFieldType) As clsSQLiteField
+        For Each myField As clsSQLiteField In Fields.Values
+            If myField.FieldType = myType Then Return myField
+        Next
+        Return Nothing
     End Function
 
 End Class

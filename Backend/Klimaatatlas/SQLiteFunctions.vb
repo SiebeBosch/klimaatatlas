@@ -8,6 +8,7 @@ Public Module SQLiteFunctions
     Public Class clsSQLiteField
 
         Public sourceFieldIdx As Integer = -1 'the original field index of the source dataset this field comes from (if applicable)
+        Public fieldIdx As Integer = -1       'the field index of the source data after read to memory
         Public FieldType As enmFieldType 'a specific fieldtype designed for klimaatatlas
 
         Public Enum enmSQLiteDataType
@@ -43,6 +44,13 @@ Public Module SQLiteFunctions
             FieldName = myFieldName
             FieldType = myFieldType
             DataType = myDataType
+        End Sub
+
+        Public Sub New(myFieldName As String, myFieldType As enmFieldType, myDataType As enmSQLiteDataType, myFieldIdx As Integer)
+            FieldName = myFieldName
+            FieldType = myFieldType
+            DataType = myDataType
+            fieldIdx = myFieldIdx
         End Sub
 
     End Class

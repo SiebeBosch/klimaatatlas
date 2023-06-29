@@ -31,9 +31,14 @@ Public Class frmKlimaatatlas
         Klimaatatlas.readFeaturesDataset()
 
         Klimaatatlas.PopulateDatasets()
+        Klimaatatlas.populateClassifications()
         Klimaatatlas.PopulateRules()
 
         Klimaatatlas.ProcessRules()
+
+        'write the results to a new shapefile
+        Klimaatatlas.ExportResultsToShapefile("c:\temp\results.shp")
+
     End Sub
 
     Private Sub btnDatabase_Click(sender As Object, e As EventArgs) Handles btnDatabase.Click

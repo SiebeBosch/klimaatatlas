@@ -23,6 +23,7 @@ Public Class clsKlimaatatlas
 
     Public featuresDataset As clsDataset                        'this is the dataset containing our features
     Public Datasets As New Dictionary(Of String, clsDataset)
+    Public Classifications As New Dictionary(Of String, clsClassification)
     Public Rules As New SortedDictionary(Of Integer, clsRule)
 
 
@@ -33,6 +34,7 @@ Public Class clsKlimaatatlas
         myProgressBar = pr
         myProgressLabel = lb
     End Sub
+
 
     Public Sub ReadConfiguration(jsonPath As String)
         Dim jsonString As String = File.ReadAllText(jsonPath)
@@ -122,6 +124,7 @@ Public Class clsKlimaatatlas
                 Dim fieldName As String = field("fieldname").ToString()
                 Dim newField As New clsSQLiteField(fieldName, fieldType, clsSQLiteField.enmSQLiteDataType.SQLITETEXT)
                 If Not featuresDataset.Fields.ContainsKey(fieldName.Trim.ToUpper) Then
+                    newField.fieldIdx = featuresDataset.Fields.Count
                     featuresDataset.Fields.Add(fieldName.Trim.ToUpper, newField)
                 End If
             Next
@@ -178,6 +181,7 @@ Public Class clsKlimaatatlas
                     Dim myField As New clsSQLiteField(fieldName, fieldType, DataType)
 
                     If Not myDataset.Fields.ContainsKey(fieldType) Then
+                        myField.fieldIdx = myDataset.Fields.Count
                         myDataset.Fields.Add(fieldName.Trim.ToUpper, myField)
                     End If
                 Next
@@ -189,18 +193,42 @@ Public Class clsKlimaatatlas
 
         End Try
     End Function
+
+    Public Function PopulateClassifications() As Boolean
+        Try
+            For Each classification As JObject In _jsonObj("classifications")
+                'create a new instance of clsClassification
+                Dim myClassification As New clsClassification(Me, classification("id").ToString)
+
+                myClassification.Classes = New List(Of clsClassificationClass)
+
+                For Each classdef In classification("classes")
+                    Dim newClass As New clsClassificationClass(Me, Convert.ToDouble(classdef("lbound")), Convert.ToDouble(classdef("ubound")), Convert.ToDouble(classdef("penalty")), classdef("result_text").ToString)
+                    myClassification.Classes.Add(newClass)
+                Next
+
+                Classifications.Add(myClassification.id.Trim.ToUpper, myClassification)
+            Next
+            Return True
+        Catch ex As Exception
+            Me.Log.AddError("Error in function ProcessRules of class clsKlimaatatlas: " & ex.Message)
+            Return False
+        End Try
+
+    End Function
+
     Public Function PopulateRules() As Boolean
         Try
             SQLiteCon.Open()
             For Each rule As JObject In _jsonObj("rules")
 
                 'create a new instance of clsRule
-                Dim myRule As New clsRule()
+                Dim myRule As New clsRule(Me, Convert.ToInt16(rule("order").ToString))
 
                 'set the general properties
-                myRule.Order = Convert.ToInt16(rule("order").ToString)
                 myRule.Apply = Convert.ToBoolean(rule("apply"))
                 myRule.Name = rule("name").ToString
+
                 myRule.InputDataset = GetDatasetObjectByID(rule("input_dataset").ToString)
 
                 'set the subset, if specified
@@ -231,13 +259,23 @@ Public Class clsKlimaatatlas
 
                 'set the rule's execution methodology
                 myRule.Rating = New clsRating()
-                Dim myExecution As JObject = rule("rule_execution")
-                myRule.Rating.Method = CType([Enum].Parse(GetType(enmRatingMethod), myExecution("method").ToString()), enmRatingMethod)
-                If myExecution.ContainsKey("fieldtype") Then
-                    myRule.Rating.FieldType = CType([Enum].Parse(GetType(enmFieldType), myExecution("field_type").ToString()), enmFieldType)
+                Dim myRating As JObject = rule("rating")
+                myRule.Rating.Method = CType([Enum].Parse(GetType(enmRatingMethod), myRating("method").ToString()), enmRatingMethod)
+
+                Select Case myRule.Rating.Method
+                    Case enmRatingMethod.constant
+                        myRule.Rating.Penalty = Convert.ToDouble(myRating("penalty"))
+                    Case enmRatingMethod.classification
+                End Select
+
+                If myRating.ContainsKey("result_text") Then
+                    myRule.Rating.resultText = myRating("result_text")
                 End If
-                If myExecution.ContainsKey("classification_id") Then
-                    myRule.Rating.classificationId = myExecution("classification_id")
+                If myRating.ContainsKey("fieldtype") Then
+                    myRule.Rating.FieldType = CType([Enum].Parse(GetType(enmFieldType), myRating("field_type").ToString()), enmFieldType)
+                End If
+                If myRating.ContainsKey("classification_id") Then
+                    myRule.Rating.classificationId = myRating("classification_id")
                 End If
 
                 'set the rule's origin
@@ -271,13 +309,65 @@ Public Class clsKlimaatatlas
                 Dim ruleOrder As Integer = kvp.Key
                 Dim myRule As clsRule = kvp.Value
 
-                myRule.Execute()
+                If myRule.Apply Then
+                    myRule.Execute()
+                End If
 
             Next
             Return True
 
         Catch ex As Exception
 
+        End Try
+    End Function
+
+    Public Function ExportResultsToShapefile(path As String) As Boolean
+        Try
+            If System.IO.File.Exists(path) Then Me.Generalfunctions.DeleteShapeFile(path)
+
+            Dim sf As New MapWinGIS.Shapefile
+            sf.CreateNew(path, ShpfileType.SHP_POLYGON)
+            sf.StartEditingShapes(True)
+
+            'add all required fields
+            For i = 0 To featuresDataset.Fields.Count - 1
+                Dim myFieldType As MapWinGIS.FieldType
+                Dim myFieldLength As Integer
+                Dim myFieldPrecision As Integer
+                Select Case featuresDataset.Fields.Values(i).DataType
+                    Case clsSQLiteField.enmSQLiteDataType.SQLITEINT
+                        myFieldType = MapWinGIS.FieldType.INTEGER_FIELD
+                        myFieldLength = 10
+                        myFieldPrecision = 0
+                    Case clsSQLiteField.enmSQLiteDataType.SQLITEREAL
+                        myFieldType = MapWinGIS.FieldType.DOUBLE_FIELD
+                        myFieldLength = 10
+                        myFieldPrecision = 2
+                    Case Else
+                        myFieldType = MapWinGIS.FieldType.STRING_FIELD
+                        myFieldLength = 100
+                        myFieldPrecision = 0
+                End Select
+                sf.EditAddField(featuresDataset.Fields.Values(i).FieldName, myFieldType, myFieldPrecision, myFieldLength)
+            Next
+
+            'add the features and write the values
+            For i = 0 To featuresDataset.Features.Count - 1
+
+                Dim newShape As New MapWinGIS.Shape
+                newShape.ImportFromWKT(featuresDataset.Features(i).getWKTString)
+                sf.EditAddShape(newShape)
+
+                For j = 0 To featuresDataset.Fields.Count - 1
+                    sf.EditCellValue(j, i, featuresDataset.Values(j, i))
+                Next
+
+            Next
+
+            sf.StopEditingShapes(True, True)
+
+        Catch ex As Exception
+            Return False
         End Try
     End Function
 
@@ -1066,7 +1156,9 @@ Public Class clsKlimaatatlas
     'End Function
 
     Private Function GetDatasetObjectByID(id As String) As clsDataset
-        If Datasets.ContainsKey(id.Trim.ToUpper) Then
+        If featuresDataset.ID.Trim.ToUpper = id.Trim.ToUpper Then
+            Return featuresDataset
+        ElseIf Datasets.ContainsKey(id.Trim.ToUpper) Then
             Return Datasets.Item(id.Trim.ToUpper)
         Else
             Return Nothing
