@@ -7,6 +7,7 @@ Imports MathNet.Symbolics
 Imports MapWinGIS
 Imports System.Globalization
 Imports Klimaatatlas.clsGeneralFunctions
+Imports System.Data.Entity.ModelConfiguration.Conventions
 
 
 Public Class clsKlimaatatlas
@@ -26,6 +27,7 @@ Public Class clsKlimaatatlas
     Public Classifications As New Dictionary(Of String, clsClassification)
     Public Rules As New SortedDictionary(Of Integer, clsRule)
 
+    Public RatingFieldName As String = "RATING"
 
     Public Sub New()
     End Sub
@@ -141,7 +143,26 @@ Public Class clsKlimaatatlas
 
     End Function
 
+    Public Function createAndInitializeRatingField() As Boolean
+        Try
+            'add two fields to our dataset if not yet present
+            Dim RatingField As clsSQLiteField = Nothing
+            If Not featuresDataset.Fields.ContainsKey(RatingFieldName.Trim.ToUpper) Then
+                RatingField = featuresDataset.GetAddField(RatingFieldName, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL)
+            Else
+                RatingField = featuresDataset.Fields.Item(RatingFieldName.Trim.ToUpper)
+            End If
 
+            'initialize our rating to a 10
+            For featureidx = 0 To featuresDataset.Features.Count - 1
+                featuresDataset.Values(RatingField.fieldIdx, featureidx) = 10
+            Next
+
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
     Public Function PopulateDatasets() As Boolean
         Try
             For Each dataset As JObject In _jsonObj("datasets")
@@ -265,17 +286,18 @@ Public Class clsKlimaatatlas
                 Select Case myRule.Rating.Method
                     Case enmRatingMethod.constant
                         myRule.Rating.Penalty = Convert.ToDouble(myRating("penalty"))
+                        If myRating.ContainsKey("result_text") Then
+                            myRule.Rating.resultText = myRating("result_text")
+                        End If
                     Case enmRatingMethod.classification
+                        If myRating.ContainsKey("classification_id") Then
+                            myRule.Rating.classificationId = myRating("classification_id")
+                        End If
+
                 End Select
 
-                If myRating.ContainsKey("result_text") Then
-                    myRule.Rating.resultText = myRating("result_text")
-                End If
-                If myRating.ContainsKey("fieldtype") Then
+                If myRating.ContainsKey("field_type") Then
                     myRule.Rating.FieldType = CType([Enum].Parse(GetType(enmFieldType), myRating("field_type").ToString()), enmFieldType)
-                End If
-                If myRating.ContainsKey("classification_id") Then
-                    myRule.Rating.classificationId = myRating("classification_id")
                 End If
 
                 'set the rule's origin
@@ -323,6 +345,8 @@ Public Class clsKlimaatatlas
 
     Public Function ExportResultsToShapefile(path As String) As Boolean
         Try
+
+            Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Writing results to shapefile...", 0, 10, True)
             If System.IO.File.Exists(path) Then Me.Generalfunctions.DeleteShapeFile(path)
 
             Dim sf As New MapWinGIS.Shapefile
@@ -364,7 +388,13 @@ Public Class clsKlimaatatlas
 
             Next
 
+            Cursor.Current = Cursors.WaitCursor
             sf.StopEditingShapes(True, True)
+            Cursor.Current = Cursors.Default
+
+            Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Operation complete.", 0, 10, True)
+
+            MsgBox("Operation complete.")
 
         Catch ex As Exception
             Return False

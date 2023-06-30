@@ -92,7 +92,7 @@
 		},
 		{
 			"order":2,
-			"apply":false,
+			"apply":true,
 			"name":"Waterdiepte",
 			"input_dataset":"watervlakken",
 			"input_field":"depth",
@@ -121,7 +121,7 @@
 				"result_text":"watervlak doodlopend."
 			},			
 			"origin":"rekenregels",
-			"scenarios": ["2014"]			
+			"scenarios": ["2014","2085"]			
 		}
 	],
 	"results":{

@@ -20,15 +20,17 @@ Public Class clsDataset
         Features = New Dictionary(Of Integer, clsSpatialFeature)
     End Sub
 
-    Public Function AddField(FieldName As String, FieldType As enmFieldType, DataType As enmSQLiteDataType)
+    Public Function GetAddField(FieldName As String, FieldType As enmFieldType, DataType As enmSQLiteDataType) As clsSQLiteField
 
-        'create a new field
-        Dim myField As New clsSQLiteField(FieldName, FieldType, DataType, Fields.Count)
-        Fields.Add(FieldName.Trim.ToUpper, myField)
+        If Not Fields.ContainsKey(FieldName.Trim.ToUpper) Then
+            'create a new field
+            Dim myField As New clsSQLiteField(FieldName, FieldType, DataType, Fields.Count)
+            Fields.Add(FieldName.Trim.ToUpper, myField)
+            'redim the values array in order to make place for values in this field
+            ReDimPreserve(Values, Fields.Count)
+        End If
 
-
-        'redim the values array in order to make place for values in this field
-        ReDimPreserve(Values, Fields.Count)
+        Return Fields.Item(FieldName.Trim.ToUpper)
 
     End Function
 
