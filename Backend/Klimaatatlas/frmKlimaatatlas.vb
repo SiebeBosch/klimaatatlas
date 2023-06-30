@@ -29,6 +29,7 @@ Public Class frmKlimaatatlas
         Klimaatatlas.UpgradeDatabase()
 
         Klimaatatlas.readFeaturesDataset()
+        Klimaatatlas.createAndInitializeRatingField()         'add two fields to our dataset for storing the final rating and result_text
 
         Klimaatatlas.PopulateDatasets()
         Klimaatatlas.populateClassifications()

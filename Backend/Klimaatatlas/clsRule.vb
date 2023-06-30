@@ -34,8 +34,8 @@ Public Class clsRule
 
 
         'add two fields to our dataset if not yet present
-        If Not Setup.featuresDataset.Fields.ContainsKey(PenaltyField.Trim.ToUpper) Then Setup.featuresDataset.addField(PenaltyField, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL)  '  .Fields.Add(PenaltyField.Trim.ToUpper, New clsSQLiteField(PenaltyField, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
-        If Not Setup.featuresDataset.Fields.ContainsKey(CommentField.Trim.ToUpper) Then Setup.featuresDataset.AddField(CommentField, enmFieldType.comment, clsSQLiteField.enmSQLiteDataType.SQLITETEXT)
+        If Not Setup.featuresDataset.Fields.ContainsKey(PenaltyField.Trim.ToUpper) Then Setup.featuresDataset.GetAddField(PenaltyField, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL)  '  .Fields.Add(PenaltyField.Trim.ToUpper, New clsSQLiteField(PenaltyField, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
+        If Not Setup.featuresDataset.Fields.ContainsKey(CommentField.Trim.ToUpper) Then Setup.featuresDataset.GetAddField(CommentField, enmFieldType.comment, clsSQLiteField.enmSQLiteDataType.SQLITETEXT)
 
         'first apply the subset criteria in order to keep only the features we need
         Dim FeatureIdxList As List(Of Integer) = ApplySubsetCriteria()
@@ -51,18 +51,23 @@ Public Class clsRule
                 For Each featureidx As Integer In FeatureIdxList
                     Setup.featuresDataset.Values(Setup.featuresDataset.Fields.Item(PenaltyField.Trim.ToUpper).fieldIdx, featureidx) = Rating.Penalty
                     Setup.featuresDataset.Values(Setup.featuresDataset.Fields.Item(CommentField.Trim.ToUpper).fieldIdx, featureidx) = Rating.resultText
+                    Setup.featuresDataset.Values(Setup.featuresDataset.Fields.Item(Setup.RatingFieldName.Trim.ToUpper).fieldIdx, featureidx) -= Rating.Penalty
                 Next
 
             Case enmRatingMethod.classification
-                'in case of a classification
+                'in case of a classification we'll retrieve the value from our datasource and compare it with the appropriate classification table
+                Dim myField As clsSQLiteField = InputDataset.getFieldByType(Rating.FieldType)
+                Dim classification As clsClassification = Setup.Classifications.Item(Rating.classificationId.Trim.ToUpper)
+                For Each featureidx As Integer In FeatureIdxList
+                    Dim featureValue As Object = InputDataset.Values(myField.fieldIdx, featureidx)
 
+                    'look up our value in the classification table
+                    Dim Penalty As Double, ResultText As String = String.Empty
+                    classification.lookupValue(featureValue, Penalty, ResultText)
 
-                For i = 0 To Setup.featuresDataset.Features.Count - 1
-
-                Next
-
-                For Each Feature As clsSpatialFeature In Setup.featuresDataset.Features.Values
-
+                    Setup.featuresDataset.Values(Setup.featuresDataset.Fields.Item(PenaltyField.Trim.ToUpper).fieldIdx, featureidx) = Penalty
+                    Setup.featuresDataset.Values(Setup.featuresDataset.Fields.Item(CommentField.Trim.ToUpper).fieldIdx, featureidx) = ResultText
+                    Setup.featuresDataset.Values(Setup.featuresDataset.Fields.Item(Setup.RatingFieldName.Trim.ToUpper).fieldIdx, featureidx) -= Penalty
                 Next
 
 
