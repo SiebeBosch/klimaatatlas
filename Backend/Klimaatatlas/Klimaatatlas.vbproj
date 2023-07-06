@@ -9,6 +9,22 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutputPath>C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutputPath>C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <COMReference Include="MapWinGIS">
       <WrapperTool>tlbimp</WrapperTool>

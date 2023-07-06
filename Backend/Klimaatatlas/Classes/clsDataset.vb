@@ -1,24 +1,94 @@
 ﻿Imports Klimaatatlas.clsGeneralFunctions
 Imports MapWinGIS
 Imports Newtonsoft.Json.Linq
+Imports System.Globalization
 Imports System.IO
 Public Class clsDataset
 
     Private Setup As clsKlimaatatlas
     Friend Comment As String
+    Friend readingCompleted As Boolean = False
     Friend ID As String
     Friend dataType As enmDataType
     Friend storageType As enmStorageType
+    Friend tablename As String
     Friend path As String
     Friend Fields As Dictionary(Of String, clsSQLiteField)            'key = the name of the field in our source dataset, to uppercase
     Friend Features As Dictionary(Of Integer, clsSpatialFeature)      'key = index number of our feature
     Friend Values As Object(,)                                        'first dimension = field idx, second dimension = feature idx
+
+    Friend SF As MapWinGIS.Shapefile
 
     Public Sub New(ByRef myKlimaatatlas As clsKlimaatatlas)
         Setup = myKlimaatatlas
         Fields = New Dictionary(Of String, clsSQLiteField)
         Features = New Dictionary(Of Integer, clsSpatialFeature)
     End Sub
+
+    'Public Function PopulateFieldsFromShapefile() As Boolean
+    '    Try
+    '        SF.Open(path)
+    '        For i = 0 To SF.NumFields - 1
+    '            Select Case SF.Field(i).Type
+    '                Case FieldType.STRING_FIELD
+    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '                Case FieldType.DOUBLE_FIELD
+    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
+    '                Case FieldType.INTEGER_FIELD
+    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEINT))
+    '                Case FieldType.BOOLEAN_FIELD
+    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEINT))
+    '                Case FieldType.DATE_FIELD
+    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '            End Select
+    '        Next
+    '        SF.Close()
+    '        Return True
+    '    Catch ex As Exception
+    '        Return False
+    '    End Try
+    'End Function
+
+
+    Public Function getValue(FieldIdx As Integer, FeatureDatasetfeatureidx As Integer, JoinMethod As enmJoinMethod) As Object
+        Try
+            'IMPORTANT: the FeatureDatasetFeatureIdx is the index number from the FeatureDataset, which is NOT necessarily THIS dataset.
+            'We might need a spatial join or a lookup in order to get the corresponding data from THIS dataset for the requested feature
+            Dim Polygon As MapWinGIS.Shape
+            Dim ShapeIdx As Integer
+
+            If ID = Setup.featuresDataset.ID Then
+                'no need for special lookup functions such as spatial joins or lookup tables
+                'our current datset is also the feature dataset. We can simply lookup our requested value
+                Return Values(FieldIdx, FeatureDatasetfeatureidx)
+            Else
+                Select Case JoinMethod
+                    Case enmJoinMethod.feature_centerpoint_in_polygon
+                        'we'll need to perform a point-in-polygon operation of our feature's centerpoint in this dataset
+                        'if all's well this dataset is a polygon shapefile and it has been opened with the option 'BeginPointInShapefile acivated
+                        Polygon = New MapWinGIS.Shape
+                        Polygon.ImportFromWKT(Setup.featuresDataset.Features.Item(FeatureDatasetfeatureidx).getWKTString)
+                        ShapeIdx = SF.PointInShapefile(Polygon.Center.x, Polygon.Center.y)
+
+                        If ShapeIdx >= 0 Then
+                            Return SF.CellValue(Fields.Values(FieldIdx).sourceFieldIdx, ShapeIdx)
+                        Else
+                            Return Nothing
+                        End If
+                    Case Else
+                        Throw New Exception($"JoinMethod {JoinMethod.ToString} not supported.")
+                End Select
+            End If
+
+
+        Catch ex As Exception
+            Me.Setup.Log.AddError("Error in function getValue of class clsDataset: " & ex.Message)
+            Return Nothing
+        End Try
+
+
+
+    End Function
 
     Public Function GetAddField(FieldName As String, FieldType As enmFieldType, DataType As enmSQLiteDataType) As clsSQLiteField
 
@@ -53,6 +123,44 @@ Public Class clsDataset
         arr = newArr
     End Sub
 
+    Public Function OpenAndPrepareShapefile() As Boolean
+        Try
+            Select Case storageType
+                Case enmStorageType.shapefile
+                    SF = New MapWinGIS.Shapefile
+                    SF.Open(path)
+                    SF.BeginPointInShapefile()
+
+                    'first walk through each field of our source dataset, check if it is one of the required ones and
+                    'if so, assign the source's field index number to it so we know where to find the data
+                    For i = 0 To SF.NumFields - 1
+                        Dim FieldName As String = SF.Field(i).Name
+                        If Fields.ContainsKey(FieldName.Trim.ToUpper) Then
+                            Fields.Item(FieldName.Trim.ToUpper).sourceFieldIdx = i
+                        End If
+                    Next
+
+                    Return True
+                Case Else
+                    Throw New Exception("Dataset must be of type shapefile.")
+            End Select
+            Throw New Exception("")
+        Catch ex As Exception
+            Setup.Log.AddError("Error in function OpenShapefileAndBeginPointInShapefile: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+    Public Function CloseShapefileAndEndPointInShapefile() As Boolean
+        Try
+            SF.EndPointInShapefile()
+            SF.Close()
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+
 
     Public Function readToDictionary() As Boolean
         Try
@@ -62,8 +170,8 @@ Public Class clsDataset
                     Features = New Dictionary(Of Integer, clsSpatialFeature) 'key = feature index
 
                     'read the shapefile
-                    Dim sf As New MapWinGIS.Shapefile
-                    sf.Open(path)
+                    SF = New MapWinGIS.Shapefile
+                    SF.Open(path)
 
                     'first walk through each field of our source dataset, check if it is one of the required ones and
                     'if so, assign the source's field index number to it so we know where to find the data
@@ -102,11 +210,41 @@ Public Class clsDataset
 
                     sf.Close()
 
+                Case enmStorageType.sqlite
+
+                    'Features = New Dictionary(Of Integer, clsSpatialFeature) 'key = feature index                  'features not necessary since we have the featureidx and can look up the feature from the featuresdataset
+                    Dim connectionString As String = String.Format("Data Source={0};Version=3;", path)
+                    Setup.SQLiteCon = New SQLite.SQLiteConnection(connectionString)
+                    Setup.SQLiteCon.Open()
+
+                    Dim query As String = "SELECT " & Fields.Values(0).FieldName
+                    For i = 1 To Fields.Count - 1
+                        query &= ", " & Fields.Values(i).FieldName
+                    Next
+                    query &= " FROM " & tablename & ";"
+
+                    'read all data from the SQLite table
+                    Dim dt As New DataTable
+                    Setup.Generalfunctions.SQLiteQuery(Setup.SQLiteCon, query, dt, True)
+
+                    'transfer the data from our datatable to our internal data structure
+                    ReDim Values(Fields.Count - 1, dt.Rows.Count - 1)
+                    For i = 0 To dt.Rows.Count - 1
+                        For j = 0 To Fields.Count - 1
+                            Values(Fields.Values(j).fieldIdx, i) = dt.Rows(i)(j)
+                        Next
+                    Next
+
+                    Setup.SQLiteCon.Close()
                 Case Else
                     Throw New Exception("Error: storage type of dataset not yet supported for reading to internal dictionary: " & ID)
             End Select
-        Catch ex As Exception
 
+            readingCompleted = True
+            Return True
+
+        Catch ex As Exception
+            Return False
         End Try
     End Function
 
