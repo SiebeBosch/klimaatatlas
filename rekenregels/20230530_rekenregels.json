@@ -18,7 +18,7 @@
 			"_comment":"this attribute describes where the water quality statistics as derived from SOBEK can be found",
 			"id":"sobek_results",
 			"data_type":"percentiles",
-			"storage_type":"SQLITE",
+			"storage_type":"sqlite",
 			"path":"c:\\GITHUB\\klimaatatlas\\data\\database.db",
 			"tablename":"WQPOLYGONSTATISTICS",
 			"fields":[
@@ -34,7 +34,7 @@
 			"_comment":"dit bestand bevat tijdreeksen met temperatuur voor diverse soorten waterlichamen",
 			"id":"temperatuur_waterlichamen",
 			"data_type":"timeseries",
-			"storage_type":"EXCEL",
+			"storage_type":"excel",
 			"path":"c:\\GITHUB\\klimaatatlas\\data\\maxtemp.xlsx",
 			"tablename":"maxtemp",
 			"fields":[

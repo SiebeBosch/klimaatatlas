@@ -21,8 +21,19 @@ Public Class clsGeneralFunctions
     Public Enum enmRatingMethod
         constant = 1
         classification = 2
+        lookup_table = 3
     End Enum
 
+    Public Enum enmJoinMethod
+        none = 0                                'no join method required in case our dataset is the same as the feature dataset
+        match_featureidx = 1                    'both datasets have a corresponding featureidx
+        feature_centerpoint_in_polygon = 2      'the centerpoints from the feature dataset are used to sample the dataset via the point-in-polyton method
+    End Enum
+
+    Public Enum enmTransformationFunction
+        bod2kleizandveen = 0                    'refers to the function bod2kleizandveen which translates bodemkaartNL values to klei/zand/veen classes
+
+    End Enum
     Public Enum enmFieldType
         featureidx = 0
         id = 1
@@ -34,11 +45,15 @@ Public Class clsGeneralFunctions
         depth = 7
         deadend = 8
         comment = 9
+        datetime = 10
+        watertype = 11
+        soiltype = 12
     End Enum
 
     Public Enum enmStorageType
         shapefile = 0
         sqlite = 1
+        excel = 2
     End Enum
 
     Public Enum enmDataType
@@ -46,6 +61,7 @@ Public Class clsGeneralFunctions
         polylines = 2
         polygons = 3
         percentiles = 4
+        timeseries = 5
     End Enum
 
 
@@ -259,5 +275,83 @@ Public Class clsGeneralFunctions
     End Sub
 
 
+    Function IsSingleQuoteCountEven(inputString As String) As Boolean
+        Dim count As Integer = 0
+        For Each c As Char In inputString
+            If c = "'"c Then
+                count += 1
+            End If
+        Next
+        If count Mod 2 = 0 Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+
+
+    Public Function ParseString(ByRef myString As String, Optional ByVal Delimiter As String = " ",
+                                Optional ByVal QuoteHandlingFlag As Integer = 1, Optional ByVal ResultMustBeNumeric As Boolean = False) As String
+
+        Dim quoteEven As Boolean
+        Dim tmpString As String = "", tmpChar As String = ""
+
+        If myString = "" Then Return ""
+
+        myString = myString.Trim
+        quoteEven = True
+
+        'v2.5.5.1: check if the record contains an even number of single quotes.
+        If Not IsSingleQuoteCountEven(myString) Then
+            Return ""
+        End If
+
+        'Quotehandlingflag: default = 1
+        '0 = items between quotes are NOT being treated as separate items (parsing also between quotes)
+        '1 = items between single quotes are being treated as separate items (no parsing between single quotes)
+        '2 = items between double quotes are being treated as separate items (no parsing between double quotes)
+
+        Dim i As Integer
+        For i = 1 To Len(myString)
+            'snoep een karakter af van de string
+            tmpChar = Strings.Left(myString, 1)
+
+            If (tmpChar = "'" And QuoteHandlingFlag = 1) Or (tmpChar = Chr(34) And QuoteHandlingFlag = 2) Then
+                If quoteEven = True Then
+                    quoteEven = False
+                    tmpString = tmpString & tmpChar
+                    myString = Right(myString, myString.Length - 1)
+                Else
+                    quoteEven = True 'dit betekent dat we klaar zijn
+                    tmpString = Right(tmpString, tmpString.Length - 1) 'laat bij het teruggeven meteen de quotes maar weg!
+                    myString = Right(myString, myString.Length - 1)
+                End If
+            ElseIf tmpChar = Delimiter And quoteEven = True Then
+                myString = Right(myString, myString.Length - 1)
+                Return tmpString
+
+                'If Not tmpString = "" Then
+                '    myString = Right(myString, myString.Length - 1)
+                '    'Return tmpString
+                '    Exit For
+                'Else
+                '    myString = Right(myString, myString.Length - 1)
+                'End If
+            ElseIf myString <> "" Then
+                myString = Right(myString, myString.Length - 1)
+                tmpString = tmpString & tmpChar
+            End If
+        Next
+
+        If ResultMustBeNumeric AndAlso Not IsNumeric(tmpString) Then
+            myString = tmpString & Delimiter & myString
+            Return 0
+        Else
+            Return tmpString
+        End If
+
+
+    End Function
 
 End Class

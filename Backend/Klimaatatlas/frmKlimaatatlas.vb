@@ -9,6 +9,7 @@ Public Class frmKlimaatatlas
 
         txtDatabase.Text = My.Settings.Database
         txtConfigFile.Text = My.Settings.Configfile
+        txtResultsFile.Text = My.Settings.ResultsFile
 
         If System.IO.File.Exists(txtDatabase.Text) Then
             Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
@@ -20,6 +21,7 @@ Public Class frmKlimaatatlas
         'store our paths for the next time
         My.Settings.Database = txtDatabase.Text
         My.Settings.Configfile = txtConfigFile.Text
+        My.Settings.Resultsfile = txtResultsFile.Text
         My.Settings.Save()
 
         'set the database connection, read the configuration file and start processing each rule
@@ -29,16 +31,19 @@ Public Class frmKlimaatatlas
         Klimaatatlas.UpgradeDatabase()
 
         Klimaatatlas.readFeaturesDataset()
-        Klimaatatlas.createAndInitializeRatingField()         'add two fields to our dataset for storing the final rating and result_text
+        Klimaatatlas.PopulateScenarios()
+        Klimaatatlas.SetAndInitializeRatingFields()         'add two fields to our dataset for storing the final rating and result_text
 
         Klimaatatlas.PopulateDatasets()
-        Klimaatatlas.populateClassifications()
+        Klimaatatlas.PopulateClassifications()
+        Klimaatatlas.PopulateLookuptables()
         Klimaatatlas.PopulateRules()
 
         Klimaatatlas.ProcessRules()
 
         'write the results to a new shapefile
-        Klimaatatlas.ExportResultsToShapefile("c:\temp\results.shp")
+        If System.IO.File.Exists(txtResultsFile.Text) Then Klimaatatlas.Generalfunctions.DeleteShapeFile(txtResultsFile.Text)
+        Klimaatatlas.ExportResultsToShapefile(txtResultsFile.Text)
 
     End Sub
 
@@ -57,6 +62,14 @@ Public Class frmKlimaatatlas
         Dim res As DialogResult = dlgOpenFile.ShowDialog
         If res = DialogResult.OK Then
             txtConfigFile.Text = dlgOpenFile.FileName
+        End If
+    End Sub
+
+    Private Sub btnResultsFile_Click(sender As Object, e As EventArgs) Handles btnResultsFile.Click
+        dlgSaveFile.Filter = "ESRI Shapefile|*.shp"
+        Dim res As DialogResult = dlgSaveFile.ShowDialog
+        If res = DialogResult.OK Then
+            txtResultsFile.Text = dlgSaveFile.FileName
         End If
     End Sub
 End Class

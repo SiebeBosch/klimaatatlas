@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from db_setup import setup_database
 
 # Inputs
-polygon_shapefile_path = r"c:\GITHUB\klimaatatlas\GIS\Watervlakken Plus2.shp"
+polygon_shapefile_path = r"c:\GITHUB\klimaatatlas\GIS\Watervlakken Plus3.shp"
 subcatchments_shapefile_path = r"c:\GITHUB\klimaatatlas\GIS\Peilgebied vigerend besluit.shp"
 sqlite_db_path = r"c:\GITHUB\klimaatatlas\data\database.db"
 delete_old_results = True
