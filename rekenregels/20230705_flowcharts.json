@@ -1,0 +1,35 @@
+[
+	{
+		"indicator":"kroos",
+		"inputs":[
+			{"id":"TgemZom"},
+			{"id":"Diepte"},
+			{"id":"Doodlopend"},
+			{"id":"Strijklengte"},
+			{"id":"Richting"},
+			{"id":"Breedte"}
+			{"id":"Eutroof"}
+		],
+		"decisions":[
+			{
+				"id":"ondiep",
+				"input":"Diepte",
+				"condition":"<0.75"
+				"node_true":""
+				"node_false":""
+			}
+		],
+		"multi_decisions":[
+			{
+				"id":"temperatuur",
+				"input":"TgemZom",
+				"paths":[
+					{"condition":"<15","to_node":"good"},
+					{"condition":"<20","to_node":"medium"},
+					{"condition":"<25","to_node":"poor"}
+				]
+			}
+		]
+		
+	}
+]

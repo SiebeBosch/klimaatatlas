@@ -3,17 +3,25 @@ Imports Newtonsoft.Json.Linq
 
 Public Class frmKlimaatatlas
     Public Klimaatatlas As clsKlimaatatlas
+    Public Flowchart As clsFlowchart
     Private Sub frmKlimaatatlas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Klimaatatlas = New clsKlimaatatlas()
         Klimaatatlas.SetProgressBar(prProgress, lblProgress)
 
         txtDatabase.Text = My.Settings.Database
         txtConfigFile.Text = My.Settings.Configfile
-        txtResultsFile.Text = My.Settings.ResultsFile
+        txtResultsFile.Text = My.Settings.Resultsfile
 
         If System.IO.File.Exists(txtDatabase.Text) Then
             Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
             Klimaatatlas.UpgradeDatabase()
+        End If
+
+    End Sub
+
+    Private Sub DrawingPanel_Paint(sender As Object, e As PaintEventArgs) Handles pnlFlowchart.Paint
+        If Flowchart IsNot Nothing Then
+            Flowchart.DrawFlowchart(e.Graphics)
         End If
     End Sub
 
@@ -25,7 +33,7 @@ Public Class frmKlimaatatlas
         My.Settings.Save()
 
         'set the database connection, read the configuration file and start processing each rule
-        Klimaatatlas.setProgressbar(prProgress, lblProgress)
+        Klimaatatlas.SetProgressBar(prProgress, lblProgress)
         Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
         Klimaatatlas.ReadConfiguration(txtConfigFile.Text)
         Klimaatatlas.UpgradeDatabase()
@@ -71,5 +79,20 @@ Public Class frmKlimaatatlas
         If res = DialogResult.OK Then
             txtResultsFile.Text = dlgSaveFile.FileName
         End If
+    End Sub
+
+
+    Private Sub cmbIndicators_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbIndicators.SelectedValueChanged
+        'as a first test I would like to create a simple flowchart containing just two nodes and one connection
+        Flowchart = New clsFlowchart()
+
+        pnlFlowchart.Invalidate()
+        pnlFlowchart.Update()
+
+
+    End Sub
+
+    Private Sub cmbIndicators_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbIndicators.SelectedIndexChanged
+
     End Sub
 End Class
