@@ -18,6 +18,13 @@ Public Class clsGeneralFunctions
         Log = New clsLog()
     End Sub
 
+    Public Enum enmFlowChartNodeEdge
+        top = 0
+        right = 1
+        bottom = 2
+        left = 3
+    End Enum
+
     Public Enum enmRatingMethod
         constant = 1
         classification = 2
