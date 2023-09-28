@@ -20,12 +20,14 @@ Public Class clsFlowchart
     Public Sub CreateDummyChart()
         'for debugging purposes
         'dummydata
-        Dim node1 As New clsFlowchartInput("Tgem.zom", New Point(20, 20))
-        Dim node2 As New clsFlowchartInput("Diepte", New Point(320, 20))
-        Dim node3 As New clsFlowchartDecision("> 15", New Point(20, 100), ">15")
-        Dim node4 As New clsFlowChartMultiSelect("Waterdiepte1", New Point(320, 100), New List(Of String) From {">0.75", "[0.50-0.75]", "<=0.50"}, New List(Of Color) From {Color.Green, Color.Green, Color.Green})
-        Dim node5 As New clsFlowChartMultiSelect("Waterdiepte2", New Point(320, 200), New List(Of String) From {">0.75", "[0.50-0.75]", "<=0.50"}, New List(Of Color) From {Color.Green, Color.Green, Color.Green})
-        Dim node6 As New clsFlowChartVerdict("Kroos", New Point(520, 100), New List(Of String) From {"goed", "middelmatig", "slecht"}, New List(Of Color) From {Color.Green, Color.Yellow, Color.Red})
+        Dim node0 As New clsFlowchartStart("Start", New Point(20, 20))
+        Dim node1 As New clsFlowchartInput("Tgem.zom", New Point(320, 20))
+        Dim node2 As New clsFlowchartInput("Diepte", New Point(620, 20))
+        Dim node3 As New clsFlowchartDecision("> 15", New Point(320, 100), ">15")
+        Dim node4 As New clsFlowChartMultiSelect("Waterdiepte1", New Point(620, 100), New List(Of String) From {">0.75", "[0.50-0.75]", "<=0.50"}, New List(Of Color) From {Color.Green, Color.Green, Color.Green})
+        Dim node5 As New clsFlowChartMultiSelect("Waterdiepte2", New Point(620, 200), New List(Of String) From {">0.75", "[0.50-0.75]", "<=0.50"}, New List(Of Color) From {Color.Green, Color.Green, Color.Green})
+        Dim node6 As New clsFlowChartVerdict("Kroos", New Point(920, 100), New List(Of String) From {"goed", "middelmatig", "slecht"}, New List(Of Color) From {Color.Green, Color.Yellow, Color.Red})
+        Dim connection0 As New clsFlowchartConnection(node0, clsGeneralFunctions.enmFlowChartNodeEdge.right, 0, node3, clsGeneralFunctions.enmFlowChartNodeEdge.left, 0)
         Dim connection1 As New clsFlowchartConnection(node1, clsGeneralFunctions.enmFlowChartNodeEdge.bottom, 0, node3, clsGeneralFunctions.enmFlowChartNodeEdge.top, 0)
         Dim connection2 As New clsFlowchartConnection(node3, clsGeneralFunctions.enmFlowChartNodeEdge.right, 0, node4, clsGeneralFunctions.enmFlowChartNodeEdge.left, 0)
         Dim connection3 As New clsFlowchartConnection(node3, clsGeneralFunctions.enmFlowChartNodeEdge.bottom, 0, node5, clsGeneralFunctions.enmFlowChartNodeEdge.left, 0)
@@ -40,12 +42,14 @@ Public Class clsFlowchart
 
         Dim connection6 As New clsFlowchartConnection(node2, clsGeneralFunctions.enmFlowChartNodeEdge.bottom, 0, node4, clsGeneralFunctions.enmFlowChartNodeEdge.top, 0)
 
+        addNode(node0)
         addNode(node1)
         addNode(node2)
         addNode(node3)
         addNode(node4)
         addNode(node5)
         addNode(node6)
+        addConnection(connection0)
         addConnection(connection1)
         addConnection(connection6)
         addConnection(connection2)
@@ -227,6 +231,51 @@ Public Class clsFlowchartInput
     End Sub
 
 End Class
+
+Public Class clsFlowchartStart
+    Inherits clsFlowchartNode
+
+    Public Sub New(mylabel As String, myPosition As Point)
+        MyBase.New(enmFlowchartNodeType.Input, mylabel, myPosition)
+    End Sub
+
+    Public Overrides Sub Draw(ByRef g As Graphics)
+        Dim myPen As New Pen(Color.Black)
+        Dim myTextBrush As New SolidBrush(Color.Black)
+        Dim myFillBrush As New SolidBrush(Color.LightYellow) ' New Brush for fill color, assuming you want it yellow for inputs
+        Dim myFont As New Font("Arial", 10)
+        Dim myStringFormat As New StringFormat()
+        myStringFormat.Alignment = StringAlignment.Center
+        myStringFormat.LineAlignment = StringAlignment.Center
+
+        ' Create a rectangle for the rounded rectangle
+        Dim rectangle As New Rectangle(Position.X, Position.Y, 100, 50)
+
+        ' Define a corner radius. This determines how "rounded" your corners are.
+        Dim cornerRadius As Integer = 10
+        Dim path As New Drawing2D.GraphicsPath
+        path.StartFigure()
+        path.AddArc(New Rectangle(rectangle.Left, rectangle.Top, cornerRadius * 2, cornerRadius * 2), 180, 90)
+        path.AddLine(rectangle.Left + cornerRadius, rectangle.Top, rectangle.Right - cornerRadius, rectangle.Top)
+        path.AddArc(New Rectangle(rectangle.Right - cornerRadius * 2, rectangle.Top, cornerRadius * 2, cornerRadius * 2), 270, 90)
+        path.AddLine(rectangle.Right, rectangle.Top + cornerRadius, rectangle.Right, rectangle.Bottom - cornerRadius)
+        path.AddArc(New Rectangle(rectangle.Right - cornerRadius * 2, rectangle.Bottom - cornerRadius * 2, cornerRadius * 2, cornerRadius * 2), 0, 90)
+        path.AddLine(rectangle.Right - cornerRadius, rectangle.Bottom, rectangle.Left + cornerRadius, rectangle.Bottom)
+        path.AddArc(New Rectangle(rectangle.Left, rectangle.Bottom - cornerRadius * 2, cornerRadius * 2, cornerRadius * 2), 90, 90)
+        path.CloseFigure()
+
+        ' Fill the rectangle first
+        g.FillPath(myFillBrush, path)
+        ' Then draw the outline
+        g.DrawPath(myPen, path)
+
+        ' Draw the label inside the rounded rectangle
+        g.DrawString(Label, myFont, myTextBrush, New RectangleF(Position.X, Position.Y, 100, 50), myStringFormat)
+    End Sub
+
+End Class
+
+
 Public Class clsFlowChartMultiSelect
     Inherits clsFlowchartNode
 
