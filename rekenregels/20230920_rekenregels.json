@@ -1,0 +1,17 @@
+"maatlatten":[
+	{"name":"doodlopend", "datasource":"watervlakken","fieldname":"doodlopend","classification":[{"ja",1},{"nee",0}]},
+	{"name":"diepte","datasource":"watervlakken","fieldname":"diepte","classification":[{"scale":[0,1.5], "verdict":[1,0]]},
+	{"name":"vermesting_p_zomer","datasource":"watervlakken","fieldname":"ptotzom","classification":[{"scale":[0,1.5],"verdict":[0,1]]},
+	{"name":"vermesting_n_zomer","datasource":"watervlakken","fieldname":"ntotzom","classification":[{"scale":[0,15],"verdict":[0,1]]},	
+	{"name":"overstort","datasource":"watervlakken","fieldname":"kansovs5pc","classification":[{"scale":[0,0.027],"verdict":[0,1]]},
+	{"name":"bodemsoort", "datasource":"watervlakken","fieldname":"bodemsoort","classification":[{"zand",1},{"klei",0.5},{"veen",1}]},
+	{"name":"temp_gt_25","datasource":"watervlakken","fieldname":"temp_gt_25","classification":[{"scale":[0,0.027],"verdict":[0,1]]},
+	{"name":"kans_warm_windstil","datasource":"watervlakken","fieldname":"p_warmstil","classification":[{"scale":[0,0.027],"verdict":[0,1]]},	
+	{"name":"breedte","datasource":"watervlakken","fieldname":"breedte","classification":[{"scale":[8,99],"verdict":[0,1]]}	
+],
+"indicatoren":[
+	{"name":"kroos", "equation":"(1 * doodlopend + 1 * diepte)/2"},
+	{"name":"botulisme", "equation":"(1 * doodlopend + 1 * diepte + 1 * vermesting_p + 1 * vermesting_n + 1 * temp_gt_25)/5"},
+	{"name":"zuurstofloosheid", "equation":"(1 * doodlopend + 1 * diepte + 1 * vermesting_p + 1 * vermesting_n + 1 * overstort + 0.2 * bodemsoort)/5.2"},
+	{"name":"drijflagen", "equation":"(1 * diepte + 1 * breedte + 1 * vermesting_p + 1 * vermesting_n + 1 * kans_warm_windstil )/5"}
+]

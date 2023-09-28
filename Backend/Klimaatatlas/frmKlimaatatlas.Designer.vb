@@ -26,7 +26,6 @@ Partial Class frmKlimaatatlas
         btnExecute = New Button()
         prProgress = New ProgressBar()
         lblProgress = New Label()
-        GroupBox1 = New GroupBox()
         Label1 = New Label()
         btnResultsFile = New Button()
         txtResultsFile = New TextBox()
@@ -42,22 +41,21 @@ Partial Class frmKlimaatatlas
         GISToolStripMenuItem = New ToolStripMenuItem()
         SpatialJoinToolStripMenuItem = New ToolStripMenuItem()
         dlgSaveFile = New SaveFileDialog()
-        Flowcharts = New GroupBox()
-        cmbIndicators = New ComboBox()
-        Label2 = New Label()
-        pnlFlowchart = New Panel()
-        GroupBox1.SuspendLayout()
+        TabControl1 = New TabControl()
+        tabSettings = New TabPage()
+        tabMaatlatten = New TabPage()
+        tabRekenregels = New TabPage()
         MenuStrip1.SuspendLayout()
-        Flowcharts.SuspendLayout()
+        TabControl1.SuspendLayout()
+        tabSettings.SuspendLayout()
         SuspendLayout()
         ' 
         ' btnExecute
         ' 
         btnExecute.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnExecute.Location = New Point(1433, 800)
-        btnExecute.Margin = New Padding(4, 5, 4, 5)
+        btnExecute.Location = New Point(1003, 480)
         btnExecute.Name = "btnExecute"
-        btnExecute.Size = New Size(156, 80)
+        btnExecute.Size = New Size(109, 48)
         btnExecute.TabIndex = 0
         btnExecute.Text = "Execute"
         btnExecute.UseVisualStyleBackColor = True
@@ -65,61 +63,36 @@ Partial Class frmKlimaatatlas
         ' prProgress
         ' 
         prProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        prProgress.Location = New Point(17, 842)
-        prProgress.Margin = New Padding(4, 5, 4, 5)
+        prProgress.Location = New Point(12, 505)
         prProgress.Name = "prProgress"
-        prProgress.Size = New Size(1391, 38)
+        prProgress.Size = New Size(974, 23)
         prProgress.TabIndex = 1
         ' 
         ' lblProgress
         ' 
         lblProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lblProgress.AutoSize = True
-        lblProgress.Location = New Point(17, 800)
-        lblProgress.Margin = New Padding(4, 0, 4, 0)
+        lblProgress.Location = New Point(12, 480)
         lblProgress.Name = "lblProgress"
-        lblProgress.Size = New Size(81, 25)
+        lblProgress.Size = New Size(52, 15)
         lblProgress.TabIndex = 2
         lblProgress.Text = "Progress"
-        ' 
-        ' GroupBox1
-        ' 
-        GroupBox1.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        GroupBox1.Controls.Add(Label1)
-        GroupBox1.Controls.Add(btnResultsFile)
-        GroupBox1.Controls.Add(txtResultsFile)
-        GroupBox1.Controls.Add(btnConfigFile)
-        GroupBox1.Controls.Add(txtConfigFile)
-        GroupBox1.Controls.Add(lblConfigFile)
-        GroupBox1.Controls.Add(btnDatabase)
-        GroupBox1.Controls.Add(lblDatabase)
-        GroupBox1.Controls.Add(txtDatabase)
-        GroupBox1.Location = New Point(17, 58)
-        GroupBox1.Margin = New Padding(4, 5, 4, 5)
-        GroupBox1.Name = "GroupBox1"
-        GroupBox1.Padding = New Padding(4, 5, 4, 5)
-        GroupBox1.Size = New Size(1571, 220)
-        GroupBox1.TabIndex = 3
-        GroupBox1.TabStop = False
-        GroupBox1.Text = "Settings"
         ' 
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(16, 152)
-        Label1.Margin = New Padding(4, 0, 4, 0)
+        Label1.Location = New Point(6, 76)
         Label1.Name = "Label1"
-        Label1.Size = New Size(99, 25)
+        Label1.Size = New Size(66, 15)
         Label1.TabIndex = 8
         Label1.Text = "Results file:"
         ' 
         ' btnResultsFile
         ' 
         btnResultsFile.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnResultsFile.Location = New Point(1526, 143)
-        btnResultsFile.Margin = New Padding(4, 5, 4, 5)
+        btnResultsFile.Location = New Point(1064, 73)
         btnResultsFile.Name = "btnResultsFile"
-        btnResultsFile.Size = New Size(34, 40)
+        btnResultsFile.Size = New Size(24, 24)
         btnResultsFile.TabIndex = 7
         btnResultsFile.Text = ".."
         btnResultsFile.UseVisualStyleBackColor = True
@@ -127,19 +100,17 @@ Partial Class frmKlimaatatlas
         ' txtResultsFile
         ' 
         txtResultsFile.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtResultsFile.Location = New Point(134, 148)
-        txtResultsFile.Margin = New Padding(4, 5, 4, 5)
+        txtResultsFile.Location = New Point(89, 74)
         txtResultsFile.Name = "txtResultsFile"
-        txtResultsFile.Size = New Size(1384, 31)
+        txtResultsFile.Size = New Size(966, 23)
         txtResultsFile.TabIndex = 6
         ' 
         ' btnConfigFile
         ' 
         btnConfigFile.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnConfigFile.Location = New Point(1529, 95)
-        btnConfigFile.Margin = New Padding(4, 5, 4, 5)
+        btnConfigFile.Location = New Point(1062, 41)
         btnConfigFile.Name = "btnConfigFile"
-        btnConfigFile.Size = New Size(34, 40)
+        btnConfigFile.Size = New Size(24, 24)
         btnConfigFile.TabIndex = 5
         btnConfigFile.Text = ".."
         btnConfigFile.UseVisualStyleBackColor = True
@@ -147,29 +118,26 @@ Partial Class frmKlimaatatlas
         ' txtConfigFile
         ' 
         txtConfigFile.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtConfigFile.Location = New Point(134, 95)
-        txtConfigFile.Margin = New Padding(4, 5, 4, 5)
+        txtConfigFile.Location = New Point(89, 42)
         txtConfigFile.Name = "txtConfigFile"
-        txtConfigFile.Size = New Size(1384, 31)
+        txtConfigFile.Size = New Size(966, 23)
         txtConfigFile.TabIndex = 4
         ' 
         ' lblConfigFile
         ' 
         lblConfigFile.AutoSize = True
-        lblConfigFile.Location = New Point(16, 100)
-        lblConfigFile.Margin = New Padding(4, 0, 4, 0)
+        lblConfigFile.Location = New Point(6, 45)
         lblConfigFile.Name = "lblConfigFile"
-        lblConfigFile.Size = New Size(97, 25)
+        lblConfigFile.Size = New Size(65, 15)
         lblConfigFile.TabIndex = 3
         lblConfigFile.Text = "Config file:"
         ' 
         ' btnDatabase
         ' 
         btnDatabase.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnDatabase.Location = New Point(1529, 45)
-        btnDatabase.Margin = New Padding(4, 5, 4, 5)
+        btnDatabase.Location = New Point(1062, 11)
         btnDatabase.Name = "btnDatabase"
-        btnDatabase.Size = New Size(34, 40)
+        btnDatabase.Size = New Size(24, 24)
         btnDatabase.TabIndex = 2
         btnDatabase.Text = ".."
         btnDatabase.UseVisualStyleBackColor = True
@@ -177,20 +145,18 @@ Partial Class frmKlimaatatlas
         ' lblDatabase
         ' 
         lblDatabase.AutoSize = True
-        lblDatabase.Location = New Point(16, 50)
-        lblDatabase.Margin = New Padding(4, 0, 4, 0)
+        lblDatabase.Location = New Point(6, 15)
         lblDatabase.Name = "lblDatabase"
-        lblDatabase.Size = New Size(118, 25)
+        lblDatabase.Size = New Size(77, 15)
         lblDatabase.TabIndex = 1
         lblDatabase.Text = "Database file:"
         ' 
         ' txtDatabase
         ' 
         txtDatabase.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtDatabase.Location = New Point(134, 45)
-        txtDatabase.Margin = New Padding(4, 5, 4, 5)
+        txtDatabase.Location = New Point(89, 12)
         txtDatabase.Name = "txtDatabase"
-        txtDatabase.Size = New Size(1384, 31)
+        txtDatabase.Size = New Size(966, 23)
         txtDatabase.TabIndex = 0
         ' 
         ' dlgOpenFile
@@ -203,7 +169,8 @@ Partial Class frmKlimaatatlas
         MenuStrip1.Items.AddRange(New ToolStripItem() {ToolsToolStripMenuItem})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
-        MenuStrip1.Size = New Size(1606, 33)
+        MenuStrip1.Padding = New Padding(4, 1, 0, 1)
+        MenuStrip1.Size = New Size(1124, 24)
         MenuStrip1.TabIndex = 4
         MenuStrip1.Text = "MenuStrip1"
         ' 
@@ -211,89 +178,92 @@ Partial Class frmKlimaatatlas
         ' 
         ToolsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {GISToolStripMenuItem})
         ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        ToolsToolStripMenuItem.Size = New Size(69, 29)
+        ToolsToolStripMenuItem.Size = New Size(46, 22)
         ToolsToolStripMenuItem.Text = "Tools"
         ' 
         ' GISToolStripMenuItem
         ' 
         GISToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {SpatialJoinToolStripMenuItem})
         GISToolStripMenuItem.Name = "GISToolStripMenuItem"
-        GISToolStripMenuItem.Size = New Size(141, 34)
+        GISToolStripMenuItem.Size = New Size(91, 22)
         GISToolStripMenuItem.Text = "GIS"
         ' 
         ' SpatialJoinToolStripMenuItem
         ' 
         SpatialJoinToolStripMenuItem.Name = "SpatialJoinToolStripMenuItem"
-        SpatialJoinToolStripMenuItem.Size = New Size(203, 34)
+        SpatialJoinToolStripMenuItem.Size = New Size(133, 22)
         SpatialJoinToolStripMenuItem.Text = "Spatial Join"
         ' 
-        ' Flowcharts
+        ' TabControl1
         ' 
-        Flowcharts.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        Flowcharts.Controls.Add(cmbIndicators)
-        Flowcharts.Controls.Add(Label2)
-        Flowcharts.Controls.Add(pnlFlowchart)
-        Flowcharts.Location = New Point(17, 288)
-        Flowcharts.Margin = New Padding(4, 5, 4, 5)
-        Flowcharts.Name = "Flowcharts"
-        Flowcharts.Padding = New Padding(4, 5, 4, 5)
-        Flowcharts.Size = New Size(1571, 502)
-        Flowcharts.TabIndex = 5
-        Flowcharts.TabStop = False
-        Flowcharts.Text = "Flowchart"
+        TabControl1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        TabControl1.Controls.Add(tabSettings)
+        TabControl1.Controls.Add(tabMaatlatten)
+        TabControl1.Controls.Add(tabRekenregels)
+        TabControl1.Location = New Point(12, 27)
+        TabControl1.Name = "TabControl1"
+        TabControl1.SelectedIndex = 0
+        TabControl1.Size = New Size(1100, 447)
+        TabControl1.TabIndex = 6
         ' 
-        ' cmbIndicators
+        ' tabSettings
         ' 
-        cmbIndicators.AutoCompleteCustomSource.AddRange(New String() {"Kroos"})
-        cmbIndicators.FormattingEnabled = True
-        cmbIndicators.Items.AddRange(New Object() {"Kroos"})
-        cmbIndicators.Location = New Point(134, 50)
-        cmbIndicators.Margin = New Padding(4, 5, 4, 5)
-        cmbIndicators.Name = "cmbIndicators"
-        cmbIndicators.Size = New Size(181, 33)
-        cmbIndicators.TabIndex = 10
+        tabSettings.Controls.Add(Label1)
+        tabSettings.Controls.Add(txtDatabase)
+        tabSettings.Controls.Add(btnResultsFile)
+        tabSettings.Controls.Add(lblDatabase)
+        tabSettings.Controls.Add(txtResultsFile)
+        tabSettings.Controls.Add(btnDatabase)
+        tabSettings.Controls.Add(btnConfigFile)
+        tabSettings.Controls.Add(lblConfigFile)
+        tabSettings.Controls.Add(txtConfigFile)
+        tabSettings.Location = New Point(4, 24)
+        tabSettings.Name = "tabSettings"
+        tabSettings.Padding = New Padding(3)
+        tabSettings.Size = New Size(1092, 419)
+        tabSettings.TabIndex = 0
+        tabSettings.Text = "Instellingen"
+        tabSettings.UseVisualStyleBackColor = True
         ' 
-        ' Label2
+        ' tabMaatlatten
         ' 
-        Label2.AutoSize = True
-        Label2.Location = New Point(16, 55)
-        Label2.Margin = New Padding(4, 0, 4, 0)
-        Label2.Name = "Label2"
-        Label2.Size = New Size(86, 25)
-        Label2.TabIndex = 9
-        Label2.Text = "Indicator:"
+        tabMaatlatten.Location = New Point(4, 24)
+        tabMaatlatten.Name = "tabMaatlatten"
+        tabMaatlatten.Padding = New Padding(3)
+        tabMaatlatten.Size = New Size(1092, 419)
+        tabMaatlatten.TabIndex = 1
+        tabMaatlatten.Text = "Maatlatten"
+        tabMaatlatten.UseVisualStyleBackColor = True
         ' 
-        ' pnlFlowchart
+        ' tabRekenregels
         ' 
-        pnlFlowchart.Location = New Point(326, 37)
-        pnlFlowchart.Margin = New Padding(4, 5, 4, 5)
-        pnlFlowchart.Name = "pnlFlowchart"
-        pnlFlowchart.Size = New Size(1234, 455)
-        pnlFlowchart.TabIndex = 0
+        tabRekenregels.Location = New Point(4, 24)
+        tabRekenregels.Name = "tabRekenregels"
+        tabRekenregels.Size = New Size(1092, 419)
+        tabRekenregels.TabIndex = 2
+        tabRekenregels.Text = "Rekenregels"
+        tabRekenregels.UseVisualStyleBackColor = True
         ' 
         ' frmKlimaatatlas
         ' 
-        AutoScaleDimensions = New SizeF(10F, 25F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1606, 900)
-        Controls.Add(Flowcharts)
-        Controls.Add(GroupBox1)
+        ClientSize = New Size(1124, 540)
+        Controls.Add(TabControl1)
         Controls.Add(lblProgress)
         Controls.Add(prProgress)
         Controls.Add(btnExecute)
         Controls.Add(MenuStrip1)
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MainMenuStrip = MenuStrip1
-        Margin = New Padding(4, 5, 4, 5)
         Name = "frmKlimaatatlas"
         Text = "Klimaatatlas"
         WindowState = FormWindowState.Maximized
-        GroupBox1.ResumeLayout(False)
-        GroupBox1.PerformLayout()
         MenuStrip1.ResumeLayout(False)
         MenuStrip1.PerformLayout()
-        Flowcharts.ResumeLayout(False)
-        Flowcharts.PerformLayout()
+        TabControl1.ResumeLayout(False)
+        tabSettings.ResumeLayout(False)
+        tabSettings.PerformLayout()
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -301,7 +271,6 @@ Partial Class frmKlimaatatlas
     Friend WithEvents btnExecute As Button
     Friend WithEvents prProgress As ProgressBar
     Friend WithEvents lblProgress As Label
-    Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents btnConfigFile As Button
     Friend WithEvents txtConfigFile As TextBox
     Friend WithEvents lblConfigFile As Label
@@ -318,7 +287,10 @@ Partial Class frmKlimaatatlas
     Friend WithEvents txtResultsFile As TextBox
     Friend WithEvents dlgSaveFile As SaveFileDialog
     Friend WithEvents Flowcharts As GroupBox
-    Friend WithEvents Label2 As Label
     Friend WithEvents pnlFlowchart As Panel
     Friend WithEvents cmbIndicators As ComboBox
+    Friend WithEvents TabControl1 As TabControl
+    Friend WithEvents tabSettings As TabPage
+    Friend WithEvents tabRekenregels As TabPage
+    Friend WithEvents tabMaatlatten As TabPage
 End Class

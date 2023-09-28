@@ -1,0 +1,93 @@
+{
+  "scenarios": ["14", "85"],
+  "features_dataset": {
+    "_comment": "this attribute describes the water area polygons",
+    "id": "watervlakken",
+    "data_type": "polygons",
+    "storage_type": "shapefile",
+    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus3.shp",
+    "fields": [
+      {"fieldtype": "id", "fieldname": "CODE"},
+      {"fieldtype": "featureidx", "fieldname": "FEATUREIDX"},
+      {"fieldtype": "depth", "fieldname": "WATERDIEPT"},
+      {"fieldtype": "deadend", "fieldname": "doodlopend"},
+      {"fieldtype": "watertype", "fieldname": "type_water"}
+    ]
+  },
+  "benchmarks": [
+    {
+      "name": "doodlopend",
+      "fieldname": "doodlopend",
+      "classification": "discrete",
+      "classes": [
+		{"name": "nee", "value": 0}, 
+		{"name": "ja", "value": 1}
+		]
+    },
+    {
+      "name": "diepte",
+      "fieldname": "waterdiept",
+      "classification": "continuous",
+      "valuesRange": [{"value":0,"verdict":1},{"value":1.5,"verdict":0}],
+    },
+	{
+		"name":"vermesting_p_zomer",
+		"fieldname":"ptotzom",
+		"classification":"continuous", 
+		"valuesRange": [{"value":0,"verdict":0},{"value":1.5,"verdict":1}],
+	},
+	{
+		"name":"vermesting_n_zomer",
+		"fieldname":"ntotzom",
+		"classification":"continuous", 
+		"valuesRange": [{"value":0,"verdict":0},{"value":15,"verdict":1}],
+	},
+	{
+		"name":"overstort",
+		"fieldname":"kansovs5pc",
+		"classification":"continuous", 
+		"valuesRange": [{"value":0,"verdict":0},{"value":0.027,"verdict":1}],
+	},
+	{
+		"name":"bodemsoort",
+		"fieldname":"bodemsoort",
+		"classification":"discrete", 
+		"classes":[
+			{"name":"zand","value":0.3},
+			{"name":"klei","value":0.5},
+			{"name":"veen","value":1}
+		]			
+	},
+	{
+		"name":"temp_gt_25",
+		"fieldname":"temp_gt_25",
+		"classification":"continuous", 
+		"valuesRange": [{"value":0,"verdict":0},{"value":0.027,"verdict":1}],
+	},
+	{
+		"name":"kans_warm_windstil",
+		"fieldname":"p_warmstil",
+		"classification":"continuous", 
+		"valuesRange": [{"value":0,"verdict":0},{"value":0.027,"verdict":1}],
+	},
+	{
+		"name":"breedte",
+		"fieldname":"breedte",
+		"classification":"continuous", 
+		"valuesRange": [{"value":8,"verdict":0},{"value":99,"verdict":1}],
+	}
+],
+  "rules": [
+    {
+      "name": "kroos",
+      "resultsfield": "kroos",
+      "components": [
+        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "krs_ddlp"},
+        {"benchmark": "diepte", "weight": 1, "resultsfield": "krs_diep"}
+      ]
+    }
+  ],
+  "results": {
+    "dataset": "watervlakken"
+  }
+}

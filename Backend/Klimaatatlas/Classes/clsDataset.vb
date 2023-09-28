@@ -90,6 +90,14 @@ Public Class clsDataset
 
     End Function
 
+    Public Function GetField(fieldname As String) As clsSQLiteField
+        If Fields.ContainsKey(fieldname.Trim.ToUpper) Then
+            Return Fields.Item(fieldname.Trim.ToUpper)
+        Else
+            Return Nothing
+        End If
+    End Function
+
     Public Function GetAddField(FieldName As String, FieldType As enmFieldType, DataType As enmSQLiteDataType) As clsSQLiteField
 
         If Not Fields.ContainsKey(FieldName.Trim.ToUpper) Then

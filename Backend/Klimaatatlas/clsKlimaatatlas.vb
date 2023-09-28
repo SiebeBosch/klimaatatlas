@@ -9,9 +9,9 @@ Imports System.Globalization
 Imports Klimaatatlas.clsGeneralFunctions
 Imports System.Data.Entity.ModelConfiguration.Conventions
 Imports FParsec
+Imports Klimaatatlas.clsBenchmark
 
 Public Class clsKlimaatatlas
-    Private _jsonObj As JObject
     Private _connString As String
     Private _config As JObject
 
@@ -24,12 +24,21 @@ Public Class clsKlimaatatlas
 
     Public featuresDataset As clsDataset                        'this is the dataset containing our features
     Public Scenarios As New Dictionary(Of String, clsScenario)
+    Public Benchmarks As New Dictionary(Of String, clsBenchmark)
     Public Datasets As New Dictionary(Of String, clsDataset)
     Public Classifications As New Dictionary(Of String, clsClassification)
     Public Lookuptables As New Dictionary(Of String, clsLookupTable)
-    Public Rules As New SortedDictionary(Of Integer, clsRule)
+    Public OldRules As New SortedDictionary(Of Integer, clsOldRule)
+    Public Rules As New SortedDictionary(Of String, clsRule)
+
+    Public Enum enmClassificationType
+        Discrete = 0
+        Continuous = 1
+    End Enum
+
 
     Public Sub New()
+        Log = New clsLog
     End Sub
 
     Public Sub SetProgressBar(ByRef pr As ProgressBar, ByRef lb As System.Windows.Forms.Label)
@@ -38,9 +47,7 @@ Public Class clsKlimaatatlas
     End Sub
 
 
-    Public Sub ReadConfiguration(jsonPath As String)
-        Dim jsonString As String = File.ReadAllText(jsonPath)
-        _jsonObj = JObject.Parse(jsonString)
+    Public Sub ReadConfigurationFile(jsonPath As String)
         Dim configContent As String = File.ReadAllText(jsonPath)
         _config = JObject.Parse(configContent)
     End Sub
@@ -115,7 +122,7 @@ Public Class clsKlimaatatlas
             'this function reads the key dataset containing our features. This is also the dataset to which our results will be written
             featuresDataset = New clsDataset(Me)
 
-            Dim dataset As JObject = _jsonObj("features_dataset")
+            Dim dataset As JObject = _config("features_dataset")
             featuresDataset.Comment = dataset("_comment").ToString
             featuresDataset.ID = dataset("id").ToString
             featuresDataset.dataType = CType([Enum].Parse(GetType(enmDataType), dataset("data_type").ToString), enmDataType)
@@ -146,10 +153,10 @@ Public Class clsKlimaatatlas
 
     Public Function PopulateScenarios() As Boolean
         Try
-            Dim jsonArray As JArray = CType(_jsonObj("scenarios"), JArray)
+            Dim jsonArray As JArray = CType(_config("scenarios"), JArray)
             For Each item As JToken In jsonArray
                 Dim myScenario As New clsScenario(Me, item.ToString)
-                Scenarios.Add(myScenario.Name.Trim.toupper, myScenario)
+                Scenarios.Add(myScenario.Name.Trim.ToUpper, myScenario)
             Next
             Return True
         Catch ex As Exception
@@ -157,9 +164,47 @@ Public Class clsKlimaatatlas
             Return False
         End Try
     End Function
+
+    Public Function PopulateBenchmarks() As Boolean
+        Try
+            If _config("benchmarks") Is Nothing Then
+                Throw New InvalidOperationException("The configuration does not contain a 'benchmarks' property.")
+            End If
+
+            Dim benchmarksArray As JArray = CType(_config("benchmarks"), JArray)
+            For Each item As JObject In benchmarksArray
+                Dim classification As enmClassificationType = If(item("classification").ToString().ToLower() = "discrete", enmClassificationType.Discrete, enmClassificationType.Continuous)
+                Dim myBenchmark As New clsBenchmark(Me, item("name").ToString(), item("fieldname").ToString(), classification)
+
+                If classification = enmClassificationType.Discrete Then
+                    Dim discreteClasses As New Dictionary(Of String, Double)
+                    For Each classItem As JObject In item("classes")
+                        ' Accessing properties of classItem JObject and converting them to appropriate types
+                        discreteClasses.Add(classItem("name").ToString(), classItem("value").ToObject(Of Double)())
+                    Next
+                    myBenchmark.SetDiscreteClasses(discreteClasses)
+                ElseIf classification = enmClassificationType.Continuous Then
+                    Dim valuesRange = New SortedDictionary(Of Double, Double)
+                    For Each classItem As JObject In item("valuesRange")
+                        ' Accessing properties of classItem JObject and converting them to appropriate types
+                        valuesRange.Add(classItem("value").ToObject(Of Double)(), classItem("verdict").ToObject(Of Double)())
+                    Next
+                    myBenchmark.SetContinuousClasses(valuesRange)
+                End If
+
+                Benchmarks.Add(myBenchmark.Name.Trim.ToUpper(), myBenchmark)
+            Next
+            Return True
+        Catch ex As Exception
+            Log.AddError("Error in function PopulateBenchmarks of class clsKlimaatatlas: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+
     Public Function PopulateDatasets() As Boolean
         Try
-            For Each dataset As JObject In _jsonObj("datasets")
+            For Each dataset As JObject In _config("datasets")
 
                 Dim myDataset As New clsDataset(Me)
                 myDataset.Comment = dataset("_comment").ToString
@@ -221,7 +266,7 @@ Public Class clsKlimaatatlas
 
     Public Function PopulateLookuptables() As Boolean
         Try
-            For Each lookuptable As JObject In _jsonObj("lookup_tables")
+            For Each lookuptable As JObject In _config("lookup_tables")
                 'create a new instance of clsClassification
                 Dim myLookupTable As New clsLookupTable(Me, lookuptable("id").ToString)
 
@@ -232,7 +277,7 @@ Public Class clsKlimaatatlas
                     myLookupTable.Records.Add(newRecord)
                 Next
 
-                lookuptables.Add(myLookupTable.id.Trim.ToUpper, myLookupTable)
+                Lookuptables.Add(myLookupTable.id.Trim.ToUpper, myLookupTable)
             Next
             Return True
         Catch ex As Exception
@@ -240,12 +285,12 @@ Public Class clsKlimaatatlas
             Return False
         End Try
     End Function
+
     Public Function PopulateClassifications() As Boolean
         Try
-            For Each classification As JObject In _jsonObj("classifications")
+            For Each classification As JObject In _config("classifications")
                 'create a new instance of clsClassification
                 Dim myClassification As New clsClassification(Me, classification("id").ToString)
-
                 myClassification.Classes = New List(Of clsClassificationClass)
 
                 For Each classdef In classification("classes")
@@ -264,11 +309,39 @@ Public Class clsKlimaatatlas
 
     Public Function PopulateRules() As Boolean
         Try
+            Dim rulesArray As JArray = CType(_config("rules"), JArray)
+            For Each item As JObject In rulesArray
+                Dim myRule As New clsRule(Me)
+                myRule.Name = item("name").ToString()
+
+                ' Iterate through factors and create equation components
+                Dim factors As JArray = CType(item("components"), JArray)
+                For Each factor As JObject In factors
+                    Dim benchmark As String = factor("benchmark").ToString()
+                    Dim weight As Double = Convert.ToDouble(factor("weight"))
+                    Dim resultsField As String = factor("resultsfield").ToString()
+
+                    Dim component As New clsEquationComponent(Me, myRule, benchmark, weight, resultsField)
+                    myRule.EquationComponents.Add(component)
+                Next
+
+                Rules.Add(myRule.Name.Trim.ToUpper(), myRule)
+            Next
+
+            Return True
+        Catch ex As Exception
+            Log.AddError("Error in function PopulateRules of class clsKlimaatatlas: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+    Public Function PopulateOldRules() As Boolean
+        Try
             SQLiteCon.Open()
-            For Each rule As JObject In _jsonObj("rules")
+            For Each rule As JObject In _config("rules")
 
                 'create a new instance of clsRule
-                Dim myRule As New clsRule(Me, Convert.ToInt16(rule("order").ToString))
+                Dim myRule As New clsOldRule(Me, Convert.ToInt16(rule("order").ToString))
 
                 'set the general properties
                 myRule.Apply = Convert.ToBoolean(rule("apply"))
@@ -357,7 +430,7 @@ Public Class clsKlimaatatlas
 
                 'add our rule to the list
                 If Rules.ContainsKey(myRule.Order) Then Throw New Exception("Error: two or more rules with the same order number in the JSON configuration file. Please correct this before proceedng.")
-                Rules.Add(myRule.Order, myRule)
+                OldRules.Add(myRule.Order, myRule)
 
             Next
             SQLiteCon.Close()
@@ -372,20 +445,13 @@ Public Class clsKlimaatatlas
     Public Function ProcessRules() As Boolean
         'this function processes all rules we have just read and computes the penalties for each feature
         Try
-            'Iterate over each key-value pair in the sorted dictionary
-            For Each kvp As KeyValuePair(Of Integer, clsRule) In Rules
-                Dim ruleOrder As Integer = kvp.Key
-                Dim myRule As clsRule = kvp.Value
-
-                If myRule.Apply Then
-                    myRule.Execute()
-                End If
-
+            'execute the rules one by one
+            For Each myRule As clsRule In Rules.Values()
+                myRule.Execute()
             Next
             Return True
-
         Catch ex As Exception
-
+            Return False
         End Try
     End Function
 

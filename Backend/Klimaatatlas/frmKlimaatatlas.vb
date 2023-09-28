@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports Newtonsoft.Json.Linq
+Imports System.Windows.Forms
 
 Public Class frmKlimaatatlas
     Public Klimaatatlas As clsKlimaatatlas
@@ -12,17 +13,65 @@ Public Class frmKlimaatatlas
         txtConfigFile.Text = My.Settings.Configfile
         txtResultsFile.Text = My.Settings.Resultsfile
 
-        If System.IO.File.Exists(txtDatabase.Text) Then
-            Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
-            Klimaatatlas.UpgradeDatabase()
+        Initialize()
+
+        If System.IO.File.Exists(txtDatabase.Text) AndAlso System.IO.File.Exists(txtConfigFile.Text) Then
+            ReadConfiguration()
         End If
 
+        ' Assuming you have a TabControl named TabControl1 with at least one TabPage
+        AddHandler TabControl1.TabPages(1).Paint, AddressOf Benchmarks_Paint
+
     End Sub
+    Private Sub Benchmarks_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
+
+        ' Initialize position
+        Dim vPos As Integer = 50
+        Dim labelWidth As Integer = 100  ' Set your desired label width
+
+        For Each Benchmark As clsBenchmark In Klimaatatlas.Benchmarks.Values
+            ' Create and configure Label
+            Dim label As New Label()
+            label.Text = Benchmark.Name  ' Assuming Name is a property of clsBenchmark
+            label.Location = New Point(20, vPos)
+            label.Width = labelWidth
+            label.TextAlign = ContentAlignment.MiddleLeft
+
+
+            ' Add the label to the TabPage's Controls collection
+            TabControl1.TabPages(1).Controls.Add(label)
+
+            ' Set position for color scale rectangle (next to the label)
+            Dim rect As New Rectangle(40 + labelWidth + 5, vPos, 300, 20) ' Adjust the starting X position and width as necessary
+            Benchmark.colorScale.DrawColorScale(e, rect)  ' Assuming DrawColorScale is a method that draws the color scale
+
+            ' Increment position for next item
+            vPos += 50  ' Adjust as necessary for proper spacing
+        Next
+
+    End Sub
+
+
 
     Private Sub DrawingPanel_Paint(sender As Object, e As PaintEventArgs) Handles pnlFlowchart.Paint
         If Flowchart IsNot Nothing Then
             Flowchart.DrawFlowchart(e.Graphics)
         End If
+    End Sub
+
+    Private Sub Initialize()
+        'set the database connection, read the configuration file and start processing each rule
+        Klimaatatlas.SetProgressBar(prProgress, lblProgress)
+        Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
+        Klimaatatlas.UpgradeDatabase()
+    End Sub
+
+    Private Sub ReadConfiguration()
+        Klimaatatlas.ReadConfigurationFile(txtConfigFile.Text)
+        Klimaatatlas.PopulateBenchmarks()
+        Klimaatatlas.PopulateRules()
+        Klimaatatlas.PopulateScenarios()
+
     End Sub
 
     Private Sub btnExecute_Click(sender As Object, e As EventArgs) Handles btnExecute.Click
@@ -32,20 +81,10 @@ Public Class frmKlimaatatlas
         My.Settings.Resultsfile = txtResultsFile.Text
         My.Settings.Save()
 
-        'set the database connection, read the configuration file and start processing each rule
-        Klimaatatlas.SetProgressBar(prProgress, lblProgress)
-        Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
-        Klimaatatlas.ReadConfiguration(txtConfigFile.Text)
-        Klimaatatlas.UpgradeDatabase()
+        Call ReadConfiguration()
 
         Klimaatatlas.readFeaturesDataset()
-        Klimaatatlas.PopulateScenarios()
-        Klimaatatlas.SetAndInitializeRatingFields()         'add two fields to our dataset for storing the final rating and result_text
-
-        Klimaatatlas.PopulateDatasets()
-        Klimaatatlas.PopulateClassifications()
-        Klimaatatlas.PopulateLookuptables()
-        Klimaatatlas.PopulateRules()
+        'Klimaatatlas.SetAndInitializeRatingFields()         'add two fields to our dataset for storing the final rating and result_text
 
         Klimaatatlas.ProcessRules()
 
@@ -70,6 +109,13 @@ Public Class frmKlimaatatlas
         Dim res As DialogResult = dlgOpenFile.ShowDialog
         If res = DialogResult.OK Then
             txtConfigFile.Text = dlgOpenFile.FileName
+
+            'remember this path for the next time we open our application
+            My.Settings.Configfile = txtConfigFile.Text
+            My.Settings.Save()
+
+            'read the configuration
+            ReadConfiguration()
         End If
     End Sub
 

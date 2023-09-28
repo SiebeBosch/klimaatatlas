@@ -4,11 +4,12 @@
 Public MustInherit Class clsFlowchartNode
 
     Public Enum enmFlowchartNodeType
-        Input = 0
-        Decision = 1
-        Action = 2
-        MultiSelect = 3
-        Verdict = 4
+        Start = 0
+        Input = 1
+        Decision = 2
+        Action = 3
+        MultiSelect = 4
+        Verdict = 5
     End Enum
 
     Public Property NodeType As enmFlowchartNodeType

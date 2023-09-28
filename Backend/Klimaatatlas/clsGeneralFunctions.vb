@@ -55,6 +55,7 @@ Public Class clsGeneralFunctions
         datetime = 10
         watertype = 11
         soiltype = 12
+        verdict = 13
     End Enum
 
     Public Enum enmStorageType
