@@ -1,4 +1,4 @@
-# klimaatatlas
+# Klimaatatlas
 Klimaatatlas voor het berekenen en publiceren van risico's op slechte waterkwaliteit zoals risico op:
 * drijflagen
 * blauwalg
@@ -8,7 +8,7 @@ Klimaatatlas voor het berekenen en publiceren van risico's op slechte waterkwali
 
 De klimaatatlas bestaat uit de volgende applicaties:
 
-### Klimaatatlas desktop-applicatie
+### desktop-applicatie
 Via een desktop-applicatie kan de gebruiker maatlatten en rekenregels configureren en doorrekenen:
 
 * Verwijzen naar een watervlakkenkaart met alle relevante gegevensvelden (bijv. waterdiepte, breedte, doodlopendheid, oriëntatie tov de wind, temperatuur die met een bepaalde frequentie voorkomt)
