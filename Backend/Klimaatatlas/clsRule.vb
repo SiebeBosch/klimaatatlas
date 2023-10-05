@@ -21,7 +21,7 @@ Public Class clsRule
                 Dim ResultField As clsSQLiteField = Setup.featuresDataset.GetAddField(Scenario.Name & "_" & Name, enmFieldType.verdict, enmSQLiteDataType.SQLITEREAL)
                 For Each Component As clsEquationComponent In EquationComponents
                     'create a field for the results of this individual component & scenario
-                    Component.ResultsField = Setup.featuresDataset.GetAddField(Scenario.Name & "_" & Component.Benchmark.Name, enmFieldType.datavalue, enmSQLiteDataType.SQLITEREAL)
+                    Component.ResultsField = Setup.featuresDataset.GetAddField(Scenario.Name & "_" & Component.ResultsFieldName, enmFieldType.datavalue, enmSQLiteDataType.SQLITEREAL)
                 Next
 
                 'iterate through each feature
@@ -51,7 +51,7 @@ Public Class clsRule
 
             Return True
         Catch ex As Exception
-            ' Handle the exception
+            Me.Setup.Log.AddError("Error executing rule " & Name & ": " & ex.Message)
             Return False
         End Try
     End Function

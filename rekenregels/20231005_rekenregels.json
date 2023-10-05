@@ -10,8 +10,11 @@
       {"fieldtype": "id", "fieldname": "CODE"},
       {"fieldtype": "featureidx", "fieldname": "FEATUREIDX"},
       {"fieldtype": "depth", "fieldname": "WATERDIEPT"},
+      {"fieldtype": "width", "fieldname": "BREEDTE"},
       {"fieldtype": "deadend", "fieldname": "doodlopend"},
-      {"fieldtype": "watertype", "fieldname": "type_water"}
+      {"fieldtype": "watertype", "fieldname": "type_water"},
+      {"fieldtype": "temperature", "fieldname": "Tex14"},
+      {"fieldtype": "temperature", "fieldname": "Tex85"}
     ]
   },
   "rules": [
@@ -45,8 +48,8 @@
 			"name": "breedte",
 			"comment":"breedte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":14, "field":"Width"},
-				{"scenario":85, "field":"Width"}			
+				{"scenario":14, "field":"Breedte"},
+				{"scenario":85, "field":"Breedte"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":5,"verdict":1},{"value":15,"verdict":0}],
