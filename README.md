@@ -11,14 +11,14 @@ De klimaatatlas bestaat uit de volgende applicaties:
 ### Klimaatatlas desktop-applicatie
 Via een desktop-applicatie kan de gebruiker maatlatten en rekenregels configureren en doorrekenen:
 
-* Verwijzen naar de watervlakkenkaart met alle relevante gegevensvelden
-* Verwijzen naar de gebruikte SQLite-database
+* Verwijzen naar een watervlakkenkaart met alle relevante gegevensvelden (bijv. waterdiepte, breedte, doodlopendheid, oriëntatie tov de wind, temperatuur die met een bepaalde frequentie voorkomt)
+* Verwijzen naar de gebruikte SQLite-database (optioneel)
 * Opstellen van 'maatlatten' die worden gebruikt in de rekenregels
 * Opstellen van rekenregels waarlangs het risico op slechte waterkwaliteit wordt berekend. Rekenregels zijn een optelsom van de individuele maatlatten, met een wegingsfactor per maatlat. 
 
 Voorbeeld van een maatlat: 
-* bij grote waterdiepte (> 1.5m): risicowaarde 0
-* bij geringe waterdiepte (< 0.2m): risicowaarde 1.
+* bij grote waterdiepte (> 1.5m): risicowaarde t.a.v. kroos = 0
+* bij geringe waterdiepte (< 0.2m): risicowaarde t.a.v. kroos = 1.
 
 Voorbeeld van een rekenregel: 
 * risico op kroos = 1 * risico_ondiep_water + 1 * doodlopendheid_watergang + 2 * belasting_vermestende_stoffen
