@@ -21,9 +21,9 @@ Voorbeeld van een maatlat:
 * bij geringe waterdiepte (< 0.2m): risicowaarde t.a.v. kroos = 1.
 
 Voorbeeld van een rekenregel: 
-* risico op kroos = 1 * risico_ondiep_water + 1 * doodlopendheid_watergang + 2 * belasting_vermestende_stoffen
+* risico op kroos = (1 * risico_ondiep_water + 1 * doodlopendheid_watergang + 2 * belasting_vermestende_stoffen) / 4
 
-Het resultaat van een rekenregel ligt altijd tussen 0 (geen risico) en 1 (hoog risico).
+Doordat na de optelling weer gedeeld wordt door de som van de factoren ligt het risico altijd tussen 0 (geen risico) en 1 (hoog risico).
 De applicatie doorloopt alle features uit de watervlakkenkaart, berekent het resultaat voor iedere maatlat en op basis daarvan, aan de hand van de rekenregels, het risico.
 Het risico wordt weggeschreven naar een kopie van de watervlakkenkaart, tezamen met de relatieve bijdrage van elke maatlat bij de totstandkoming van het risico.
 
