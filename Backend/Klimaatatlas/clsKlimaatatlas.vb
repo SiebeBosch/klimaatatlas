@@ -24,7 +24,7 @@ Public Class clsKlimaatatlas
 
     Public featuresDataset As clsDataset                        'this is the dataset containing our features
     Public Scenarios As New Dictionary(Of String, clsScenario)
-    Public Benchmarks As New Dictionary(Of String, clsBenchmark)
+    'Public Benchmarks As New Dictionary(Of String, clsBenchmark)
     Public Datasets As New Dictionary(Of String, clsDataset)
     Public Classifications As New Dictionary(Of String, clsClassification)
     Public Lookuptables As New Dictionary(Of String, clsLookupTable)
@@ -165,41 +165,41 @@ Public Class clsKlimaatatlas
         End Try
     End Function
 
-    Public Function PopulateBenchmarks() As Boolean
-        Try
-            If _config("benchmarks") Is Nothing Then
-                Throw New InvalidOperationException("The configuration does not contain a 'benchmarks' property.")
-            End If
+    'Public Function PopulateBenchmarks() As Boolean
+    '    Try
+    '        If _config("benchmarks") Is Nothing Then
+    '            Throw New InvalidOperationException("The configuration does not contain a 'benchmarks' property.")
+    '        End If
 
-            Dim benchmarksArray As JArray = CType(_config("benchmarks"), JArray)
-            For Each item As JObject In benchmarksArray
-                Dim classification As enmClassificationType = If(item("classification").ToString().ToLower() = "discrete", enmClassificationType.Discrete, enmClassificationType.Continuous)
-                Dim myBenchmark As New clsBenchmark(Me, item("name").ToString(), item("fieldname").ToString(), classification)
+    '        Dim benchmarksArray As JArray = CType(_config("benchmarks"), JArray)
+    '        For Each item As JObject In benchmarksArray
+    '            Dim classification As enmClassificationType = If(item("classification").ToString().ToLower() = "discrete", enmClassificationType.Discrete, enmClassificationType.Continuous)
+    '            Dim myBenchmark As New clsBenchmark(Me, item("name").ToString(), item("fieldname").ToString(), classification)
 
-                If classification = enmClassificationType.Discrete Then
-                    Dim discreteClasses As New Dictionary(Of String, Double)
-                    For Each classItem As JObject In item("classes")
-                        ' Accessing properties of classItem JObject and converting them to appropriate types
-                        discreteClasses.Add(classItem("name").ToString(), classItem("value").ToObject(Of Double)())
-                    Next
-                    myBenchmark.SetDiscreteClasses(discreteClasses)
-                ElseIf classification = enmClassificationType.Continuous Then
-                    Dim valuesRange = New SortedDictionary(Of Double, Double)
-                    For Each classItem As JObject In item("valuesRange")
-                        ' Accessing properties of classItem JObject and converting them to appropriate types
-                        valuesRange.Add(classItem("value").ToObject(Of Double)(), classItem("verdict").ToObject(Of Double)())
-                    Next
-                    myBenchmark.SetContinuousClasses(valuesRange)
-                End If
+    '            If classification = enmClassificationType.Discrete Then
+    '                Dim discreteClasses As New Dictionary(Of String, Double)
+    '                For Each classItem As JObject In item("classes")
+    '                    ' Accessing properties of classItem JObject and converting them to appropriate types
+    '                    discreteClasses.Add(classItem("name").ToString(), classItem("value").ToObject(Of Double)())
+    '                Next
+    '                myBenchmark.SetDiscreteClasses(discreteClasses)
+    '            ElseIf classification = enmClassificationType.Continuous Then
+    '                Dim valuesRange = New SortedDictionary(Of Double, Double)
+    '                For Each classItem As JObject In item("valuesRange")
+    '                    ' Accessing properties of classItem JObject and converting them to appropriate types
+    '                    valuesRange.Add(classItem("value").ToObject(Of Double)(), classItem("verdict").ToObject(Of Double)())
+    '                Next
+    '                myBenchmark.SetContinuousClasses(valuesRange)
+    '            End If
 
-                Benchmarks.Add(myBenchmark.Name.Trim.ToUpper(), myBenchmark)
-            Next
-            Return True
-        Catch ex As Exception
-            Log.AddError("Error in function PopulateBenchmarks of class clsKlimaatatlas: " & ex.Message)
-            Return False
-        End Try
-    End Function
+    '            Benchmarks.Add(myBenchmark.Name.Trim.ToUpper(), myBenchmark)
+    '        Next
+    '        Return True
+    '    Catch ex As Exception
+    '        Log.AddError("Error in function PopulateBenchmarks of class clsKlimaatatlas: " & ex.Message)
+    '        Return False
+    '    End Try
+    'End Function
 
 
     Public Function PopulateDatasets() As Boolean
@@ -306,15 +306,52 @@ Public Class clsKlimaatatlas
             Return False
         End Try
     End Function
-
-    Public Function PopulateRules() As Boolean
+    Public Function PopulateRules(ByRef cmbRekenRegels As ComboBox) As Boolean
         Try
+            'clear the combobox containing the rules
+            cmbRekenRegels.Items.Clear()
+
             Dim rulesArray As JArray = CType(_config("rules"), JArray)
             For Each item As JObject In rulesArray
                 Dim myRule As New clsRule(Me)
                 myRule.Name = item("name").ToString()
 
-                ' Iterate through factors and create equation components
+                ' Handle benchmarks
+                Dim benchmarksArray As JArray = CType(item("benchmarks"), JArray)
+                For Each benchmarkItem As JObject In benchmarksArray
+                    Dim classification As enmClassificationType = If(benchmarkItem("classification").ToString().ToLower() = "discrete", enmClassificationType.Discrete, enmClassificationType.Continuous)
+
+                    ' Process fieldnames per scenario
+                    Dim fieldNamesPerScenario As New Dictionary(Of String, String)
+                    For Each fieldnameItem As JObject In CType(benchmarkItem("fieldname"), JArray)
+                        Dim scenario As String = fieldnameItem("scenario").ToString()
+                        Dim field As String = fieldnameItem("field").ToString()
+                        fieldNamesPerScenario.Add(scenario.trim.toupper, field)
+                    Next
+
+                    'create the benchmark class instance
+                    Dim myBenchmark As New clsBenchmark(Me, benchmarkItem("name").ToString(), fieldNamesPerScenario, classification)
+
+                    'process the classification of our benchmark
+                    If classification = enmClassificationType.Discrete Then
+                        Dim discreteClasses As New Dictionary(Of String, Double)
+                        For Each classItem As JObject In benchmarkItem("classes")
+                            discreteClasses.Add(classItem("name").ToString(), classItem("value").ToObject(Of Double)())
+                        Next
+                        myBenchmark.SetDiscreteClasses(discreteClasses)
+                    ElseIf classification = enmClassificationType.Continuous Then
+                        Dim valuesRange = New SortedDictionary(Of Double, Double)
+                        For Each classItem As JObject In benchmarkItem("valuesRange")
+                            valuesRange.Add(classItem("value").ToObject(Of Double)(), classItem("verdict").ToObject(Of Double)())
+                        Next
+                        myBenchmark.SetContinuousClasses(valuesRange)
+                    End If
+
+                    ' Add the created benchmark to the current rule
+                    myRule.Benchmarks.Add(myBenchmark.Name.Trim.ToUpper(), myBenchmark)
+                Next
+
+                ' Handle equation components
                 Dim factors As JArray = CType(item("components"), JArray)
                 For Each factor As JObject In factors
                     Dim benchmark As String = factor("benchmark").ToString()
@@ -326,6 +363,7 @@ Public Class clsKlimaatatlas
                 Next
 
                 Rules.Add(myRule.Name.Trim.ToUpper(), myRule)
+                cmbRekenRegels.Items.Add(myRule.Name)
             Next
 
             Return True
@@ -334,6 +372,7 @@ Public Class clsKlimaatatlas
             Return False
         End Try
     End Function
+
 
     Public Function PopulateOldRules() As Boolean
         Try

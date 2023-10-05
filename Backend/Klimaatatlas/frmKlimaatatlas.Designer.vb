@@ -44,10 +44,13 @@ Partial Class frmKlimaatatlas
         TabControl1 = New TabControl()
         tabSettings = New TabPage()
         tabMaatlatten = New TabPage()
+        Label2 = New Label()
+        cmbRekenregels = New ComboBox()
         tabRekenregels = New TabPage()
         MenuStrip1.SuspendLayout()
         TabControl1.SuspendLayout()
         tabSettings.SuspendLayout()
+        tabMaatlatten.SuspendLayout()
         SuspendLayout()
         ' 
         ' btnExecute
@@ -227,6 +230,8 @@ Partial Class frmKlimaatatlas
         ' 
         ' tabMaatlatten
         ' 
+        tabMaatlatten.Controls.Add(Label2)
+        tabMaatlatten.Controls.Add(cmbRekenregels)
         tabMaatlatten.Location = New Point(4, 24)
         tabMaatlatten.Name = "tabMaatlatten"
         tabMaatlatten.Padding = New Padding(3)
@@ -234,6 +239,23 @@ Partial Class frmKlimaatatlas
         tabMaatlatten.TabIndex = 1
         tabMaatlatten.Text = "Maatlatten"
         tabMaatlatten.UseVisualStyleBackColor = True
+        ' 
+        ' Label2
+        ' 
+        Label2.AutoSize = True
+        Label2.Location = New Point(17, 15)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(68, 15)
+        Label2.TabIndex = 7
+        Label2.Text = "Rekenregel:"
+        ' 
+        ' cmbRekenregels
+        ' 
+        cmbRekenregels.FormattingEnabled = True
+        cmbRekenregels.Location = New Point(145, 10)
+        cmbRekenregels.Name = "cmbRekenregels"
+        cmbRekenregels.Size = New Size(300, 23)
+        cmbRekenregels.TabIndex = 0
         ' 
         ' tabRekenregels
         ' 
@@ -264,6 +286,8 @@ Partial Class frmKlimaatatlas
         TabControl1.ResumeLayout(False)
         tabSettings.ResumeLayout(False)
         tabSettings.PerformLayout()
+        tabMaatlatten.ResumeLayout(False)
+        tabMaatlatten.PerformLayout()
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -293,4 +317,6 @@ Partial Class frmKlimaatatlas
     Friend WithEvents tabSettings As TabPage
     Friend WithEvents tabRekenregels As TabPage
     Friend WithEvents tabMaatlatten As TabPage
+    Friend WithEvents Label2 As Label
+    Friend WithEvents cmbRekenregels As ComboBox
 End Class

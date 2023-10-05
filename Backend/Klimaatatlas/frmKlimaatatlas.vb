@@ -29,25 +29,29 @@ Public Class frmKlimaatatlas
         Dim vPos As Integer = 50
         Dim labelWidth As Integer = 100  ' Set your desired label width
 
-        For Each Benchmark As clsBenchmark In Klimaatatlas.Benchmarks.Values
-            ' Create and configure Label
-            Dim label As New Label()
-            label.Text = Benchmark.Name  ' Assuming Name is a property of clsBenchmark
-            label.Location = New Point(20, vPos)
-            label.Width = labelWidth
-            label.TextAlign = ContentAlignment.MiddleLeft
+        'for now, pick the first rule to render
+        If Klimaatatlas.Rules.ContainsKey(cmbRekenregels.Text.Trim.ToUpper) Then
+            Dim Rule As clsRule = Klimaatatlas.Rules.Item(cmbRekenregels.Text.Trim.ToUpper)
+            For Each Benchmark As clsBenchmark In Rule.Benchmarks.Values
+                ' Create and configure Label
+                Dim label As New Label()
+                label.Text = Benchmark.Name  ' Assuming Name is a property of clsBenchmark
+                label.Location = New Point(20, vPos)
+                label.Width = labelWidth
+                label.TextAlign = ContentAlignment.MiddleLeft
 
 
-            ' Add the label to the TabPage's Controls collection
-            TabControl1.TabPages(1).Controls.Add(label)
+                ' Add the label to the TabPage's Controls collection
+                TabControl1.TabPages(1).Controls.Add(label)
 
-            ' Set position for color scale rectangle (next to the label)
-            Dim rect As New Rectangle(40 + labelWidth + 5, vPos, 300, 20) ' Adjust the starting X position and width as necessary
-            Benchmark.colorScale.DrawColorScale(e, rect)  ' Assuming DrawColorScale is a method that draws the color scale
+                ' Set position for color scale rectangle (next to the label)
+                Dim rect As New Rectangle(40 + labelWidth + 5, vPos, 300, 20) ' Adjust the starting X position and width as necessary
+                Benchmark.colorScale.DrawColorScale(e, rect)  ' Assuming DrawColorScale is a method that draws the color scale
 
-            ' Increment position for next item
-            vPos += 50  ' Adjust as necessary for proper spacing
-        Next
+                ' Increment position for next item
+                vPos += 50  ' Adjust as necessary for proper spacing
+            Next
+        End If
 
     End Sub
 
@@ -68,8 +72,7 @@ Public Class frmKlimaatatlas
 
     Private Sub ReadConfiguration()
         Klimaatatlas.ReadConfigurationFile(txtConfigFile.Text)
-        Klimaatatlas.PopulateBenchmarks()
-        Klimaatatlas.PopulateRules()
+        Klimaatatlas.PopulateRules(cmbRekenregels)
         Klimaatatlas.PopulateScenarios()
 
     End Sub
@@ -141,4 +144,14 @@ Public Class frmKlimaatatlas
     Private Sub cmbIndicators_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbIndicators.SelectedIndexChanged
 
     End Sub
+
+    Private Sub cmbRekenregels_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbRekenregels.SelectedIndexChanged
+        ' Trigger Repaint
+        Me.Refresh()
+        ' Or you could invalidate and update the specific control where benchmarks are drawn
+        ' YourControl.Invalidate()
+        ' YourControl.Update()
+
+    End Sub
+
 End Class

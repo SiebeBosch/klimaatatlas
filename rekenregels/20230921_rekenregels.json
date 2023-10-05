@@ -5,7 +5,7 @@
     "id": "watervlakken",
     "data_type": "polygons",
     "storage_type": "shapefile",
-    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus3.shp",
+    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus4.shp",
     "fields": [
       {"fieldtype": "id", "fieldname": "CODE"},
       {"fieldtype": "featureidx", "fieldname": "FEATUREIDX"},
@@ -23,6 +23,12 @@
 		{"name": "nee", "value": 0}, 
 		{"name": "ja", "value": 1}
 		]
+    },
+    {
+      "name": "breedte",
+      "fieldname": "Width",
+      "classification": "continuous",
+      "valuesRange": [{"value":5,"verdict":1},{"value":15,"verdict":0}],
     },
     {
       "name": "diepte",
@@ -65,25 +71,75 @@
 		"valuesRange": [{"value":0,"verdict":0},{"value":0.027,"verdict":1}],
 	},
 	{
+		"name":"kroos_temp",
+		"fieldname":"temp_gt_25",
+		"classification":"continuous", 
+		"valuesRange": [{"value":18,"verdict":0},{"value":20,"verdict":0.3},{"value":22,"verdict":0.5},{"value":24,"verdict":0.6},{"value":25,"verdict":0.7},{"value":26,"verdict":1},{"value":28,"verdict":0.5},{"value":29,"verdict":0.3}],
+	},
+	{
 		"name":"kans_warm_windstil",
 		"fieldname":"p_warmstil",
 		"classification":"continuous", 
 		"valuesRange": [{"value":0,"verdict":0},{"value":0.027,"verdict":1}],
 	},
 	{
-		"name":"breedte",
-		"fieldname":"breedte",
+		"name":"weekTemp",
+		"comment":"de watertemperatuur die gemiddeld één week per jaar wordt overschreden.",
+		"fieldname":"Tweek",
 		"classification":"continuous", 
-		"valuesRange": [{"value":8,"verdict":0},{"value":99,"verdict":1}],
+		"valuesRange": [{"value":15,"verdict":0},{"value":27,"verdict":1},{"value":35,"verdict":0}],
 	}
 ],
   "rules": [
     {
       "name": "kroos",
+	  "benchmarks":[
+		{
+			"name": "doodlopend",
+			"fieldname":[
+				{"scenario":14, "field":"doodlopend"},
+				{"scenario":85, "field":"doodlopend"}
+			],
+			"classification": "discrete",
+			"classes": [
+				{"name": "nee", "value": 0}, 
+				{"name": "ja", "value": 1}
+			]
+		},
+		{
+			"name": "diepte",
+			"fieldname":[
+				{"scenario":14, "field":"waterdiept"},
+				{"scenario":85, "field":"waterdiept"}			
+			],
+			"classification": "continuous",
+			"valuesRange": [{"value":0,"verdict":1},{"value":1.5,"verdict":0}],
+		},
+		{
+			"name": "breedte",
+			"fieldname":[
+				{"scenario":14, "field":"Width"},
+				{"scenario":85, "field":"Width"}			
+			],
+			"classification": "continuous",
+			"valuesRange": [{"value":5,"verdict":1},{"value":15,"verdict":0}],
+		},
+		{
+			"name":"Texceedance",
+			"comment":"de watertemperatuur die gemiddeld één week per jaar wordt overschreden.",
+			"fieldname":[
+				{"scenario":14, "field":"Tex14"},
+				{"scenario":85, "field":"Tex85"}			
+			],
+			"classification":"continuous", 
+			"valuesRange": [{"value":15,"verdict":0},{"value":27,"verdict":1},{"value":35,"verdict":0}],
+		}
+	],
       "resultsfield": "kroos",
       "components": [
-        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "krs_ddlp"},
-        {"benchmark": "diepte", "weight": 1, "resultsfield": "krs_diep"}
+        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "krs_dl"},
+        {"benchmark": "breedte", "weight": 1, "resultsfield": "krs_br"},
+        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "krs_Tx"},
       ]
     }
   ],

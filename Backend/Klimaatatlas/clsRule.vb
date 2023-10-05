@@ -4,6 +4,7 @@ Imports Klimaatatlas.clsGeneralFunctions
 
 Public Class clsRule
     Friend Name As String
+    Friend Benchmarks As New Dictionary(Of String, clsBenchmark)
     Friend EquationComponents As New List(Of clsEquationComponent)
     Private Setup As clsKlimaatatlas
 
@@ -30,7 +31,7 @@ Public Class clsRule
                     Dim ComponentResults As New List(Of Double)
                     'retrieve the individual components
                     For Each Component As clsEquationComponent In EquationComponents
-                        Dim benchmarkField As clsSQLiteField = Setup.featuresDataset.Fields.Item(Component.Benchmark.fieldname.Trim.ToUpper)
+                        Dim benchmarkField As clsSQLiteField = Setup.featuresDataset.Fields.Item(Component.Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper).Trim.ToUpper)
                         Component.calculateResult(Setup.featuresDataset.Values(benchmarkField.fieldIdx, featureIdx))
 
                         'add the result of this component to the total result
@@ -70,7 +71,7 @@ Public Class clsEquationComponent
     Public Sub New(ByRef mySetup As clsKlimaatatlas, ByRef myRule As clsRule, myBenchmarkName As String, myWeight As Double, myResultsFieldName As String)
         Setup = mySetup
         Rule = myRule
-        Benchmark = Setup.Benchmarks.Item(myBenchmarkName.Trim.ToUpper)
+        Benchmark = Rule.Benchmarks.Item(myBenchmarkName.Trim.ToUpper)
         Weight = myWeight
         ResultsFieldName = myResultsFieldName
     End Sub
