@@ -7,14 +7,14 @@
     "storage_type": "shapefile",
     "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus4.shp",
     "fields": [
-      {"fieldtype": "id", "fieldname": "CODE"},
-      {"fieldtype": "featureidx", "fieldname": "FEATUREIDX"},
-      {"fieldtype": "depth", "fieldname": "WATERDIEPT"},
-      {"fieldtype": "width", "fieldname": "BREEDTE"},
-      {"fieldtype": "deadend", "fieldname": "doodlopend"},
-      {"fieldtype": "watertype", "fieldname": "type_water"},
-      {"fieldtype": "temperature", "fieldname": "Tex14"},
-      {"fieldtype": "temperature", "fieldname": "Tex85"}
+      {"fieldtype": "id", "datatype":"SQLITETEXT", "fieldname": "CODE"},
+      {"fieldtype": "featureidx", "datatype":"SQLITEINT", "fieldname": "FEATUREIDX"},
+      {"fieldtype": "depth", "datatype":"SQLITEREAL", "fieldname": "WATERDIEPT"},
+      {"fieldtype": "width", "datatype":"SQLITEREAL", "fieldname": "BREEDTE"},
+      {"fieldtype": "deadend", "datatype":"SQLITETEXT", "fieldname": "doodlopend"},
+      {"fieldtype": "watertype", "datatype":"SQLITETEXT", "fieldname": "type_water"},
+      {"fieldtype": "temperature", "datatype":"SQLITEREAL", "fieldname": "Tex14"},
+      {"fieldtype": "temperature", "datatype":"SQLITEREAL", "fieldname": "Tex85"}
     ]
   },
   "rules": [

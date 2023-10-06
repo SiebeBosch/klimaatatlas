@@ -131,7 +131,8 @@ Public Class clsKlimaatatlas
             For Each field In dataset("fields")
                 Dim fieldType As enmFieldType = CType([Enum].Parse(GetType(enmFieldType), field("fieldtype").ToString()), enmFieldType)
                 Dim fieldName As String = field("fieldname").ToString()
-                Dim newField As New clsSQLiteField(fieldName, fieldType, clsSQLiteField.enmSQLiteDataType.SQLITETEXT)
+                Dim fieldDataType As enmSQLiteDataType = CType([Enum].Parse(GetType(enmSQLiteDataType), field("datatype").ToString()), enmSQLiteDataType)
+                Dim newField As New clsSQLiteField(fieldName, fieldType, fieldDataType)
                 If Not featuresDataset.Fields.ContainsKey(fieldName.Trim.ToUpper) Then
                     newField.fieldIdx = featuresDataset.Fields.Count
                     featuresDataset.Fields.Add(fieldName.Trim.ToUpper, newField)
@@ -509,6 +510,7 @@ Public Class clsKlimaatatlas
                 Dim myFieldType As MapWinGIS.FieldType
                 Dim myFieldLength As Integer
                 Dim myFieldPrecision As Integer
+                Dim myFieldName As String = featuresDataset.Fields.Values(i).FieldName
                 Select Case featuresDataset.Fields.Values(i).DataType
                     Case clsSQLiteField.enmSQLiteDataType.SQLITEINT
                         myFieldType = MapWinGIS.FieldType.INTEGER_FIELD
@@ -523,7 +525,7 @@ Public Class clsKlimaatatlas
                         myFieldLength = 100
                         myFieldPrecision = 0
                 End Select
-                sf.EditAddField(featuresDataset.Fields.Values(i).FieldName, myFieldType, myFieldPrecision, myFieldLength)
+                sf.EditAddField(myFieldName, myFieldType, myFieldPrecision, myFieldLength)
             Next
 
             'add the features and write the values
