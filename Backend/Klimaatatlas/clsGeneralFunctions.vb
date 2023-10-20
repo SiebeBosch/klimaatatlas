@@ -1,10 +1,36 @@
 ﻿Imports System.Data.Entity.ModelConfiguration.Conventions
 Imports System.Data.SQLite
+Imports System.IO
 Imports System.Windows
 
 Public Class clsGeneralFunctions
 
+    Private Setup As clsKlimaatatlas
     Dim Log As clsLog
+
+
+    Public Sub New()
+        Log = New clsLog()
+    End Sub
+
+    Public Enum enm2DParameter
+        depth = 0
+        waterlevel = 1
+        velocity = 2
+        u_velocity = 3
+        v_velocity = 4
+        maxvelocity = 5
+        max_uvelocity = 6
+        max_vvelocity = 7
+        maxdepth = 8
+        maxwaterlevel = 9
+        t_flood = 10     'time to inundation
+        cellidx = 11     'the index number of a 2D cell or face
+        t_max = 12
+        t_20cm = 13
+        t_50cm = 14
+    End Enum
+
 
     Public Enum enmSQLiteDataType
         SQLITETEXT  'note: dates can be implemented as text in YYYY-MM-DD HH:MM:SS.SSSS format
@@ -14,9 +40,6 @@ Public Class clsGeneralFunctions
         SQLITEBLOB
     End Enum
 
-    Public Sub New()
-        Log = New clsLog()
-    End Sub
 
     Public Enum enmFlowChartNodeEdge
         top = 0
@@ -59,6 +82,8 @@ Public Class clsGeneralFunctions
         width = 14
         temperature = 15
     End Enum
+
+
 
     Public Enum enmStorageType
         shapefile = 0
@@ -107,6 +132,83 @@ Public Class clsGeneralFunctions
         ' Return the connection
         Return connection
     End Function
+
+
+    Public Function Interpolate2RGBColors(fromColor As System.Drawing.Color, toColor As System.Drawing.Color, myMin As Double, myMax As Double, myVal As Double) As System.Drawing.Color
+        'source refactored (sped up) by ChatGPT Plus
+        Dim newColor As New System.Drawing.Color
+        Dim R As Integer, G As Integer, B As Integer
+
+        R = Interpolate(myMin, fromColor.R, myMax, toColor.R, myVal)
+        G = Interpolate(myMin, fromColor.G, myMax, toColor.G, myVal)
+        B = Interpolate(myMin, fromColor.B, myMax, toColor.B, myVal)
+
+        newColor = System.Drawing.Color.FromArgb(255, R, G, B)
+        Return newColor
+    End Function
+
+
+    Public Function Interpolate(ByVal X1 As Double, ByVal Y1 As Double, ByVal X2 As Double, ByVal Y2 As Double,
+                                ByVal X3 As Double, Optional ByVal BlockInterpolate As Boolean = False, Optional ByVal AllowExtrapolation As Boolean = False) As Double
+
+        If X3 < X1 And X3 < X2 Then 'is niet interpoleren maar extrapoleren
+            If AllowExtrapolation Then
+                Return Extrapolate(X1, Y1, X2, Y2, X3)
+            Else
+                Return Y1
+            End If
+        ElseIf X3 > X2 And X3 > X1 Then 'is niet interpoleren maar extrapoleren
+            If AllowExtrapolation Then
+                Return Extrapolate(X1, Y1, X2, Y2, X3)
+            Else
+                Return Y2
+            End If
+        ElseIf X1 = X2 Then
+            Return Y1
+        Else
+            If BlockInterpolate = True Then
+                Return Y1
+            Else
+                Return Y1 + (Y2 - Y1) / (X2 - X1) * (X3 - X1)
+            End If
+        End If
+    End Function
+
+
+    Public Function Interpolate2RGBAColors(fromColor As System.Drawing.Color, toColor As System.Drawing.Color, myMin As Double, myMax As Double, TransparentBelowLowest As Boolean, TransparentAboveHighest As Boolean, TransparentAtLowest As Boolean, TransparentAtHighest As Boolean, myVal As Double) As System.Drawing.Color
+        'this is a version refactored (sped up) by ChatGPT Plus
+        Dim newColor As New System.Drawing.Color
+        Dim R As Integer, G As Integer, B As Integer, A As Integer 'A = opacity: 0 = fully transparent, 255 = fully opaque
+
+        If (myVal < myMin AndAlso TransparentBelowLowest) OrElse (myVal > myMax AndAlso TransparentAboveHighest) OrElse (myVal = myMin AndAlso TransparentAtLowest) OrElse (myVal = myMax AndAlso TransparentAtHighest) Then
+            A = 0
+        Else
+            A = 255
+        End If
+
+        R = Interpolate(myMin, fromColor.R, myMax, toColor.R, myVal)
+        G = Interpolate(myMin, fromColor.G, myMax, toColor.G, myVal)
+        B = Interpolate(myMin, fromColor.B, myMax, toColor.B, myVal)
+
+        newColor = System.Drawing.Color.FromArgb(A, R, G, B)
+        Return newColor
+    End Function
+
+    Friend Function Extrapolate(ByVal X1 As Double, ByVal Y1 As Double, ByVal X2 As Double, ByVal Y2 As Double, ByVal X3 As Double) As Double
+        'extrapolates linearly
+
+        Dim Rico As Double = 0
+        If X3 > X2 Then
+            Rico = (Y2 - Y1) / (X2 - X1)
+            Extrapolate = Y2 + (X3 - X2) * Rico
+        ElseIf X3 < X1 Then
+            Rico = (Y2 - Y1) / (X2 - X1)
+            Extrapolate = Y1 - (X1 - X3) * Rico
+        Else
+            Extrapolate = -999
+        End If
+    End Function
+
 
     Public Function SQLiteIndexExists(ByRef con As System.Data.SQLite.SQLiteConnection, TableName As String, IndexName As String) As Boolean
         Try
@@ -223,6 +325,119 @@ Public Class clsGeneralFunctions
         End Try
 
     End Function
+
+
+    Public Sub UpdateProgressBar(ByVal lblText As String, ByVal i As Long, ByVal n As Long, Optional ByVal ForceUpdate As Boolean = False)
+
+        ' Check if the application is running in a console
+        Dim isConsole = Console.OpenStandardInput(1) IsNot Stream.Null
+
+        If Setup.ProgressBar IsNot Nothing AndAlso Setup.ProgressLabel IsNot Nothing Then
+            If n = 0 Then n = 1
+            i = System.Math.Min(System.Math.Max(i, 0), n)
+
+            If lblText <> String.Empty Then
+                Setup.ProgressLabel.Text = lblText
+                ForceUpdate = True
+            End If
+
+            If ForceUpdate OrElse System.Math.Round(i / n * 100, 0) >= (Setup.ProgressBar.Value + 1) Then
+                Setup.ProgressBar.Value = CInt(i / n * 100)
+                Forms.Application.DoEvents()
+            End If
+        End If
+
+    End Sub
+
+    Public Function WGS842RD(ByVal Lat As Double, ByVal Lon As Double, Optional ByRef X As Double = 0, Optional ByRef y As Double = 0) As String
+        'converteert WGS84-coordinaten (Lat/Long) naar RD
+        'maakt gebruik van de routines van Ejo Schrama: schrama @geo.tudelft.nl
+        Dim phiBes As Double
+        Dim LambdaBes As Double
+        Call WGS842BESSEL(Lat, Lon, phiBes, LambdaBes)
+        Call BESSEL2RD(phiBes, LambdaBes, X, y)
+        WGS842RD = X & "," & y
+
+    End Function
+
+
+    Public Sub WGS842BESSEL(ByVal PhiWGS As Double, ByVal LamWGS As Double, ByRef phi As Double, ByRef lambda As Double)
+        Dim dphi As Double, dlam As Double, phicor As Double, lamcor As Double
+
+        dphi = PhiWGS - 52
+        dlam = LamWGS - 5
+        phicor = (-96.862 - dphi * 11.714 - dlam * 0.125) * 0.00001
+        lamcor = (dphi * 0.329 - 37.902 - dlam * 14.667) * 0.00001
+        phi = PhiWGS - phicor
+        lambda = LamWGS - lamcor
+
+    End Sub
+
+    Public Sub BESSEL2RD(ByVal phiBes As Double, ByVal lamBes As Double, ByRef X As Double, ByRef y As Double)
+
+        'converteert Lat/Long van een Bessel-functie naar X en Y in RD
+        'code is geheel gebaseerd op de routines van Ejo Schrama's software:
+        'schrama@geo.tudelft.nl
+
+        Dim x0 As Double
+        Dim y0 As Double
+        Dim k As Double
+        Dim bigr As Double
+        Dim m As Double
+        Dim n As Double
+        Dim lambda0 As Double
+        Dim phi0 As Double
+        Dim l0 As Double
+        Dim b0 As Double
+        Dim e As Double
+        Dim a As Double
+
+        Dim d_1 As Double, d_2 As Double, r As Double, sa As Double, ca As Double, cpsi As Double, spsi As Double
+        Dim b As Double, dl As Double, w As Double, q As Double
+        Dim dq As Double, pi As Double, phi As Double, lambda As Double, s2psihalf As Double, cpsihalf As Double, spsihalf As Double
+        Dim tpsihalf As Double
+
+        x0 = 155000
+        y0 = 463000
+        k = 0.9999079
+        bigr = 6382644.571
+        m = 0.003773953832
+        n = 1.00047585668
+
+        pi = System.Math.PI
+        'pi = 3.14159265358979
+        lambda0 = pi * 0.0299313271611111
+        phi0 = pi * 0.289756447533333
+        l0 = pi * 0.0299313271611111
+        b0 = pi * 0.289561651383333
+
+        e = 0.08169683122
+        a = 6377397.155
+
+        phi = phiBes / 180 * pi
+        lambda = lamBes / 180 * pi
+
+        q = System.Math.Log(System.Math.Tan(phi / 2 + pi / 4))
+        dq = e / 2 * System.Math.Log((e * System.Math.Sin(phi) + 1) / (1 - e * System.Math.Sin(phi)))
+        q = q - dq
+        w = n * q + m
+        b = System.Math.Atan(System.Math.Exp(1) ^ w) * 2 - pi / 2
+        dl = n * (lambda - lambda0)
+        d_1 = System.Math.Sin((b - b0) / 2)
+        d_2 = System.Math.Sin(dl / 2)
+        s2psihalf = d_1 * d_1 + d_2 * d_2 * System.Math.Cos(b) * System.Math.Cos(b0)
+        cpsihalf = System.Math.Sqrt(1 - s2psihalf)
+        spsihalf = System.Math.Sqrt(s2psihalf)
+        tpsihalf = spsihalf / cpsihalf
+        spsi = spsihalf * 2 * cpsihalf
+        cpsi = 1 - s2psihalf * 2
+        sa = System.Math.Sin(dl) * System.Math.Cos(b) / spsi
+        ca = (System.Math.Sin(b) - System.Math.Sin(b0) * cpsi) / (System.Math.Cos(b0) * spsi)
+        r = k * 2 * bigr * tpsihalf
+        X = System.Math.Round(r * sa + x0, 0)
+        y = System.Math.Round(r * ca + y0, 0)
+
+    End Sub
 
 
     Public Function SQLiteNoQuery(ByRef con As System.Data.SQLite.SQLiteConnection, ByVal myQuery As String, Optional ByVal CloseAfterwards As Boolean = True, Optional ByVal RetryIfException As Boolean = True, Optional ByRef nAffected As Integer = 0) As Boolean

@@ -196,21 +196,21 @@ Public Class clsDataset
                     Next
 
                     'then walk through each feature of the source dataset and add it
-                    Setup.Generalfunctions.UpdateProgressBar(Setup.myProgressBar, Setup.myProgressLabel, "Reading features...", 0, 10, True)
+                    Setup.Generalfunctions.UpdateProgressBar(Setup.ProgressBar, Setup.ProgressLabel, "Reading features...", 0, 10, True)
 
                     For j = 0 To sf.NumShapes - 1
-                        Setup.Generalfunctions.UpdateProgressBar(Setup.myProgressBar, Setup.myProgressLabel, "", j, sf.NumShapes)
+                        Setup.Generalfunctions.UpdateProgressBar(Setup.ProgressBar, Setup.ProgressLabel, "", j, SF.NumShapes)
                         Dim myFeature As New clsSpatialFeature(clsGeneralFunctions.enmDataType.polygons, sf.Shape(j).ExportToWKT)
                         Features.Add(j, myFeature)
                     Next
 
                     'then walk through each feature of the source dataset and add it
-                    Setup.Generalfunctions.UpdateProgressBar(Setup.myProgressBar, Setup.myProgressLabel, "Reading feature values...", 0, 10, True)
+                    Setup.Generalfunctions.UpdateProgressBar(Setup.ProgressBar, Setup.ProgressLabel, "Reading feature values...", 0, 10, True)
 
                     'and finally populate the table with the data contents
                     ReDim Values(Fields.Count - 1, sf.NumShapes - 1)
                     For j = 0 To Features.Count - 1
-                        Setup.Generalfunctions.UpdateProgressBar(Setup.myProgressBar, Setup.myProgressLabel, "", j, sf.NumShapes)
+                        Setup.Generalfunctions.UpdateProgressBar(Setup.ProgressBar, Setup.ProgressLabel, "", j, SF.NumShapes)
                         For i = 0 To Fields.Count - 1
                             Values(i, j) = sf.CellValue(Fields.Values(i).sourceFieldIdx, j)
                         Next

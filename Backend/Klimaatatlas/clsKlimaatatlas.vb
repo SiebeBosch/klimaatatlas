@@ -17,10 +17,10 @@ Public Class clsKlimaatatlas
 
     Public Log As clsLog
     Public SQLiteCon As SQLiteConnection
-    Public Generalfunctions As New clsGeneralFunctions()
+    Public Generalfunctions As New clsGeneralFunctions
 
-    Public myProgressBar As ProgressBar
-    Public myProgressLabel As System.Windows.Forms.Label
+    Public ProgressBar As ProgressBar
+    Public ProgressLabel As System.Windows.Forms.Label
 
     Public featuresDataset As clsDataset                        'this is the dataset containing our features
     Public Scenarios As New Dictionary(Of String, clsScenario)
@@ -42,8 +42,8 @@ Public Class clsKlimaatatlas
     End Sub
 
     Public Sub SetProgressBar(ByRef pr As ProgressBar, ByRef lb As System.Windows.Forms.Label)
-        myProgressBar = pr
-        myProgressLabel = lb
+        ProgressBar = pr
+        ProgressLabel = lb
     End Sub
 
 
@@ -63,11 +63,11 @@ Public Class clsKlimaatatlas
         UpgradeWQDERIVEDSERIESTable(50)
         UpgradeWQINDICATORSTable(90)
         UpgradeMappingTable(95)
-        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Database successfully upgraded.", 0, 100, True)
+        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Database successfully upgraded.", 0, 100, True)
     End Function
 
     Public Sub UpgradeWQTIMESERIESTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Upgrading WQTIMESERIES table...", ProgressPercentage, 100, True)
+        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQTIMESERIES table...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
         Fields.Add("DATASOURCE", New clsSQLiteField("DATASOURCE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
         Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
@@ -79,7 +79,7 @@ Public Class clsKlimaatatlas
     End Sub
 
     Public Sub UpgradeWQDERIVEDSERIESTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Upgrading WQDERIVEDSERIES table...", ProgressPercentage, 100, True)
+        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQDERIVEDSERIES table...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
         Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
         Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
@@ -90,7 +90,7 @@ Public Class clsKlimaatatlas
     End Sub
 
     Public Sub UpgradeWQNonEquidistantTimeseriesTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Upgrading WQNONEQUIDISTANTSERIES table...", ProgressPercentage, 100, True)
+        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQNONEQUIDISTANTSERIES table...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
         Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
         Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
@@ -101,7 +101,7 @@ Public Class clsKlimaatatlas
     End Sub
 
     Public Sub UpgradeWQINDICATORSTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Upgrading INDICATORS table...", ProgressPercentage, 100, True)
+        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading INDICATORS table...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
         Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
         Fields.Add("INDICATOR", New clsSQLiteField("INDICATOR", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
@@ -110,7 +110,7 @@ Public Class clsKlimaatatlas
         CreateOrUpdateSQLiteTable(SQLiteCon, "INDICATORS", Fields)
     End Sub
     Public Sub UpgradeMappingTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Upgrading Koppeltabel...", ProgressPercentage, 100, True)
+        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading Koppeltabel...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
         Fields.Add("CODE", New clsSQLiteField("CODE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
         Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
@@ -495,10 +495,11 @@ Public Class clsKlimaatatlas
         End Try
     End Function
 
+
     Public Function ExportResultsToShapefile(path As String) As Boolean
         Try
 
-            Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Writing results to shapefile...", 0, 10, True)
+            Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Writing results to shapefile...", 0, 10, True)
             If System.IO.File.Exists(path) Then Me.Generalfunctions.DeleteShapeFile(path)
 
             Dim sf As New MapWinGIS.Shapefile
@@ -545,9 +546,9 @@ Public Class clsKlimaatatlas
             sf.StopEditingShapes(True, True)
             Cursor.Current = Cursors.Default
 
-            Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Operation complete.", 0, 10, True)
+            Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Operation complete.", 0, 10, True)
 
-            MsgBox("Operation complete.")
+            'MsgBox("Operation complete.")
 
         Catch ex As Exception
             Return False
@@ -570,7 +571,7 @@ Public Class clsKlimaatatlas
         If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
 
         'update the progress bar
-        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Reading point locations from database...", 0, 10, True)
+        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Reading point locations from database...", 0, 10, True)
 
         Dim idFieldName As String = GetFieldNameByType(points, "id")
         Dim xFieldName As String = GetFieldNameByType(points, "x")
@@ -597,7 +598,7 @@ Public Class clsKlimaatatlas
         End Using
 
         'update the progress bar
-        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Mapping delwaq segments to water surface areas...", 0, 10, True)
+        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Mapping delwaq segments to water surface areas...", 0, 10, True)
 
         Using koppelTrans = SQLiteCon.BeginTransaction()
             Using koppelCmd As New SQLiteCommand(SQLiteCon)
@@ -610,7 +611,7 @@ Public Class clsKlimaatatlas
                 For i As Integer = 0 To sf.NumShapes - 1
 
                     'update the progress bar
-                    Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "", i + 1, sf.NumShapes)
+                    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, sf.NumShapes)
 
                     Dim shape As Shape = sf.Shape(i)
                     Dim center As Point = shape.Center
@@ -637,14 +638,14 @@ Public Class clsKlimaatatlas
         End Using
 
         'update the progress bar
-        Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Mapping complete.", 0, 10, True)
+        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Mapping complete.", 0, 10, True)
 
 
     End Sub
 
     Private Function ProcessTimeseriesTransformation(rule As JObject) As Boolean
         Try
-            Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Executing timeseries transformation """ & rule("name").ToString() & """...", 0, 10, True)
+            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries transformation """ & rule("name").ToString() & """...", 0, 10, True)
 
             If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
 
@@ -667,7 +668,7 @@ Public Class clsKlimaatatlas
 
             ' Process each unique combination
             For i = 0 To UniqueSeries.Count - 1
-                Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "", i + 1, UniqueSeries.Count)
+                Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
 
                 Dim Scenario As String = UniqueSeries(i).Values(0)
                 Dim LocationID As String = UniqueSeries(i).Values(1)
@@ -785,7 +786,7 @@ Public Class clsKlimaatatlas
                 End Using
 
             Next
-            Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
+            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
 
             SQLiteCon.Close()
             Return True
@@ -909,7 +910,7 @@ Public Class clsKlimaatatlas
     End Function
     Private Function ProcessTimeseriesFilter_thresholdExceedance(rule As JObject) As Boolean
         Try
-            Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
+            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
 
             If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
 
@@ -926,7 +927,7 @@ Public Class clsKlimaatatlas
 
             ' Process each unique combination
             For i = 0 To UniqueSeries.Count - 1
-                Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "", i + 1, UniqueSeries.Count)
+                Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
 
                 Dim Scenario As String = UniqueSeries(i).Values(0)
                 Dim LocationID As String = UniqueSeries(i).Values(1)
@@ -945,7 +946,7 @@ Public Class clsKlimaatatlas
 
             Next
 
-            Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
+            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
 
             SQLiteCon.Close()
             Return True
@@ -1034,7 +1035,7 @@ Public Class clsKlimaatatlas
     Private Function ProcessTimeseriesFilter_hoursThresholdExceedance(rule As JObject) As Boolean
         Try
             'update the progress bar
-            Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
+            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
 
             'open the SQLite database
             If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
@@ -1054,7 +1055,7 @@ Public Class clsKlimaatatlas
 
             ' Process each unique combination
             For i = 0 To UniqueSeries.Count - 1
-                Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "", i + 1, UniqueSeries.Count)
+                Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
 
                 'retrieve the scenario and location ID for this combination
                 Dim Scenario As String = UniqueSeries(i).Values(0)
@@ -1072,7 +1073,7 @@ Public Class clsKlimaatatlas
                 ' Save results to the output dataset
                 SaveResultsToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
             Next
-            Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
+            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
 
             SQLiteCon.Close()
             Return True
@@ -1177,7 +1178,7 @@ Public Class clsKlimaatatlas
             Dim i As Integer, j As Integer
 
             'update the progress bar
-            Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "Executing timeseries classification """ & rule("name").ToString() & """...", 0, 10, True)
+            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries classification """ & rule("name").ToString() & """...", 0, 10, True)
 
             'open the SQLite database
             If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
@@ -1207,7 +1208,7 @@ Public Class clsKlimaatatlas
 
                     ' Process each unique combination and calculate the duration our criterium is met
                     For i = 0 To UniqueSeries.Count - 1
-                        Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "", i + 1, UniqueSeries.Count)
+                        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
 
                         'retrieve the scenario and location ID for this combination
                         Dim Scenario As String = UniqueSeries(i).Values(0)
@@ -1257,7 +1258,7 @@ Public Class clsKlimaatatlas
             End Select
 
 
-            Me.Generalfunctions.UpdateProgressBar(myProgressBar, myProgressLabel, "New classification " & outputParameterName & " successfully written.", 0, 10, True)
+            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New classification " & outputParameterName & " successfully written.", 0, 10, True)
 
             SQLiteCon.Close()
             Return True
