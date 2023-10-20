@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports Newtonsoft.Json.Linq
 Imports System.Windows.Forms
+Imports MapWinGIS
 
 Public Class frmKlimaatatlas
     Public Klimaatatlas As clsKlimaatatlas
@@ -34,9 +35,9 @@ Public Class frmKlimaatatlas
             Dim Rule As clsRule = Klimaatatlas.Rules.Item(cmbRekenregels.Text.Trim.ToUpper)
             For Each Benchmark As clsBenchmark In Rule.Benchmarks.Values
                 ' Create and configure Label
-                Dim label As New Label()
+                Dim label As New System.Windows.Forms.Label()
                 label.Text = Benchmark.Name  ' Assuming Name is a property of clsBenchmark
-                label.Location = New Point(20, vPos)
+                label.Location = New System.Drawing.Point(20, vPos)
                 label.Width = labelWidth
                 label.TextAlign = ContentAlignment.MiddleLeft
 
@@ -94,6 +95,40 @@ Public Class frmKlimaatatlas
         'write the results to a new shapefile
         If System.IO.File.Exists(txtResultsFile.Text) Then Klimaatatlas.Generalfunctions.DeleteShapeFile(txtResultsFile.Text)
         Klimaatatlas.ExportResultsToShapefile(txtResultsFile.Text)
+
+        'read the shapefile weve just created and reproject it to WGS84
+        Dim sfpath As String = txtResultsFile.Text
+        Dim sfpathweb As String = Strings.Replace(txtResultsFile.Text, ".shp", "_web.shp")
+        Dim jsonpath As String = Strings.Replace(txtResultsFile.Text, ".shp", ".json")
+
+
+        Dim SourceProjection As New MapWinGIS.GeoProjection
+        SourceProjection.ImportFromEPSG(28992)
+
+        Dim shapefile As New MapWinGIS.Shapefile
+        shapefile.Open(txtResultsFile.Text)
+        shapefile.GeoProjection = SourceProjection
+
+        Dim TargetProjection As New MapWinGIS.GeoProjection
+        TargetProjection.ImportFromEPSG(4326)
+
+        Dim reprojectedSf As Shapefile, n As Integer
+        'reprojectedSf.Open(sfpath)
+        reprojectedSf = shapefile.Reproject(TargetProjection, n)
+        reprojectedSf.SaveAs(sfpathweb)
+
+        shapefile.Close()
+        reprojectedSf.Close()
+
+        ' Save the reprojected shapefile in JSON format
+        Dim SF As clsShapeFile = New clsShapeFile(Me.Klimaatatlas, True)
+        SF.Path = sfpathweb
+        SF.Open()
+
+        Using jsonWriter As New StreamWriter(jsonpath)
+            SF.WriteToGeoJSONForWeb(jsonWriter, "Klimaatatlas")
+        End Using
+        SF.Close()
 
     End Sub
 
