@@ -69,12 +69,12 @@ Public Class clsKlimaatatlas
     Public Sub UpgradeWQTIMESERIESTable(ProgressPercentage As Integer)
         Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQTIMESERIES table...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("DATASOURCE", New clsSQLiteField("DATASOURCE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", clsSQLiteField.enmSQLiteDataType.SQLITEREAL, False))
+        Fields.Add("DATASOURCE", New clsSQLiteField("DATASOURCE", enmFieldType.origin, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", enmFieldType.datetime, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
         CreateOrUpdateSQLiteTable(SQLiteCon, "WQTIMESERIES", Fields)
     End Sub
 
