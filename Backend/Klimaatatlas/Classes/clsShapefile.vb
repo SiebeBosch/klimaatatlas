@@ -87,6 +87,9 @@ Public Class clsShapeFile
             jsWriter.WriteLine("        ""features"": [") 'open the array containing the features
 
             For i = 0 To sf.NumShapes - 1
+
+                If Not i = 328 Then Continue For
+
                 Dim myShape As MapWinGIS.Shape = sf.Shape(i)
                 ShapeNum = i
 
@@ -96,7 +99,24 @@ Public Class clsShapeFile
                     jsWriter.Write("            { ""type"": ""Feature"", ""geometry"": { ""type"": ""Polygon"", ""coordinates"": [") ' Removed one square bracket here
                 End If
 
+                Debug.Print("number of parts is " & myShape.NumParts)
+
                 For p = 0 To myShape.NumParts - 1
+
+                    Debug.Print("processing part " & p)
+                    Debug.Print("part start index is " & myShape.Part(p))
+                    Debug.Print("part end index is " & myShape.EndOfPart(p))
+
+                    Dim partShape As MapWinGIS.Shape = myShape.PartAsShape(p)
+                    If myShape.PartIsClockWise(p) Then
+                        'this is a hole, so we need to reverse the order of the points
+                        Debug.Print("Part clockwise and has an area of " & partShape.Area)
+                    Else
+                        Debug.Print("Part counterclockwise and has an area of " & partShape.Area)
+                    End If
+
+
+
                     If p > 0 Then jsWriter.Write(", ")
 
                     jsWriter.Write("[")
@@ -109,9 +129,9 @@ Public Class clsShapeFile
                         endIdx = myShape.numPoints - 1
                     End If
 
-                    For j = startIdx To endIdx
+                    For j = endIdx To startIdx Step -1
                         jsWriter.Write("[" & myShape.Point(j).x & "," & myShape.Point(j).y & "]")
-                        If j < endIdx Then jsWriter.Write(", ")
+                        If j > startIdx Then jsWriter.Write(", ")
                     Next
 
                     jsWriter.Write("]")
@@ -136,7 +156,17 @@ Public Class clsShapeFile
         End Try
     End Function
 
+    Public Function ObeysRightHandRule(ByVal myShape As MapWinGIS.Shape, ByVal startIdx As Integer, ByVal endIdx As Integer) As Boolean
+        Dim area As Double = 0
 
+        For i = startIdx To endIdx - 1
+            Dim p1 = myShape.Point(i)
+            Dim p2 = myShape.Point(i + 1)
+            area += (p2.x - p1.x) * (p2.y + p1.y)
+        Next
+
+        Return area > 0
+    End Function
 
     Public Function ExportAsTilemapByTemplate(TemplateDir As String, ExportDir As String, ShapeIdxFieldIdx As Integer, ValuesFieldIdx As Integer, timestep As Integer, ntimesteps As Integer, Parameter As String, Gradient As clsColorGradient) As Boolean
         Try
