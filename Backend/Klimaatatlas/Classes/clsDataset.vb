@@ -1,6 +1,7 @@
 ﻿Imports Klimaatatlas.clsGeneralFunctions
 Imports MapWinGIS
 Imports Newtonsoft.Json.Linq
+Imports System.Data.SQLite
 Imports System.Globalization
 Imports System.IO
 Public Class clsDataset
@@ -25,31 +26,6 @@ Public Class clsDataset
         Features = New Dictionary(Of Integer, clsSpatialFeature)
     End Sub
 
-    'Public Function PopulateFieldsFromShapefile() As Boolean
-    '    Try
-    '        SF.Open(path)
-    '        For i = 0 To SF.NumFields - 1
-    '            Select Case SF.Field(i).Type
-    '                Case FieldType.STRING_FIELD
-    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-    '                Case FieldType.DOUBLE_FIELD
-    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
-    '                Case FieldType.INTEGER_FIELD
-    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEINT))
-    '                Case FieldType.BOOLEAN_FIELD
-    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEINT))
-    '                Case FieldType.DATE_FIELD
-    '                    Fields.Add(SF.Field(i).Name.Trim.ToUpper, New clsSQLiteField(SF.Field(i).Name, enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-    '            End Select
-    '        Next
-    '        SF.Close()
-    '        Return True
-    '    Catch ex As Exception
-    '        Return False
-    '    End Try
-    'End Function
-
-
     Public Function getValue(FieldIdx As Integer, FeatureDatasetfeatureidx As Integer, JoinMethod As enmJoinMethod) As Object
         Try
             'IMPORTANT: the FeatureDatasetFeatureIdx is the index number from the FeatureDataset, which is NOT necessarily THIS dataset.
@@ -67,7 +43,7 @@ Public Class clsDataset
                         'we'll need to perform a point-in-polygon operation of our feature's centerpoint in this dataset
                         'if all's well this dataset is a polygon shapefile and it has been opened with the option 'BeginPointInShapefile acivated
                         Polygon = New MapWinGIS.Shape
-                        Polygon.ImportFromWKT(Setup.featuresDataset.Features.Item(FeatureDatasetfeatureidx).getWKTString)
+                        Polygon.ImportFromWKT(Setup.featuresDataset.Features.Item(FeatureDatasetfeatureidx).WKT)
                         ShapeIdx = SF.PointInShapefile(Polygon.Center.x, Polygon.Center.y)
 
                         If ShapeIdx >= 0 Then
@@ -174,6 +150,61 @@ Public Class clsDataset
         Try
             Dim i As Integer, j As Integer
             Select Case storageType
+                Case enmStorageType.geopackage
+
+                    Features = New Dictionary(Of Integer, clsSpatialFeature) 'key = feature index
+
+                    'Dim Tables As List(Of String) = GetGeoPackageTables(path)
+
+                    ' Features = New Dictionary(Of Integer, clsSpatialFeature) 'key = feature index
+                    Dim connectionString As String = $"Data Source={path};"
+                    Using conn As New SQLite.SQLiteConnection(connectionString)
+                        conn.Open()
+
+                        ' Creating the SQL command to select all rows from the specified table
+                        Dim cmd As New SQLiteCommand($"SELECT * FROM {tablename};", conn)
+
+                        ' Execute the command and fill a DataTable with the query results
+                        Using reader As SQLiteDataReader = cmd.ExecuteReader()
+                            Dim dt As New DataTable
+                            dt.Load(reader)
+
+                            'find the geometry column
+                            Dim geomColIdx As Integer = -1
+                            For i = 0 To dt.Columns.Count - 1
+                                If dt.Columns(i).ColumnName.Trim.ToLower = "geom" OrElse dt.Columns(i).ColumnName.Trim.ToLower = "geometry" Then
+                                    geomColIdx = i
+                                    Exit For
+                                End If
+                            Next
+
+                            If geomColIdx >= 0 Then
+
+                                'Transfer the data from our DataTable to our internal data structure
+                                ReDim Values(Fields.Count - 1, dt.Rows.Count - 1)
+                                For i = 0 To dt.Rows.Count - 1
+
+                                    'write the geometry to the features dictionary
+                                    Dim myFeature As New clsSpatialFeature(enmDataType.polygons)
+                                    Dim geomBytes As Byte() = DirectCast(dt.Rows(i)(geomColIdx), Byte())
+                                    myFeature.WKB = geomBytes
+                                    Features.Add(Features.Count, myFeature)
+
+                                    'write the attribute values to the values list
+                                    For j = 0 To Fields.Count - 1
+                                        Values(Fields.Values(j).fieldIdx, i) = dt.Rows(i)(j)
+                                    Next
+                                Next
+
+                            End If
+
+                        End Using
+
+                        conn.Close()
+                    End Using
+
+
+
                 Case enmStorageType.shapefile
                     Features = New Dictionary(Of Integer, clsSpatialFeature) 'key = feature index
 
@@ -183,8 +214,8 @@ Public Class clsDataset
 
                     'first walk through each field of our source dataset, check if it is one of the required ones and
                     'if so, assign the source's field index number to it so we know where to find the data
-                    For i = 0 To sf.NumFields - 1
-                        Dim FieldName As String = sf.Field(i).Name
+                    For i = 0 To SF.NumFields - 1
+                        Dim FieldName As String = SF.Field(i).Name
                         If Fields.ContainsKey(FieldName.Trim.ToUpper) Then
                             Fields.Item(FieldName.Trim.ToUpper).sourceFieldIdx = i
                         End If
@@ -198,9 +229,9 @@ Public Class clsDataset
                     'then walk through each feature of the source dataset and add it
                     Setup.Generalfunctions.UpdateProgressBar(Setup.ProgressBar, Setup.ProgressLabel, "Reading features...", 0, 10, True)
 
-                    For j = 0 To sf.NumShapes - 1
+                    For j = 0 To SF.NumShapes - 1
                         Setup.Generalfunctions.UpdateProgressBar(Setup.ProgressBar, Setup.ProgressLabel, "", j, SF.NumShapes)
-                        Dim myFeature As New clsSpatialFeature(clsGeneralFunctions.enmDataType.polygons, sf.Shape(j).ExportToWKT)
+                        Dim myFeature As New clsSpatialFeature(clsGeneralFunctions.enmDataType.polygons, SF.Shape(j).ExportToWKT)
                         Features.Add(j, myFeature)
                     Next
 
@@ -208,15 +239,15 @@ Public Class clsDataset
                     Setup.Generalfunctions.UpdateProgressBar(Setup.ProgressBar, Setup.ProgressLabel, "Reading feature values...", 0, 10, True)
 
                     'and finally populate the table with the data contents
-                    ReDim Values(Fields.Count - 1, sf.NumShapes - 1)
+                    ReDim Values(Fields.Count - 1, SF.NumShapes - 1)
                     For j = 0 To Features.Count - 1
                         Setup.Generalfunctions.UpdateProgressBar(Setup.ProgressBar, Setup.ProgressLabel, "", j, SF.NumShapes)
                         For i = 0 To Fields.Count - 1
-                            Values(i, j) = sf.CellValue(Fields.Values(i).sourceFieldIdx, j)
+                            Values(i, j) = SF.CellValue(Fields.Values(i).sourceFieldIdx, j)
                         Next
                     Next
 
-                    sf.Close()
+                    SF.Close()
 
                 Case enmStorageType.sqlite
 
@@ -254,6 +285,33 @@ Public Class clsDataset
         Catch ex As Exception
             Return False
         End Try
+    End Function
+
+    Public Function GetGeoPackageTables(ByVal geoPackagePath As String) As List(Of String)
+        Dim tables As New List(Of String)
+
+        Try
+            Dim connectionString As String = $"Data Source={geoPackagePath};"
+            Using conn As New SQLiteConnection(connectionString)
+                conn.Open()
+
+                ' Query to get all tables in the GeoPackage
+                Using cmd As New SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table';", conn)
+                    Using reader As SQLiteDataReader = cmd.ExecuteReader()
+                        While reader.Read()
+                            tables.Add(reader("name").ToString())
+                        End While
+                    End Using
+                End Using
+
+                conn.Close()
+            End Using
+        Catch ex As Exception
+            ' Handle exceptions like file not found or no permission
+            Console.WriteLine($"An error occurred: {ex.Message}")
+        End Try
+
+        Return tables
     End Function
 
     Public Function getFeatureIndexList() As List(Of Integer)

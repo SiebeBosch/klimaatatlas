@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "QYXTrsvRp0NOaLWsQvON3jfn/AN8MjIWp58a35BRNUfAbGtgTFuuVrNreF6SIpdRsxlQDIiEAEGsNpoxcjodbA==",
+  "dgSpecHash": "axLP/MPc8f2rqk+hb+VnmYl62ueSYbHmJ8txAiTAYGX8zzP1YYEZAz/+6CUyr89zcxIOdDmNkQZhg0J3E51fjA==",
   "success": true,
   "projectFilePath": "C:\\GITHUB\\klimaatatlas\\Backend\\Klimaatatlas\\Klimaatatlas.vbproj",
   "expectedPackageFiles": [
     "C:\\Users\\SiebeBosch\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\SiebeBosch\\.nuget\\packages\\fparsec\\1.0.3\\fparsec.1.0.3.nupkg.sha512",
     "C:\\Users\\SiebeBosch\\.nuget\\packages\\fsharp.core\\4.6.0\\fsharp.core.4.6.0.nupkg.sha512",
+    "C:\\Users\\SiebeBosch\\.nuget\\packages\\geolibrary\\1.3.0\\geolibrary.1.3.0.nupkg.sha512",
     "C:\\Users\\SiebeBosch\\.nuget\\packages\\mathnet.numerics\\4.15.0\\mathnet.numerics.4.15.0.nupkg.sha512",
     "C:\\Users\\SiebeBosch\\.nuget\\packages\\mathnet.numerics.fsharp\\4.15.0\\mathnet.numerics.fsharp.4.15.0.nupkg.sha512",
     "C:\\Users\\SiebeBosch\\.nuget\\packages\\mathnet.symbolics\\0.24.0\\mathnet.symbolics.0.24.0.nupkg.sha512",
