@@ -209,3 +209,4 @@ C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\runtimes\
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\runtimes\win-x86\native\SQLite.Interop.dll
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\GeoLibrary.dll

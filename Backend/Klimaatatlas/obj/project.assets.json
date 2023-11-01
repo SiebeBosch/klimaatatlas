@@ -112,6 +112,15 @@
           }
         }
       },
+      "GeoLibrary/1.3.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/GeoLibrary.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/GeoLibrary.dll": {}
+        }
+      },
       "MathNet.Numerics/4.15.0": {
         "type": "package",
         "compile": {
@@ -2272,6 +2281,20 @@
         "lib/netstandard1.6/tr/FSharp.Core.resources.dll",
         "lib/netstandard1.6/zh-Hans/FSharp.Core.resources.dll",
         "lib/netstandard1.6/zh-Hant/FSharp.Core.resources.dll"
+      ]
+    },
+    "GeoLibrary/1.3.0": {
+      "sha512": "gPZaWIz8gRWtb7ccCjrZ12gdM07oqnIjoTGeP/EC9PekG+JBXEByR/Sog5xUc0poKetYiQFaHYqvPglZ+//o6Q==",
+      "type": "package",
+      "path": "geolibrary/1.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "geolibrary.1.3.0.nupkg.sha512",
+        "geolibrary.nuspec",
+        "lib/netstandard2.0/GeoLibrary.dll",
+        "lib/netstandard2.1/GeoLibrary.dll"
       ]
     },
     "MathNet.Numerics/4.15.0": {
@@ -6925,6 +6948,7 @@
   },
   "projectFileDependencyGroups": {
     "net7.0-windows7.0": [
+      "GeoLibrary >= 1.3.0",
       "MathNet.Symbolics >= 0.24.0",
       "Microsoft.CodeAnalysis.CSharp.Scripting >= 4.5.0",
       "Newtonsoft.Json >= 13.0.3",
@@ -6975,6 +6999,10 @@
       "net7.0-windows7.0": {
         "targetAlias": "net7.0-windows",
         "dependencies": {
+          "GeoLibrary": {
+            "target": "Package",
+            "version": "[1.3.0, )"
+          },
           "MathNet.Symbolics": {
             "target": "Package",
             "version": "[0.24.0, )"

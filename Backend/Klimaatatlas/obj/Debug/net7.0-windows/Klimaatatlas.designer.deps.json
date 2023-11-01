@@ -93,6 +93,14 @@
           }
         }
       },
+      "GeoLibrary/1.3.0": {
+        "runtime": {
+          "lib/netstandard2.1/GeoLibrary.dll": {
+            "assemblyVersion": "1.3.0.0",
+            "fileVersion": "1.3.0.0"
+          }
+        }
+      },
       "MathNet.Numerics/4.15.0": {
         "runtime": {
           "lib/netstandard2.0/MathNet.Numerics.dll": {
@@ -1759,6 +1767,13 @@
       "sha512": "sha512-Neg/er6EOaNBrvBS2FrsYdrXW8Jv4CRQhtDfw+0b7usRSDvaJnABTNEWTdh3RqmdyT6K2qOayUsrY0lpiQjBxQ==",
       "path": "fsharp.core/4.6.0",
       "hashPath": "fsharp.core.4.6.0.nupkg.sha512"
+    },
+    "GeoLibrary/1.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gPZaWIz8gRWtb7ccCjrZ12gdM07oqnIjoTGeP/EC9PekG+JBXEByR/Sog5xUc0poKetYiQFaHYqvPglZ+//o6Q==",
+      "path": "geolibrary/1.3.0",
+      "hashPath": "geolibrary.1.3.0.nupkg.sha512"
     },
     "MathNet.Numerics/4.15.0": {
       "type": "package",

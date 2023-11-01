@@ -19,6 +19,11 @@ Public Class clsKlimaatatlas
     Public SQLiteCon As SQLiteConnection
     Public Generalfunctions As New clsGeneralFunctions
 
+    'the connection to the geopackage
+    Public GpkgCon As SQLiteConnection
+    Public GpkgTable As String
+
+
     Public ProgressBar As ProgressBar
     Public ProgressLabel As System.Windows.Forms.Label
 
@@ -81,41 +86,69 @@ Public Class clsKlimaatatlas
     Public Sub UpgradeWQDERIVEDSERIESTable(ProgressPercentage As Integer)
         Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQDERIVEDSERIES table...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", clsSQLiteField.enmSQLiteDataType.SQLITEREAL, False))
+        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", enmFieldType.datetime, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
         CreateOrUpdateSQLiteTable(SQLiteCon, "WQDERIVEDSERIES", Fields)
     End Sub
 
     Public Sub UpgradeWQNonEquidistantTimeseriesTable(ProgressPercentage As Integer)
         Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQNONEQUIDISTANTSERIES table...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", clsSQLiteField.enmSQLiteDataType.SQLITEREAL, False))
+        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", enmFieldType.datetime, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
         CreateOrUpdateSQLiteTable(SQLiteCon, "WQNONEQUIDISTANTSERIES", Fields)
     End Sub
 
     Public Sub UpgradeWQINDICATORSTable(ProgressPercentage As Integer)
         Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading INDICATORS table...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("INDICATOR", New clsSQLiteField("INDICATOR", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", clsSQLiteField.enmSQLiteDataType.SQLITEREAL, False))
+        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("INDICATOR", New clsSQLiteField("INDICATOR", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
         CreateOrUpdateSQLiteTable(SQLiteCon, "INDICATORS", Fields)
     End Sub
     Public Sub UpgradeMappingTable(ProgressPercentage As Integer)
         Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading Koppeltabel...", ProgressPercentage, 100, True)
         Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("CODE", New clsSQLiteField("CODE", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", clsSQLiteField.enmSQLiteDataType.SQLITETEXT, True))
+        Fields.Add("CODE", New clsSQLiteField("CODE", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
         CreateOrUpdateSQLiteTable(SQLiteCon, "KOPPELTABEL", Fields)
     End Sub
+
+    Public Function SetGeoPackageConnection() As Boolean
+        Try
+            Dim dataset As JObject = _config("features_dataset")
+            Dim Path As String = dataset("path").ToString()         'PATH TO THE GEOPACKAGE
+            GpkgTable = dataset("tablename").ToString()             'the table in our geopackage containing our features and attribute data
+
+            ' Creating a connection string
+            Dim connectionString As String = $"Data Source={Path};Version=3;"
+
+            ' Initializing and opening the connection
+            GpkgCon = New SQLiteConnection(connectionString)
+            GpkgCon.Open()
+
+            ' If the connection state is open, return true
+            If GpkgCon.State = ConnectionState.Open Then
+                Return True
+            Else
+                Return False
+            End If
+
+        Catch ex As Exception
+            ' You might want to log or display the exception message to understand the nature of the error
+            Console.WriteLine(ex.Message)
+            Return False
+        End Try
+    End Function
+
 
     Public Function readFeaturesDataset() As Boolean
         Try
@@ -127,6 +160,7 @@ Public Class clsKlimaatatlas
             featuresDataset.ID = dataset("id").ToString
             featuresDataset.dataType = CType([Enum].Parse(GetType(enmDataType), dataset("data_type").ToString), enmDataType)
             featuresDataset.storageType = CType([Enum].Parse(GetType(enmStorageType), dataset("storage_type").ToString), enmStorageType)
+            If featuresDataset.storageType = enmStorageType.geopackage Then featuresDataset.tablename = dataset("tablename".ToString)
             featuresDataset.path = dataset("path").ToString
             For Each field In dataset("fields")
                 Dim fieldType As enmFieldType = CType([Enum].Parse(GetType(enmFieldType), field("fieldtype").ToString()), enmFieldType)
@@ -327,7 +361,7 @@ Public Class clsKlimaatatlas
                     For Each fieldnameItem As JObject In CType(benchmarkItem("fieldname"), JArray)
                         Dim scenario As String = fieldnameItem("scenario").ToString()
                         Dim field As String = fieldnameItem("field").ToString()
-                        fieldNamesPerScenario.Add(scenario.trim.toupper, field)
+                        fieldNamesPerScenario.Add(scenario.Trim.ToUpper, field)
                     Next
 
                     'create the benchmark class instance
@@ -533,7 +567,7 @@ Public Class clsKlimaatatlas
             For i = 0 To featuresDataset.Features.Count - 1
 
                 Dim newShape As New MapWinGIS.Shape
-                newShape.ImportFromWKT(featuresDataset.Features(i).getWKTString)
+                newShape.ImportFromWKT(featuresDataset.Features(i).WKT)
                 sf.EditAddShape(newShape)
 
                 For j = 0 To featuresDataset.Fields.Count - 1
@@ -554,6 +588,106 @@ Public Class clsKlimaatatlas
             Return False
         End Try
     End Function
+
+
+    Public Function ExportResultsToGeoPackage(path As String) As Boolean
+        Try
+            Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Writing results to GeoPackage...", 0, 10, True)
+
+            ' Create or connect to a GeoPackage database
+            Dim connectionString As String = $"Data Source={path};Version=3;"
+            Using connection As New SQLiteConnection(connectionString)
+                connection.Open()
+
+                ' Start a transaction
+                Using transaction = connection.BeginTransaction()
+
+                    ' Create geometry table
+                    Using cmd As New SQLiteCommand($"CREATE TABLE IF NOT EXISTS geometries (id INTEGER PRIMARY KEY, geom BLOB);", connection)
+                        cmd.ExecuteNonQuery()
+                    End Using
+
+                    ' Add attributes columns and handle existing columns
+                    For i = 0 To featuresDataset.Fields.Count - 1
+                        Dim myFieldName As String = featuresDataset.Fields.Values(i).FieldName
+                        Dim myFieldType As String
+                        ' Determine the field type
+                        Select Case featuresDataset.Fields.Values(i).DataType
+                            Case clsSQLiteField.enmSQLiteDataType.SQLITEINT
+                                myFieldType = "INTEGER"
+                            Case clsSQLiteField.enmSQLiteDataType.SQLITEREAL
+                                myFieldType = "REAL"
+                            Case Else
+                                myFieldType = "TEXT"
+                        End Select
+
+                        '--------------------------------------------------------------------------------------------------------------
+                        ' Check if the column already exists. If not, then add it
+                        Dim columnExists As Boolean = False
+
+                        ' Check if the column already exists
+                        Using cmd As New SQLiteCommand($"PRAGMA table_info(geometries);", connection)
+                            Using reader As SQLiteDataReader = cmd.ExecuteReader()
+                                While reader.Read()
+                                    If String.Equals(reader("name").ToString(), myFieldName, StringComparison.OrdinalIgnoreCase) Then
+                                        columnExists = True
+                                        Exit While
+                                    End If
+                                End While
+                            End Using
+                        End Using
+
+                        ' If the column doesn't exist, then add it
+                        If Not columnExists Then
+                            Using cmd As New SQLiteCommand($"ALTER TABLE geometries ADD COLUMN {myFieldName} {myFieldType};", connection)
+                                cmd.ExecuteNonQuery()
+                            End Using
+                        End If
+                        '--------------------------------------------------------------------------------------------------------------
+
+                    Next
+
+                    ' Insert geometries and attributes
+                    For i = 0 To featuresDataset.Features.Count - 1
+
+                        ' Convert geometry to WKB (Well-Known Binary)
+                        Dim wkb As Byte() = featuresDataset.Features(i).WKB
+
+                        ' Building the INSERT command text
+                        Dim cmdText As String = "INSERT INTO geometries (geom"
+                        Dim valuesText As String = $" VALUES (@geom"
+                        For j = 0 To featuresDataset.Fields.Count - 1
+                            cmdText &= $", {featuresDataset.Fields.Values(j).FieldName}"
+                            valuesText &= $", @{featuresDataset.Fields.Values(j).FieldName}"
+                        Next
+                        cmdText &= ")"
+                        valuesText &= ")"
+
+                        Using cmd As New SQLiteCommand($"{cmdText} {valuesText};", connection, transaction)
+                            cmd.Parameters.AddWithValue("@geom", wkb)
+                            For j = 0 To featuresDataset.Fields.Count - 1
+                                cmd.Parameters.AddWithValue($"@{featuresDataset.Fields.Values(j).FieldName}", featuresDataset.Values(j, i))
+                            Next
+                            cmd.ExecuteNonQuery()
+                        End Using
+                    Next
+
+                    ' Commit the transaction
+                    transaction.Commit()
+                End Using
+            End Using
+
+            Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Operation complete.", 0, 10, True)
+
+        Catch ex As Exception
+            ' Handle your exception here
+            Return False
+        End Try
+
+        Return True
+    End Function
+
+
 
     Public Sub ProcessPolygonToPointMapping(ByVal rule As JObject)
         Dim polygons As JObject = GetDatasetById(rule("input")("target_dataset").ToString())

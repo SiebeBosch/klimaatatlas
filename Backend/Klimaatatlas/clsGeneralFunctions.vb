@@ -86,9 +86,10 @@ Public Class clsGeneralFunctions
 
 
     Public Enum enmStorageType
-        shapefile = 0
-        sqlite = 1
-        excel = 2
+        geopackage = 0
+        shapefile = 1
+        sqlite = 2
+        excel = 3
     End Enum
 
     Public Enum enmDataType

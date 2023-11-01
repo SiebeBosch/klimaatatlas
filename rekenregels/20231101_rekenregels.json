@@ -1,12 +1,12 @@
 {
-  "scenarios": ["2014", "2085"],
+  "scenarios": ["Klimaat2014", "Klimaat2085"],
   "features_dataset": {
     "_comment": "this attribute describes the water area polygons",
     "id": "watervlakken",
     "data_type": "polygons",
     "storage_type": "geopackage",
-    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_WQ_Interpolated.gpkg",
-	"tablename":"Watervlakken_WQ_Interpolated",
+    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken Plus4.gpkg",
+	"tablename":"Watervlakken_Plus4",
     "fields": [
       {"fieldtype": "id", "datatype":"SQLITETEXT", "fieldname": "CODE"},
       {"fieldtype": "featureidx", "datatype":"SQLITEINT", "fieldname": "FEATUREIDX"},
@@ -26,8 +26,8 @@
 			"name": "doodlopend",
 			"comment":"of het waterlichaam doodlopend is.",
 			"fieldname":[
-				{"scenario":2014, "field":"doodlopend"},
-				{"scenario":2085, "field":"doodlopend"}
+				{"scenario":"Klimaat2014", "field":"doodlopend"},
+				{"scenario":"Klimaat2085", "field":"doodlopend"}
 			],
 			"classification": "discrete",
 			"classes": [
@@ -39,8 +39,8 @@
 			"name": "diepte",
 			"comment":"diepte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":2014, "field":"waterdiept"},
-				{"scenario":2085, "field":"waterdiept"}			
+				{"scenario":"Klimaat2014", "field":"waterdiept"},
+				{"scenario":"Klimaat2085", "field":"waterdiept"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":0,"verdict":1},{"value":1.5,"verdict":0}],
@@ -49,8 +49,8 @@
 			"name": "breedte",
 			"comment":"breedte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":2014, "field":"Breedte"},
-				{"scenario":2085, "field":"Breedte"}			
+				{"scenario":"Klimaat2014", "field":"Breedte"},
+				{"scenario":"Klimaat2085", "field":"Breedte"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":5,"verdict":1},{"value":15,"verdict":0}],
@@ -59,8 +59,8 @@
 			"name":"Texceedance",
 			"comment":"de watertemperatuur die gemiddeld één week per jaar wordt overschreden.",
 			"fieldname":[
-				{"scenario":2014, "field":"Tex14"},
-				{"scenario":2085, "field":"Tex85"}			
+				{"scenario":"Klimaat2014", "field":"Tex14"},
+				{"scenario":"Klimaat2085", "field":"Tex85"}			
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":15,"verdict":0},{"value":27,"verdict":1},{"value":35,"verdict":0}],
@@ -68,9 +68,9 @@
 	],
       "resultsfield": "kroos",
       "components": [
-        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "kroos doodlopend"},
-        {"benchmark": "breedte", "weight": 1, "resultsfield": "kroos breedte"},
-        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "kroos overschrijdingstemperatuur"},
+        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "kroos_doodlopend"},
+        {"benchmark": "breedte", "weight": 1, "resultsfield": "kroos_breedte"},
+        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "kroos_overschrijdingstemperatuur"},
       ]
     },
     {
@@ -80,8 +80,8 @@
 			"name": "Texceedance",
 			"comment":"de watertemperatuur die gemiddeld één week per jaar wordt overschreden.",
 			"fieldname":[
-				{"scenario":2014, "field":"doodlopend"},
-				{"scenario":2085, "field":"doodlopend"}
+				{"scenario":"Klimaat2014", "field":"doodlopend"},
+				{"scenario":"Klimaat2085", "field":"doodlopend"}
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":15,"verdict":0},{"value":28,"verdict":0.5},{"value":35,"verdict":1}],
@@ -90,8 +90,8 @@
 			"name": "overstortfractie",
 			"comment":"fractie overstort.",
 			"fieldname":[
-				{"scenario":2014, "field":"2014_Nt-vov_0.5"},
-				{"scenario":2085, "field":"2085_Nt-vov_0.5"}			
+				{"scenario":"Klimaat2014", "field":"Klimaat2014_Nt-vov_0.5"},
+				{"scenario":"Klimaat2085", "field":"Klimaat2085_Nt-vov_0.5"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":0,"verdict":0},{"value":15,"verdict":1}],
@@ -100,8 +100,8 @@
 			"name": "bodemtype",
 			"comment":"overwegende bodemsoort: klei, zand of veen.",
 			"fieldname":[
-				{"scenario":2014, "field":"BODEMKLASS"},
-				{"scenario":2085, "field":"BODEMKLASS"}			
+				{"scenario":"Klimaat2014", "field":"BODEMKLASS"},
+				{"scenario":"Klimaat2085", "field":"BODEMKLASS"}			
 			],
 			"classification": "discrete",
 			"classes": [
@@ -114,8 +114,8 @@
 			"name":"vermesting_N",
 			"comment":"de mate van vermesting met stikstof.",
 			"fieldname":[
-				{"scenario":2014, "field":"2014_Nt_0.5"},
-				{"scenario":2085, "field":"2085_Nt_0.5"}			
+				{"scenario":"Klimaat2014", "field":"Klimaat2014_Nt_0.5"},
+				{"scenario":"Klimaat2085", "field":"Klimaat2085_Nt_0.5"}			
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":0,"verdict":0},{"value":15,"verdict":1}],
@@ -124,8 +124,8 @@
 			"name":"vermesting_P",
 			"comment":"de mate van vermesting met fosfor.",
 			"fieldname":[
-				{"scenario":2014, "field":"2014_Pt_0.5"},
-				{"scenario":2085, "field":"2085_Pt_0.5"}			
+				{"scenario":"Klimaat2014", "field":"Klimaat2014_Pt_0.5"},
+				{"scenario":"Klimaat2085", "field":"Klimaat2085_Pt_0.5"}			
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":0,"verdict":0},{"value":1.5,"verdict":1}],
@@ -134,8 +134,8 @@
 			"name": "diepte",
 			"comment":"diepte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":2014, "field":"waterdiept"},
-				{"scenario":2085, "field":"waterdiept"}			
+				{"scenario":"Klimaat2014", "field":"waterdiept"},
+				{"scenario":"Klimaat2085", "field":"waterdiept"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":0,"verdict":1},{"value":1.5,"verdict":0}],
@@ -144,8 +144,8 @@
 			"name": "doodlopend",
 			"comment":"of het waterlichaam doodlopend is.",
 			"fieldname":[
-				{"scenario":2014, "field":"doodlopend"},
-				{"scenario":2085, "field":"doodlopend"}
+				{"scenario":"Klimaat2014", "field":"doodlopend"},
+				{"scenario":"Klimaat2085", "field":"doodlopend"}
 			],
 			"classification": "discrete",
 			"classes": [
@@ -157,8 +157,8 @@
 			"name": "verblijftijd",
 			"comment":"mediaan van de verblijftijd van het water in seconden.",
 			"fieldname":[
-				{"scenario":2014, "field":"2014_ResTim_0.5"},
-				{"scenario":2085, "field":"2085_ResTim_0.5"}
+				{"scenario":"Klimaat2014", "field":"Klimaat2014_ResTim_0.5"},
+				{"scenario":"Klimaat2085", "field":"Klimaat2085_ResTim_0.5"}
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":1E6,"verdict":0},{"value":1E8,"verdict":1}],
@@ -166,14 +166,14 @@
 	],
       "resultsfield": "zuurstofloosheid",
       "components": [
-        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "zuurstofloosheid overschrijdingstemperatuur"},
-        {"benchmark": "overstortfractie", "weight": 1, "resultsfield": "zuurstofloosheid overstortfractie"},
-        {"benchmark": "bodemtype", "weight": 1, "resultsfield": "zuurstofloosheid bodemtype"},
-        {"benchmark": "vermesting_N", "weight": 0.5, "resultsfield": "zuurstofloosheid vermesting stikstof"},
-        {"benchmark": "vermesting_P", "weight": 0.5, "resultsfield": "zuurstofloosheid vermesting fosfor"},
-        {"benchmark": "diepte", "weight": 1, "resultsfield": "zuurstofloosheid waterdiepte"},
-        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "zuurstofloosheid doodlopend"},
-        {"benchmark": "verblijftijd", "weight": 1, "resultsfield": "zuurstofloosheid verblijftijd"},
+        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "zuurstofloosheid_overschrijdingstemperatuur"},
+        {"benchmark": "overstortfractie", "weight": 1, "resultsfield": "zuurstofloosheid_overstortfractie"},
+        {"benchmark": "bodemtype", "weight": 1, "resultsfield": "zuurstofloosheid_bodemtype"},
+        {"benchmark": "vermesting_N", "weight": 0.5, "resultsfield": "zuurstofloosheid_vermesting_stikstof"},
+        {"benchmark": "vermesting_P", "weight": 0.5, "resultsfield": "zuurstofloosheid_vermesting_fosfor"},
+        {"benchmark": "diepte", "weight": 1, "resultsfield": "zuurstofloosheid_waterdiepte"},
+        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "zuurstofloosheid_doodlopend"},
+        {"benchmark": "verblijftijd", "weight": 1, "resultsfield": "zuurstofloosheid_verblijftijd"},
       ]
     }
   ],

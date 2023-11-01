@@ -85,50 +85,63 @@ Public Class frmKlimaatatlas
         My.Settings.Resultsfile = txtResultsFile.Text
         My.Settings.Save()
 
+        'read our configuration file
         Call ReadConfiguration()
 
-        Klimaatatlas.readFeaturesDataset()
-        'Klimaatatlas.SetAndInitializeRatingFields()         'add two fields to our dataset for storing the final rating and result_text
+        'open a connection to our geopackage
+        Klimaatatlas.setGeoPackageConnection()
 
+        'process our rules
         Klimaatatlas.ProcessRules()
 
+        'close the connection to the geopackage
+        Klimaatatlas.GpkgCon.Close()
+
+
+        'Klimaatatlas.readFeaturesDataset()
+        'Klimaatatlas.SetAndInitializeRatingFields()         'add two fields to our dataset for storing the final rating and result_text
+
+
         'write the results to a new shapefile
-        If System.IO.File.Exists(txtResultsFile.Text) Then Klimaatatlas.Generalfunctions.DeleteShapeFile(txtResultsFile.Text)
-        Klimaatatlas.ExportResultsToShapefile(txtResultsFile.Text)
+        'If System.IO.File.Exists(txtResultsFile.Text) Then Klimaatatlas.Generalfunctions.DeleteShapeFile(txtResultsFile.Text)
+        'Klimaatatlas.ExportResultsToShapefile(txtResultsFile.Text)
 
-        'read the shapefile weve just created and reproject it to WGS84
-        Dim sfpath As String = txtResultsFile.Text
-        Dim sfpathweb As String = Strings.Replace(txtResultsFile.Text, ".shp", "_web.shp")
-        Dim jsonpath As String = Strings.Replace(txtResultsFile.Text, ".shp", ".json")
+        'Klimaatatlas.ExportResultsToGeopackage(txtResultsFile.Text)
 
 
-        Dim SourceProjection As New MapWinGIS.GeoProjection
-        SourceProjection.ImportFromEPSG(28992)
+        ''read the shapefile weve just created and reproject it to WGS84
+        'Dim sfpath As String = txtResultsFile.Text
+        'Dim sfpathweb As String = Strings.Replace(txtResultsFile.Text, ".shp", "_web.shp")
+        'Dim jsonpath As String = Strings.Replace(txtResultsFile.Text, ".shp", ".json")
 
-        Dim shapefile As New MapWinGIS.Shapefile
-        shapefile.Open(txtResultsFile.Text)
-        shapefile.GeoProjection = SourceProjection
 
-        Dim TargetProjection As New MapWinGIS.GeoProjection
-        TargetProjection.ImportFromEPSG(4326)
+        'Dim SourceProjection As New MapWinGIS.GeoProjection
+        'SourceProjection.ImportFromEPSG(28992)
 
-        Dim reprojectedSf As Shapefile, n As Integer
-        'reprojectedSf.Open(sfpath)
-        reprojectedSf = shapefile.Reproject(TargetProjection, n)
-        reprojectedSf.SaveAs(sfpathweb)
+        'Dim shapefile As New MapWinGIS.Shapefile
+        'shapefile.Open(txtResultsFile.Text)
+        'shapefile.GeoProjection = SourceProjection
 
-        shapefile.Close()
-        reprojectedSf.Close()
+        'Dim TargetProjection As New MapWinGIS.GeoProjection
+        'TargetProjection.ImportFromEPSG(4326)
 
-        ' Save the reprojected shapefile in JSON format
-        Dim SF As clsShapeFile = New clsShapeFile(Me.Klimaatatlas, True)
-        SF.Path = sfpathweb
-        SF.Open()
+        'Dim reprojectedSf As Shapefile, n As Integer
+        ''reprojectedSf.Open(sfpath)
+        'reprojectedSf = shapefile.Reproject(TargetProjection, n)
+        'reprojectedSf.SaveAs(sfpathweb)
 
-        Using jsonWriter As New StreamWriter(jsonpath)
-            SF.WriteToGeoJSONForWeb(jsonWriter, "Klimaatatlas")
-        End Using
-        SF.Close()
+        'shapefile.Close()
+        'reprojectedSf.Close()
+
+        '' Save the reprojected shapefile in JSON format
+        'Dim SF As clsShapeFile = New clsShapeFile(Me.Klimaatatlas, True)
+        'SF.Path = sfpathweb
+        'SF.Open()
+
+        'Using jsonWriter As New StreamWriter(jsonpath)
+        '    SF.WriteToGeoJSONForWeb(jsonWriter, "Klimaatatlas")
+        'End Using
+        'SF.Close()
 
     End Sub
 
