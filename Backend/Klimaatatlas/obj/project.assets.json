@@ -773,7 +773,19 @@
           }
         }
       },
-      "Stub.System.Data.SQLite.Core.NetStandard/1.0.117": {
+      "SpatialiteSharp/4.2.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Data.SQLite.Core": "1.0.93"
+        },
+        "compile": {
+          "lib/SpatialiteSharp.dll": {}
+        },
+        "runtime": {
+          "lib/SpatialiteSharp.dll": {}
+        }
+      },
+      "Stub.System.Data.SQLite.Core.NetStandard/1.0.118": {
         "type": "package",
         "compile": {
           "lib/netstandard2.1/System.Data.SQLite.dll": {
@@ -975,20 +987,20 @@
           }
         }
       },
-      "System.Data.SQLite/1.0.117": {
+      "System.Data.SQLite/1.0.118": {
         "type": "package",
         "dependencies": {
-          "System.Data.SQLite.Core": "[1.0.117]",
-          "System.Data.SQLite.EF6": "[1.0.117]"
+          "System.Data.SQLite.Core": "[1.0.118]",
+          "System.Data.SQLite.EF6": "[1.0.118]"
         }
       },
-      "System.Data.SQLite.Core/1.0.117": {
+      "System.Data.SQLite.Core/1.0.118": {
         "type": "package",
         "dependencies": {
-          "Stub.System.Data.SQLite.Core.NetStandard": "[1.0.117]"
+          "Stub.System.Data.SQLite.Core.NetStandard": "[1.0.118]"
         }
       },
-      "System.Data.SQLite.EF6/1.0.117": {
+      "System.Data.SQLite.EF6/1.0.118": {
         "type": "package",
         "dependencies": {
           "EntityFramework": "6.4.4"
@@ -3338,10 +3350,49 @@
         "version.txt"
       ]
     },
-    "Stub.System.Data.SQLite.Core.NetStandard/1.0.117": {
-      "sha512": "x1zzPC/A4MmiKGDLoxLE6O5KLu7Kz7dyzhPQzlqYFTFcXmXAtM7hNNWpGw5yLEz833AnGbd/kxoitXArgR4YyA==",
+    "SpatialiteSharp/4.2.0": {
+      "sha512": "2FqOdS1xyjwZrJhn/bu05LT+Lmb6uoxHNrDtYBMC/0vuOkPwDDoR0CPbUIST2sEGJvjguVxLOfZYj16+huVDXA==",
       "type": "package",
-      "path": "stub.system.data.sqlite.core.netstandard/1.0.117",
+      "path": "spatialitesharp/4.2.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build.bat",
+        "build.txt",
+        "content/x64/spatialite/libfreexl-1.dll",
+        "content/x64/spatialite/libgcc_s_seh_64-1.dll",
+        "content/x64/spatialite/libgeos-3-4-2.dll",
+        "content/x64/spatialite/libgeos_c-1.dll",
+        "content/x64/spatialite/libiconv-2.dll",
+        "content/x64/spatialite/liblzma-5.dll",
+        "content/x64/spatialite/libproj-0.dll",
+        "content/x64/spatialite/libstdc++_64-6.dll",
+        "content/x64/spatialite/libxml2-2.dll",
+        "content/x64/spatialite/mod_spatialite.dll",
+        "content/x64/spatialite/zlib1.dll",
+        "content/x86/spatialite/libfreexl-1.dll",
+        "content/x86/spatialite/libgcc_s_dw2-1.dll",
+        "content/x86/spatialite/libgeos-3-4-2.dll",
+        "content/x86/spatialite/libgeos_c-1.dll",
+        "content/x86/spatialite/libiconv-2.dll",
+        "content/x86/spatialite/liblzma-5.dll",
+        "content/x86/spatialite/libproj-0.dll",
+        "content/x86/spatialite/libstdc++-6.dll",
+        "content/x86/spatialite/libxml2-2.dll",
+        "content/x86/spatialite/mod_spatialite.dll",
+        "content/x86/spatialite/zlib1.dll",
+        "lib/SpatialiteSharp.XML",
+        "lib/SpatialiteSharp.dll",
+        "spatialitesharp.4.2.0.nupkg.sha512",
+        "spatialitesharp.nuspec",
+        "tools/install.ps1"
+      ]
+    },
+    "Stub.System.Data.SQLite.Core.NetStandard/1.0.118": {
+      "sha512": "4TS8IZvDj0ud6utxfXI6zv9Ditk4U9Kt9KqLyAIQGcU3GXp5oGBHgGZifq+APcqRCayuN/MSE8t9ZZmygtU28A==",
+      "type": "package",
+      "path": "stub.system.data.sqlite.core.netstandard/1.0.118",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3355,7 +3406,7 @@
         "runtimes/osx-x64/native/SQLite.Interop.dll",
         "runtimes/win-x64/native/SQLite.Interop.dll",
         "runtimes/win-x86/native/SQLite.Interop.dll",
-        "stub.system.data.sqlite.core.netstandard.1.0.117.nupkg.sha512",
+        "stub.system.data.sqlite.core.netstandard.1.0.118.nupkg.sha512",
         "stub.system.data.sqlite.core.netstandard.nuspec"
       ]
     },
@@ -3847,32 +3898,32 @@
         "version.txt"
       ]
     },
-    "System.Data.SQLite/1.0.117": {
-      "sha512": "yL8FPHoK9LfP9mPk0FGTJlF8ZiqujKfeyn2lIdE/5LyKDhhyXRNWtOF2dN6+OpBdmO1ZSHaYr8HyOY3a3rZ4sw==",
+    "System.Data.SQLite/1.0.118": {
+      "sha512": "lm+Qc7SxuMNl/HpyAbJhQng+snqUs38jaC+GvKoYm5/w+RCTspvM6aFvdWXn6+yhntJR8FnbPWZ7oi2K4UL2vQ==",
       "type": "package",
-      "path": "system.data.sqlite/1.0.117",
+      "path": "system.data.sqlite/1.0.118",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "system.data.sqlite.1.0.117.nupkg.sha512",
+        "system.data.sqlite.1.0.118.nupkg.sha512",
         "system.data.sqlite.nuspec"
       ]
     },
-    "System.Data.SQLite.Core/1.0.117": {
-      "sha512": "lGfOhA3QQod9XhdWYqLgNgbgq5uZnVG6DtnhDAdPisbLpTTgZBNbeGnp+GWt8C+3EyaqBYTGJWXcxHlHKwo05A==",
+    "System.Data.SQLite.Core/1.0.118": {
+      "sha512": "2V1PsfBeqWlZxF/VtB8lQKPfDBayCU8zD5Xc3Mq7cILOa2ZqpPDSwMP0fTfk1gtGSStSk//DxKiGy6zwCQs7Uw==",
       "type": "package",
-      "path": "system.data.sqlite.core/1.0.117",
+      "path": "system.data.sqlite.core/1.0.118",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "system.data.sqlite.core.1.0.117.nupkg.sha512",
+        "system.data.sqlite.core.1.0.118.nupkg.sha512",
         "system.data.sqlite.core.nuspec"
       ]
     },
-    "System.Data.SQLite.EF6/1.0.117": {
-      "sha512": "Q1y/Jz1K63okYr1Jea7DyNGrOyWJiOpPHdpJ9cbjWAJanKJ0RUAZ8HQHKy9oEdxfjv0kfPR+Up9QcWni8lryCQ==",
+    "System.Data.SQLite.EF6/1.0.118": {
+      "sha512": "6OqO3OA8tej0BidxjYxutfR2HlodiYAA3qU4BtYe/wQdXJ75rumiAr9inYJaxFkwgGb8jW1qyFy953ZFyCOe8A==",
       "type": "package",
-      "path": "system.data.sqlite.ef6/1.0.117",
+      "path": "system.data.sqlite.ef6/1.0.118",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -3898,7 +3949,7 @@
         "lib/net451/System.Data.SQLite.EF6.dll",
         "lib/net46/System.Data.SQLite.EF6.dll",
         "lib/netstandard2.1/System.Data.SQLite.EF6.dll",
-        "system.data.sqlite.ef6.1.0.117.nupkg.sha512",
+        "system.data.sqlite.ef6.1.0.118.nupkg.sha512",
         "system.data.sqlite.ef6.nuspec",
         "tools/net40/install.ps1",
         "tools/net45/install.ps1",
@@ -6952,7 +7003,8 @@
       "MathNet.Symbolics >= 0.24.0",
       "Microsoft.CodeAnalysis.CSharp.Scripting >= 4.5.0",
       "Newtonsoft.Json >= 13.0.3",
-      "System.Data.SQLite >= 1.0.117",
+      "SpatialiteSharp >= 4.2.0",
+      "System.Data.SQLite >= 1.0.118",
       "ncalc >= 1.3.8"
     ]
   },
@@ -7015,9 +7067,13 @@
             "target": "Package",
             "version": "[13.0.3, )"
           },
+          "SpatialiteSharp": {
+            "target": "Package",
+            "version": "[4.2.0, )"
+          },
           "System.Data.SQLite": {
             "target": "Package",
-            "version": "[1.0.117, )"
+            "version": "[1.0.118, )"
           },
           "ncalc": {
             "target": "Package",
@@ -7054,6 +7110,16 @@
       "warningLevel": 1,
       "message": "Package 'ncalc 1.3.8' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "ncalc",
+      "targetGraphs": [
+        "net7.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'SpatialiteSharp 4.2.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "SpatialiteSharp",
       "targetGraphs": [
         "net7.0-windows7.0"
       ]

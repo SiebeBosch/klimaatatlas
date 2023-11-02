@@ -12,7 +12,6 @@ Public Class frmKlimaatatlas
 
         txtDatabase.Text = My.Settings.Database
         txtConfigFile.Text = My.Settings.Configfile
-        txtResultsFile.Text = My.Settings.Resultsfile
 
         Initialize()
 
@@ -82,7 +81,6 @@ Public Class frmKlimaatatlas
         'store our paths for the next time
         My.Settings.Database = txtDatabase.Text
         My.Settings.Configfile = txtConfigFile.Text
-        My.Settings.Resultsfile = txtResultsFile.Text
         My.Settings.Save()
 
         'read our configuration file
@@ -170,13 +168,6 @@ Public Class frmKlimaatatlas
         End If
     End Sub
 
-    Private Sub btnResultsFile_Click(sender As Object, e As EventArgs) Handles btnResultsFile.Click
-        dlgSaveFile.Filter = "ESRI Shapefile|*.shp"
-        Dim res As DialogResult = dlgSaveFile.ShowDialog
-        If res = DialogResult.OK Then
-            txtResultsFile.Text = dlgSaveFile.FileName
-        End If
-    End Sub
 
 
     Private Sub cmbIndicators_SelectedValueChanged(sender As Object, e As EventArgs) Handles cmbIndicators.SelectedValueChanged
