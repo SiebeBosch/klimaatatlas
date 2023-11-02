@@ -26,9 +26,6 @@ Partial Class frmKlimaatatlas
         btnExecute = New Button()
         prProgress = New ProgressBar()
         lblProgress = New Label()
-        Label1 = New Label()
-        btnResultsFile = New Button()
-        txtResultsFile = New TextBox()
         btnConfigFile = New Button()
         txtConfigFile = New TextBox()
         lblConfigFile = New Label()
@@ -80,33 +77,6 @@ Partial Class frmKlimaatatlas
         lblProgress.Size = New Size(52, 15)
         lblProgress.TabIndex = 2
         lblProgress.Text = "Progress"
-        ' 
-        ' Label1
-        ' 
-        Label1.AutoSize = True
-        Label1.Location = New Point(6, 76)
-        Label1.Name = "Label1"
-        Label1.Size = New Size(66, 15)
-        Label1.TabIndex = 8
-        Label1.Text = "Results file:"
-        ' 
-        ' btnResultsFile
-        ' 
-        btnResultsFile.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnResultsFile.Location = New Point(1064, 73)
-        btnResultsFile.Name = "btnResultsFile"
-        btnResultsFile.Size = New Size(24, 24)
-        btnResultsFile.TabIndex = 7
-        btnResultsFile.Text = ".."
-        btnResultsFile.UseVisualStyleBackColor = True
-        ' 
-        ' txtResultsFile
-        ' 
-        txtResultsFile.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtResultsFile.Location = New Point(89, 74)
-        txtResultsFile.Name = "txtResultsFile"
-        txtResultsFile.Size = New Size(966, 23)
-        txtResultsFile.TabIndex = 6
         ' 
         ' btnConfigFile
         ' 
@@ -211,11 +181,8 @@ Partial Class frmKlimaatatlas
         ' 
         ' tabSettings
         ' 
-        tabSettings.Controls.Add(Label1)
         tabSettings.Controls.Add(txtDatabase)
-        tabSettings.Controls.Add(btnResultsFile)
         tabSettings.Controls.Add(lblDatabase)
-        tabSettings.Controls.Add(txtResultsFile)
         tabSettings.Controls.Add(btnDatabase)
         tabSettings.Controls.Add(btnConfigFile)
         tabSettings.Controls.Add(lblConfigFile)
@@ -306,9 +273,6 @@ Partial Class frmKlimaatatlas
     Friend WithEvents ToolsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GISToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SpatialJoinToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents Label1 As Label
-    Friend WithEvents btnResultsFile As Button
-    Friend WithEvents txtResultsFile As TextBox
     Friend WithEvents dlgSaveFile As SaveFileDialog
     Friend WithEvents Flowcharts As GroupBox
     Friend WithEvents pnlFlowchart As Panel

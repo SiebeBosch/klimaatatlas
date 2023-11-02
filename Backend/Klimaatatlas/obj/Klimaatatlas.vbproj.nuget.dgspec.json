@@ -60,9 +60,13 @@
               "target": "Package",
               "version": "[13.0.3, )"
             },
+            "SpatialiteSharp": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
             "System.Data.SQLite": {
               "target": "Package",
-              "version": "[1.0.117, )"
+              "version": "[1.0.118, )"
             },
             "ncalc": {
               "target": "Package",

@@ -1,8 +1,10 @@
 ﻿Imports System.ComponentModel
 Imports System.Data.SQLite
+Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Transactions
 Imports Klimaatatlas.clsGeneralFunctions
+Imports SpatialiteSharp
 
 Public Class clsRule
     Friend Name As String
@@ -16,6 +18,15 @@ Public Class clsRule
 
     Public Function Execute() As Boolean
         Try
+
+            ' Load the SpatiaLite extension
+            If Setup.GpkgCon.State <> ConnectionState.Open Then Setup.GpkgCon.Open()
+            Setup.GpkgCon.EnableExtensions(True)
+            Setup.GpkgCon.LoadExtension("mod_spatialite")
+            'Setup.GpkgCon.LoadExtension(spatialitePath)
+            'Using cmd As New SQLiteCommand($"Select load_extension('{spatialitePath}');", Setup.GpkgCon)
+            '    cmd.ExecuteNonQuery()
+            'End Using
 
             For Each Scenario As clsScenario In Setup.Scenarios.Values
 
@@ -86,7 +97,7 @@ Public Class clsRule
                     For Each row As DataRow In dt.Rows
                         Using cmdUpdate As New SQLiteCommand(Setup.GpkgCon)
                             Dim updateSetClauses As New List(Of String)
-
+                            Dim myfid As Integer = Convert.ToInt32(row("fid"))
                             For Each columnName In columnsToUpdate
                                 If dt.Columns.Contains(columnName) Then
                                     updateSetClauses.Add($"{columnName} = @{columnName}")
@@ -94,7 +105,7 @@ Public Class clsRule
                                 End If
                             Next
 
-                            cmdUpdate.CommandText = $"UPDATE {Setup.GpkgTable} SET {String.Join(", ", updateSetClauses)} WHERE fid = @fid;"
+                            cmdUpdate.CommandText = $"UPDATE {Setup.GpkgTable} SET {String.Join(", ", updateSetClauses)} WHERE fid = {myfid};"
                             cmdUpdate.ExecuteNonQuery()
                         End Using
                     Next

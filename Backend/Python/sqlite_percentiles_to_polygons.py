@@ -24,15 +24,26 @@ def main():
     #shp_path = "c:\\GITHUB\\klimaatatlas\\GIS\\Peilgebied vigerend besluit.shp"
     #result_path = "c:\\GITHUB\\klimaatatlas\\GIS\\Peilgebied_WQ_Interpolated.gpkg"
 
-    shp_path = "c:\GITHUB\klimaatatlas\GIS\Watervlakken Plus4.shp"
-    result_path = "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_WQ_Interpolated.gpkg"
+    #shp_path = "c:\GITHUB\klimaatatlas\GIS\Watervlakken_Plus4.shp"
+    gdf_path = "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_Plus4.gpkg"
+    result_path = "c:\GITHUB\klimaatatlas\GIS\Watervlakken_Plus5.gpkg"
     
     df = load_data(db_path)
-    gdf = gpd.read_file(shp_path)
+    gdf = gpd.read_file(gdf_path)
     
     combinations = df[['SCENARIO', 'SUBSTANCE', 'PERCENTILE']].drop_duplicates().values
     
     for scenario, substance, percentile in combinations:
+
+        #add the word Klimaat before scenario in order to make it a valid fieldname for sqlite
+        scenariofield = f'Klimaat{scenario}'        
+
+        # Multiplying the percentile by 100 to convert it to a percentage
+        percentilefield = int(round(percentile * 100))
+        
+        # Replacing dashes with underscores in the substance string
+        substancefield = substance.replace('-', '_')
+
         print(f"Processing combination {scenario},{substance},{percentile}")
 
         subset = df[
@@ -43,7 +54,8 @@ def main():
         points = subset[['X', 'Y']].values
         values = subset['DATAVALUE'].values
         
-        field_name = f"{scenario}_{substance}_{percentile}"
+        print(f"Writing to {scenariofield},{substancefield},{percentilefield}")
+        field_name = f"{scenariofield}_{substancefield}_{percentilefield}"
         
         gdf[field_name] = gdf.geometry.apply(lambda geom: 
             idw_interpolation(points, values, geom.centroid.x, geom.centroid.y))
