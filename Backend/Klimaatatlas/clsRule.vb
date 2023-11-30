@@ -4,8 +4,6 @@ Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Transactions
 Imports Klimaatatlas.clsGeneralFunctions
-Imports SpatialiteSharp
-
 Public Class clsRule
     Friend Name As String
     Friend Benchmarks As New Dictionary(Of String, clsBenchmark)
@@ -23,12 +21,11 @@ Public Class clsRule
             If Setup.GpkgCon.State <> ConnectionState.Open Then Setup.GpkgCon.Open()
             Setup.GpkgCon.EnableExtensions(True)
             Setup.GpkgCon.LoadExtension("mod_spatialite")
-            'Setup.GpkgCon.LoadExtension(spatialitePath)
-            'Using cmd As New SQLiteCommand($"Select load_extension('{spatialitePath}');", Setup.GpkgCon)
-            '    cmd.ExecuteNonQuery()
-            'End Using
 
             For Each Scenario As clsScenario In Setup.Scenarios.Values
+
+                Setup.Log.WriteToDiagnosticsFile("Processing scenario " & Scenario.Name)
+                Me.Setup.Generalfunctions.UpdateProgressBar($"Processing rule {Name} for scenario {Scenario.Name}...", 0, 10, True)
 
                 Using transaction As SQLiteTransaction = Setup.GpkgCon.BeginTransaction()
 
@@ -44,9 +41,11 @@ Public Class clsRule
                     columnsToUpdate.Add($"{Scenario.Name}_{Name}")
 
                     For Each Component As clsEquationComponent In EquationComponents
+                        Setup.Log.WriteToDiagnosticsFile("Creating field for component " & Component.ResultsFieldName)
                         EnsureColumnExists(Setup.GpkgTable, $"{Scenario.Name}_{Component.ResultsFieldName}", "REAL")
                         Fields.Add($"{Scenario.Name}_{Component.ResultsFieldName}")
                         columnsToUpdate.Add($"{Scenario.Name}_{Component.ResultsFieldName}")
+                        Setup.Log.WriteToDiagnosticsFile("Field for component " & Component.ResultsFieldName & " created.")
                     Next
 
                     ' Execute a query to retrieve all features and necessary fields
@@ -56,21 +55,34 @@ Public Class clsRule
                         End Using
                     End Using
 
+                    Me.Setup.Generalfunctions.UpdateProgressBar($"Processing rule {Name} for scenario {Scenario.Name}...", 0, 10, True)
+                    Dim iRow As Integer = 0, nRow As Integer = dt.Rows.Count
+
+                    Setup.Log.WriteToDiagnosticsFile("Number of rows to process: " & dt.Rows.Count)
                     For Each row As DataRow In dt.Rows
+                        iRow += 1
+                        Me.Setup.Generalfunctions.UpdateProgressBar("", iRow, nRow)
                         Dim fid As Integer = Convert.ToInt32(row("fid"))
                         Dim totalWeight As Double = 0
                         Dim ResultSum As Double = 0
 
                         For Each Component As clsEquationComponent In EquationComponents
                             Dim FieldName As String = Component.Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper)
+                            Dim Transformation As String = Component.Benchmark.TransformationPerScenario.Item(Scenario.Name.Trim.ToUpper)
                             Dim value As Object = row(FieldName)
+                            If Transformation <> "" Then
+                                If Not Setup.Generalfunctions.EvaluateSecondDegreePolynomeExpression(Transformation, value, value) Then
+                                    Throw New Exception($"Error evaluating mathematical expression {Transformation}. Please check if your equation obeys the a * x^2 + b * x + c format convention.")
+                                End If
+                            End If
+
                             totalWeight += Component.Weight
                             Component.Result = Component.Benchmark.getResult(value) * Component.Weight
-                            ResultSum += Component.Result * Component.Weight
+                            ResultSum += Component.Result
                         Next
 
                         For Each Component As clsEquationComponent In EquationComponents
-                            Dim contribution As Double = Component.Result / ResultSum
+                            Dim contribution As Double = Component.Result / totalWeight
 
                             ' Assuming the column name is built using Scenario.Name, Component.ResultsFieldName
                             Dim columnName As String = $"{Scenario.Name}_{Component.ResultsFieldName}"
@@ -91,9 +103,10 @@ Public Class clsRule
                             Throw New Exception($"Column '{resultColumnName}' does not exist in the DataTable.")
                         End If
                     Next
-
+                    Setup.Log.WriteToDiagnosticsFile("All rows processed.")
 
                     ' At the end of each scenario, write the results back to the database
+                    Setup.Log.WriteToDiagnosticsFile("Writing results back to the database.")
                     For Each row As DataRow In dt.Rows
                         Using cmdUpdate As New SQLiteCommand(Setup.GpkgCon)
                             Dim updateSetClauses As New List(Of String)
@@ -109,9 +122,11 @@ Public Class clsRule
                             cmdUpdate.ExecuteNonQuery()
                         End Using
                     Next
+                    Setup.Log.WriteToDiagnosticsFile("Results written.")
 
                     transaction.Commit() ' Committing transaction after all rows are updated
                 End Using
+                Setup.Log.WriteToDiagnosticsFile("Scenario " & Scenario.Name & " processed.")
             Next
 
             Return True
@@ -121,7 +136,9 @@ Public Class clsRule
         End Try
     End Function
 
-    ' Removed Parse function since it's not needed for the JSON approach
+
+
+
 
     Public Sub EnsureColumnExists(tableName As String, columnName As String, dataType As String)
         Dim columnExists As Boolean = False

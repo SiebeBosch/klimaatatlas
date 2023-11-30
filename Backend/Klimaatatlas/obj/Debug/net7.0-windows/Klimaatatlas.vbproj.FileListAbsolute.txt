@@ -129,7 +129,6 @@ C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\Microsoft
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\Microsoft.CodeAnalysis.CSharp.dll
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\Microsoft.CodeAnalysis.CSharp.Scripting.dll
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\Microsoft.CodeAnalysis.Scripting.dll
-C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\NCalc.dll
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\Newtonsoft.Json.dll
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\System.Data.SQLite.dll
 C:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows\System.Data.SqlClient.dll

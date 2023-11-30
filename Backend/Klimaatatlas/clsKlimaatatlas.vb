@@ -17,7 +17,7 @@ Public Class clsKlimaatatlas
 
     Public Log As clsLog
     Public SQLiteCon As SQLiteConnection
-    Public Generalfunctions As New clsGeneralFunctions
+    Public Generalfunctions As New clsGeneralFunctions(Me)
 
     'the connection to the geopackage
     Public GpkgCon As SQLiteConnection
@@ -124,6 +124,8 @@ Public Class clsKlimaatatlas
 
     Public Function SetGeoPackageConnection() As Boolean
         Try
+            Generalfunctions.UpdateProgressBar("Setting database connection for geopackage...", 0, 10, True)
+
             Dim dataset As JObject = _config("features_dataset")
             Dim Path As String = dataset("path").ToString()         'PATH TO THE GEOPACKAGE
             GpkgTable = dataset("tablename").ToString()             'the table in our geopackage containing our features and attribute data
@@ -146,6 +148,9 @@ Public Class clsKlimaatatlas
             ' You might want to log or display the exception message to understand the nature of the error
             Console.WriteLine(ex.Message)
             Return False
+
+        Finally
+            Generalfunctions.UpdateProgressBar("Connection to geopackage successfully established.", 0, 10, True)
         End Try
     End Function
 
@@ -195,7 +200,7 @@ Public Class clsKlimaatatlas
             Next
             Return True
         Catch ex As Exception
-            Log.AddError("Error in function PopulateScenarios of class clsKlimaatatlas: " & ex.Message)
+            Log.AddError("Error In Function PopulateScenarios Of Class clsKlimaatatlas:  " & ex.Message)
             Return False
         End Try
     End Function
@@ -344,6 +349,7 @@ Public Class clsKlimaatatlas
     Public Function PopulateRules(ByRef cmbRekenRegels As ComboBox) As Boolean
         Try
             'clear the combobox containing the rules
+            Rules.Clear()
             cmbRekenRegels.Items.Clear()
 
             Dim rulesArray As JArray = CType(_config("rules"), JArray)
@@ -358,14 +364,18 @@ Public Class clsKlimaatatlas
 
                     ' Process fieldnames per scenario
                     Dim fieldNamesPerScenario As New Dictionary(Of String, String)
+                    Dim transformationPerScenario As New Dictionary(Of String, String)
                     For Each fieldnameItem As JObject In CType(benchmarkItem("fieldname"), JArray)
                         Dim scenario As String = fieldnameItem("scenario").ToString()
                         Dim field As String = fieldnameItem("field").ToString()
                         fieldNamesPerScenario.Add(scenario.Trim.ToUpper, field)
+
+                        Dim transformation As String = If(fieldnameItem.ContainsKey("transformation"), fieldnameItem("transformation").ToString(), String.Empty)
+                        transformationPerScenario.Add(scenario.Trim.ToUpper, transformation)
                     Next
 
                     'create the benchmark class instance
-                    Dim myBenchmark As New clsBenchmark(Me, benchmarkItem("name").ToString(), fieldNamesPerScenario, classification)
+                    Dim myBenchmark As New clsBenchmark(Me, benchmarkItem("name").ToString(), fieldNamesPerScenario, transformationPerScenario, classification)
 
                     'process the classification of our benchmark
                     If classification = enmClassificationType.Discrete Then
@@ -519,10 +529,16 @@ Public Class clsKlimaatatlas
     Public Function ProcessRules() As Boolean
         'this function processes all rules we have just read and computes the penalties for each feature
         Try
+            Generalfunctions.UpdateProgressBar("Processing rules...", 0, 10, True)
+
             'execute the rules one by one
             For Each myRule As clsRule In Rules.Values()
+                Log.WriteToDiagnosticsFile("Processing rule " & myRule.Name)
                 myRule.Execute()
+                Log.WriteToDiagnosticsFile("Rule " & myRule.Name & " processed.")
             Next
+
+            Generalfunctions.UpdateProgressBar("Rules successfully processed.", 0, 10, True)
             Return True
         Catch ex As Exception
             Return False
@@ -777,159 +793,161 @@ Public Class clsKlimaatatlas
 
     End Sub
 
-    Private Function ProcessTimeseriesTransformation(rule As JObject) As Boolean
-        Try
-            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries transformation """ & rule("name").ToString() & """...", 0, 10, True)
+    'Private Function ProcessTimeseriesTransformation(rule As JObject) As Boolean
+    '    Try
+    '        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries transformation """ & rule("name").ToString() & """...", 0, 10, True)
 
-            If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
+    '        If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
 
-            Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
-            Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
-            Dim equation = rule("equation").ToString()
-            Dim outputParameterName = rule("output")("parameter_name").ToString()
+    '        Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
+    '        Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
+    '        Dim equation = rule("equation").ToString()
+    '        Dim outputParameterName = rule("output")("parameter_name").ToString()
 
-            ' Extract variables from equation
-            Dim VariablesList As List(Of String) = ExtractVariablesFromEquation(equation)
+    '        ' Extract variables from equation
+    '        Dim VariablesList As List(Of String) = ExtractVariablesFromEquation(equation)
 
-            ' Create variables to be used in query
-            Dim variablesString As String = String.Join(",", VariablesList.Select(Function(v) $"MAX(CASE WHEN {GetFieldNameByType(inputDataset, "parameter_name")} = '{v}' THEN {GetFieldNameByType(inputDataset, "parameter_value")} ELSE NULL END) AS {v}"))
+    '        ' Create variables to be used in query
+    '        Dim variablesString As String = String.Join(",", VariablesList.Select(Function(v) $"MAX(CASE WHEN {GetFieldNameByType(inputDataset, "parameter_name")} = '{v}' THEN {GetFieldNameByType(inputDataset, "parameter_value")} ELSE NULL END) AS {v}"))
 
-            ' Get all unique combinations of scenario and location ID
-            Dim UniqueSeries As List(Of Dictionary(Of String, String)) = GetScenarioLocationCombinations(inputDataset)
+    '        ' Get all unique combinations of scenario and location ID
+    '        Dim UniqueSeries As List(Of Dictionary(Of String, String)) = GetScenarioLocationCombinations(inputDataset)
 
-            ' Determine if the input dataset has "data_type" of "non-equidistant_timeseries"
-            Dim isNonEquidistant As Boolean = inputDataset("data_type").ToString() = "non-equidistant_timeseries"
+    '        ' Determine if the input dataset has "data_type" of "non-equidistant_timeseries"
+    '        Dim isNonEquidistant As Boolean = inputDataset("data_type").ToString() = "non-equidistant_timeseries"
 
-            ' Process each unique combination
-            For i = 0 To UniqueSeries.Count - 1
-                Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
+    '        ' Process each unique combination
+    '        For i = 0 To UniqueSeries.Count - 1
+    '            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
 
-                Dim Scenario As String = UniqueSeries(i).Values(0)
-                Dim LocationID As String = UniqueSeries(i).Values(1)
+    '            Dim Scenario As String = UniqueSeries(i).Values(0)
+    '            Dim LocationID As String = UniqueSeries(i).Values(1)
 
-                ' Remove old results for the given location ID and scenario
-                DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
-
-
-                ' Create a sorted list of all unique DateTime values in the database table for the variables involved in the equation
-                Dim uniqueDates As New List(Of DateTime)
-                If isNonEquidistant Then
-                    Using cmd As New SQLiteCommand(SQLiteCon)
-                        cmd.CommandText = $"SELECT DISTINCT {GetFieldNameByType(inputDataset, "date")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} IN ('{String.Join("', '", VariablesList)}') ORDER BY {GetFieldNameByType(inputDataset, "date")};"
-                        Using reader As SQLiteDataReader = cmd.ExecuteReader()
-                            While reader.Read()
-                                uniqueDates.Add(DateTime.Parse(reader.GetString(0)))
-                            End While
-                        End Using
-                    End Using
-                End If
-
-                ' Get data for all variables in a single query
-                Dim dt As New DataTable
-                Using cmd As New SQLiteCommand(SQLiteCon)
-                    cmd.CommandText = $"SELECT {GetFieldNameByType(inputDataset, "date")}, {variablesString} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' GROUP BY {GetFieldNameByType(inputDataset, "date")} ORDER BY {GetFieldNameByType(inputDataset, "date")};"
-                    Using reader As SQLiteDataReader = cmd.ExecuteReader()
-                        dt.Load(reader)
-                    End Using
-                End Using
+    '            ' Remove old results for the given location ID and scenario
+    '            DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
 
 
-                ' Process the data and create resultDataTable
-                Dim resultDataTable As New DataTable
-                resultDataTable.Columns.Add("Date", GetType(DateTime))
-                resultDataTable.Columns.Add("Value", GetType(Double))
+    '            ' Create a sorted list of all unique DateTime values in the database table for the variables involved in the equation
+    '            Dim uniqueDates As New List(Of DateTime)
+    '            If isNonEquidistant Then
+    '                Using cmd As New SQLiteCommand(SQLiteCon)
+    '                    cmd.CommandText = $"SELECT DISTINCT {GetFieldNameByType(inputDataset, "date")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} IN ('{String.Join("', '", VariablesList)}') ORDER BY {GetFieldNameByType(inputDataset, "date")};"
+    '                    Using reader As SQLiteDataReader = cmd.ExecuteReader()
+    '                        While reader.Read()
+    '                            uniqueDates.Add(DateTime.Parse(reader.GetString(0)))
+    '                        End While
+    '                    End Using
+    '                End Using
+    '            End If
 
-                ' Dictionary to store the last value for each variable
-                Dim lastValues As New Dictionary(Of String, Double)
-
-
-                ' Debugging lines to print uniqueDates and DataTable
-                Debug.Print("Unique Dates:")
-                For Each d As DateTime In uniqueDates
-                    Debug.Print(d)
-                Next
-                Debug.Print("DataTable:")
-                For Each r As DataRow In dt.Rows
-                    Debug.Print(r(0).ToString())
-                    For Each Variable As String In VariablesList
-                        Debug.Print(" " & Variable & ": " & r(Variable).ToString())
-                    Next
-                    Debug.Print("")
-                Next
-
-
-                If isNonEquidistant Then
-                    'non-equidistant data
-                    Dim dateFieldIndex As Integer = dt.Columns.IndexOf(GetFieldNameByType(inputDataset, "date"))
-
-                    For Each currentDate As DateTime In uniqueDates
-                        Dim evaluatedEquation As String = equation
-
-                        For Each Variable As String In VariablesList
-                            ' Find the row for the current variable and DateTime
+    '            ' Get data for all variables in a single query
+    '            Dim dt As New DataTable
+    '            Using cmd As New SQLiteCommand(SQLiteCon)
+    '                cmd.CommandText = $"SELECT {GetFieldNameByType(inputDataset, "date")}, {variablesString} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' GROUP BY {GetFieldNameByType(inputDataset, "date")} ORDER BY {GetFieldNameByType(inputDataset, "date")};"
+    '                Using reader As SQLiteDataReader = cmd.ExecuteReader()
+    '                    dt.Load(reader)
+    '                End Using
+    '            End Using
 
 
-                            Dim row As DataRow = dt.AsEnumerable().LastOrDefault(Function(r) Not DBNull.Value.Equals(r(Variable)) AndAlso r(Variable).ToString() <> "" AndAlso DateTime.Parse(r.Field(Of String)(0)) <= currentDate)
+    '            ' Process the data and create resultDataTable
+    '            Dim resultDataTable As New DataTable
+    '            resultDataTable.Columns.Add("Date", GetType(DateTime))
+    '            resultDataTable.Columns.Add("Value", GetType(Double))
 
-                            ' If a row is found, update the last value for the variable
-                            If row IsNot Nothing Then
-                                lastValues(Variable) = row.Field(Of Double)(Variable)
-                            ElseIf Not lastValues.ContainsKey(Variable) Then
-                                ' If the variable is not in the lastValues dictionary, add it with a default value of 0
-                                lastValues(Variable) = 0
-                            End If
+    '            ' Dictionary to store the last value for each variable
+    '            Dim lastValues As New Dictionary(Of String, Double)
 
-                            ' Update the equation with the actual variable value
-                            evaluatedEquation = evaluatedEquation.Replace("[" & Variable & "]", lastValues(Variable).ToString())
-                        Next
 
-                        Dim expression As New NCalc.Expression(evaluatedEquation)
-                        Dim result As Double = Convert.ToDouble(expression.Evaluate())
-                        resultDataTable.Rows.Add(currentDate, result)
-                    Next
-                Else
-                    'equidistant data
-                    For Each row As DataRow In dt.Rows
-                        Dim dateValue As DateTime = row(0)
-                        Dim evaluatedEquation As String = equation
+    '            ' Debugging lines to print uniqueDates and DataTable
+    '            Debug.Print("Unique Dates:")
+    '            For Each d As DateTime In uniqueDates
+    '                Debug.Print(d)
+    '            Next
+    '            Debug.Print("DataTable:")
+    '            For Each r As DataRow In dt.Rows
+    '                Debug.Print(r(0).ToString())
+    '                For Each Variable As String In VariablesList
+    '                    Debug.Print(" " & Variable & ": " & r(Variable).ToString())
+    '                Next
+    '                Debug.Print("")
+    '            Next
 
-                        For Each Variable As String In VariablesList
-                            Dim variableValue As Double
-                            If Not DBNull.Value.Equals(row(Variable)) Then
-                                variableValue = row(Variable)
-                            Else
-                                variableValue = 0 ' Assign a default value if DBNull is encountered
-                            End If
-                            evaluatedEquation = evaluatedEquation.Replace("[" & Variable & "]", variableValue.ToString())
-                        Next
 
-                        Dim expression As New NCalc.Expression(evaluatedEquation)
-                        Dim result As Double = Convert.ToDouble(expression.Evaluate())
-                        resultDataTable.Rows.Add(dateValue, result)
-                    Next
-                End If
+    '            If isNonEquidistant Then
+    '                'non-equidistant data
+    '                Dim dateFieldIndex As Integer = dt.Columns.IndexOf(GetFieldNameByType(inputDataset, "date"))
 
-                ' Save results to the output dataset
-                Using transaction = SQLiteCon.BeginTransaction()
-                    For Each row As DataRow In resultDataTable.Rows
-                        Dim dateValue As DateTime = row("Date")
-                        Dim dataValue As Double = row("Value")
-                        SaveResultsToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
-                    Next
-                    transaction.Commit()
-                End Using
+    '                For Each currentDate As DateTime In uniqueDates
+    '                    Dim evaluatedEquation As String = equation
 
-            Next
-            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
+    '                    For Each Variable As String In VariablesList
+    '                        ' Find the row for the current variable and DateTime
 
-            SQLiteCon.Close()
-            Return True
 
-        Catch ex As Exception
-            Me.Log.AddError("Error in function ProcessTimeseriesTransformation of class clsKlimaatatlas: " & ex.Message)
-            Return False
-        End Try
-    End Function
+    '                        Dim row As DataRow = dt.AsEnumerable().LastOrDefault(Function(r) Not DBNull.Value.Equals(r(Variable)) AndAlso r(Variable).ToString() <> "" AndAlso DateTime.Parse(r.Field(Of String)(0)) <= currentDate)
+
+    '                        ' If a row is found, update the last value for the variable
+    '                        If row IsNot Nothing Then
+    '                            lastValues(Variable) = row.Field(Of Double)(Variable)
+    '                        ElseIf Not lastValues.ContainsKey(Variable) Then
+    '                            ' If the variable is not in the lastValues dictionary, add it with a default value of 0
+    '                            lastValues(Variable) = 0
+    '                        End If
+
+    '                        ' Update the equation with the actual variable value
+    '                        evaluatedEquation = evaluatedEquation.Replace("[" & Variable & "]", lastValues(Variable).ToString())
+    '                    Next
+
+    '                    Dim result As Double
+
+    '                    Generalfunctions.EvaluateSecondDegreePolynomeExpression(evaluatedEquation, result)
+
+    '                    resultDataTable.Rows.Add(currentDate, result)
+    '                Next
+    '            Else
+    '                'equidistant data
+    '                For Each row As DataRow In dt.Rows
+    '                    Dim dateValue As DateTime = row(0)
+    '                    Dim evaluatedEquation As String = equation
+
+    '                    For Each Variable As String In VariablesList
+    '                        Dim variableValue As Double
+    '                        If Not DBNull.Value.Equals(row(Variable)) Then
+    '                            variableValue = row(Variable)
+    '                        Else
+    '                            variableValue = 0 ' Assign a default value if DBNull is encountered
+    '                        End If
+    '                        evaluatedEquation = evaluatedEquation.Replace("[" & Variable & "]", variableValue.ToString())
+    '                    Next
+
+    '                    Dim expression As New NCalc.Expression(evaluatedEquation)
+    '                    Dim result As Double = Convert.ToDouble(expression.Evaluate())
+    '                    resultDataTable.Rows.Add(dateValue, result)
+    '                Next
+    '            End If
+
+    '            ' Save results to the output dataset
+    '            Using transaction = SQLiteCon.BeginTransaction()
+    '                For Each row As DataRow In resultDataTable.Rows
+    '                    Dim dateValue As DateTime = row("Date")
+    '                    Dim dataValue As Double = row("Value")
+    '                    SaveResultsToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
+    '                Next
+    '                transaction.Commit()
+    '            End Using
+
+    '        Next
+    '        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
+
+    '        SQLiteCon.Close()
+    '        Return True
+
+    '    Catch ex As Exception
+    '        Me.Log.AddError("Error in function ProcessTimeseriesTransformation of class clsKlimaatatlas: " & ex.Message)
+    '        Return False
+    '    End Try
+    'End Function
 
     'Private Function ProcessTimeseriesTransformation(rule As JObject) As Boolean
     '    Try

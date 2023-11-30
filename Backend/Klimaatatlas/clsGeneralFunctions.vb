@@ -9,7 +9,8 @@ Public Class clsGeneralFunctions
     Dim Log As clsLog
 
 
-    Public Sub New()
+    Public Sub New(ByRef mySetup As clsKlimaatatlas)
+        Setup = mySetup
         Log = New clsLog()
     End Sub
 
@@ -579,5 +580,49 @@ Public Class clsGeneralFunctions
 
 
     End Function
+
+    Function EvaluateLinearEquation(weights() As Double, values() As Double, ByRef yValue As Double) As Boolean
+        ' Check if arrays are of the same length
+        If weights.Length <> values.Length Then
+            Return False
+        End If
+
+        yValue = 0
+        For i As Integer = 0 To weights.Length - 1
+            yValue += weights(i) * values(i)
+        Next
+
+        Return True
+    End Function
+
+
+    Function EvaluateSecondDegreePolynomeExpression(expression As String, xValue As Double, ByRef yValue As Double) As Boolean
+        Try
+            ' Remove spaces and convert to lower case for easier parsing
+            expression = expression.ToLower().Replace(" ", "")
+
+            ' Regular expression to extract a, b, and c coefficients, including decimals
+            Dim pattern As String = "^([+-]?\d*\.?\d*)x\^2([+-]\d*\.?\d*)x([+-]\d*\.?\d+)$"
+            Dim regex As New Text.RegularExpressions.Regex(pattern)
+            Dim match As Text.RegularExpressions.Match = regex.Match(expression)
+
+            If Not match.Success Then
+                Throw New ArgumentException("Invalid expression format.")
+            End If
+
+            ' Extract a, b, and c values
+            Dim a As Double = If(String.IsNullOrEmpty(match.Groups(1).Value), 1, Convert.ToDouble(match.Groups(1).Value))
+            Dim b As Double = Convert.ToDouble(match.Groups(2).Value)
+            Dim c As Double = Convert.ToDouble(match.Groups(3).Value)
+
+            ' Evaluate the expression ax^2 + bx + c
+            yValue = a * xValue * xValue + b * xValue + c
+            Return True
+        Catch ex As Exception
+            Me.Setup.Log.AddError("Unable to evaluate mathematical expression for second degree polynome: " & expression & ". Error: " & ex.Message)
+            Return False
+        End Try
+    End Function
+
 
 End Class
