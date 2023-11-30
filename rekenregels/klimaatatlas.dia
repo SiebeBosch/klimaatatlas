@@ -1,0 +1,40 @@
+DIAGNOSTICS FILE, CREATED ON: 30-11-2023 23:02:41
+Reading configuration file.
+Error In Function PopulateScenarios Of Class clsKlimaatatlas:  An item with the same key has already been added. Key: KLIMAAT2014
+Configuration file read.
+Setting geopackage connection.
+Geopackage connection set.
+Processing rules.
+Processing rule biomassa
+Processing scenario Klimaat2014
+Creating field for component biomassa_Tex
+Field for component biomassa_Tex created.
+Creating field for component biomassa_mestN
+Field for component biomassa_mestN created.
+Creating field for component biomassa_mestP
+Field for component biomassa_mestP created.
+Creating field for component biomassa_max
+Field for component biomassa_max created.
+Number of rows to process: 99170
+All rows processed.
+Writing results back to the database.
+Results written.
+Scenario Klimaat2014 processed.
+Processing scenario Klimaat2085
+Creating field for component biomassa_Tex
+Field for component biomassa_Tex created.
+Creating field for component biomassa_mestN
+Field for component biomassa_mestN created.
+Creating field for component biomassa_mestP
+Field for component biomassa_mestP created.
+Creating field for component biomassa_max
+Field for component biomassa_max created.
+Number of rows to process: 99170
+All rows processed.
+Writing results back to the database.
+Results written.
+Scenario Klimaat2085 processed.
+Rule biomassa processed.
+Rules processed.
+Closing geopackage.
+Geopackage closed.

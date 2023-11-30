@@ -66,80 +66,55 @@ Public Class frmKlimaatatlas
     Private Sub Initialize()
         'set the database connection, read the configuration file and start processing each rule
         Klimaatatlas.SetProgressBar(prProgress, lblProgress)
-        Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
-        Klimaatatlas.UpgradeDatabase()
+        If System.IO.File.Exists(txtDatabase.Text) Then
+            Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
+            Klimaatatlas.UpgradeDatabase()
+        End If
     End Sub
 
     Private Sub ReadConfiguration()
+        Me.Klimaatatlas.Generalfunctions.UpdateProgressBar("Reading configuration...", 0, 10, True)
         Klimaatatlas.ReadConfigurationFile(txtConfigFile.Text)
+        Me.Klimaatatlas.Generalfunctions.UpdateProgressBar("Populating rules...", 3, 10, True)
         Klimaatatlas.PopulateRules(cmbRekenregels)
+        Me.Klimaatatlas.Generalfunctions.UpdateProgressBar("Populating scenarios...", 7, 10, True)
         Klimaatatlas.PopulateScenarios()
-
+        Me.Klimaatatlas.Generalfunctions.UpdateProgressBar("Configuration successfully read", 0, 10, True)
     End Sub
 
     Private Sub btnExecute_Click(sender As Object, e As EventArgs) Handles btnExecute.Click
+
+        Klimaatatlas.SetProgressBar(prProgress, lblProgress)
+        Klimaatatlas.Log = New clsLog
+
         'store our paths for the next time
         My.Settings.Database = txtDatabase.Text
         My.Settings.Configfile = txtConfigFile.Text
         My.Settings.Save()
 
+        'initialize our diagnostics file. It will be written to the same dir as our config file
+        Klimaatatlas.Log.SetDiagnosticsPath(Path.GetDirectoryName(txtConfigFile.Text) & "\klimaatatlas.dia")
+
         'read our configuration file
+        Klimaatatlas.Log.WriteToDiagnosticsFile("Reading configuration file.")
         Call ReadConfiguration()
+        Klimaatatlas.Log.WriteToDiagnosticsFile("Configuration file read.")
 
         'open a connection to our geopackage
-        Klimaatatlas.setGeoPackageConnection()
+        Klimaatatlas.Log.WriteToDiagnosticsFile("Setting geopackage connection.")
+        Klimaatatlas.SetGeoPackageConnection()
+        Klimaatatlas.Log.WriteToDiagnosticsFile("Geopackage connection set.")
 
         'process our rules
+        Klimaatatlas.Log.WriteToDiagnosticsFile("Processing rules.")
         Klimaatatlas.ProcessRules()
+        Klimaatatlas.Log.WriteToDiagnosticsFile("Rules processed.")
 
         'close the connection to the geopackage
+        Klimaatatlas.Log.WriteToDiagnosticsFile("Closing geopackage.")
         Klimaatatlas.GpkgCon.Close()
+        Klimaatatlas.Log.WriteToDiagnosticsFile("Geopackage closed.")
 
-
-        'Klimaatatlas.readFeaturesDataset()
-        'Klimaatatlas.SetAndInitializeRatingFields()         'add two fields to our dataset for storing the final rating and result_text
-
-
-        'write the results to a new shapefile
-        'If System.IO.File.Exists(txtResultsFile.Text) Then Klimaatatlas.Generalfunctions.DeleteShapeFile(txtResultsFile.Text)
-        'Klimaatatlas.ExportResultsToShapefile(txtResultsFile.Text)
-
-        'Klimaatatlas.ExportResultsToGeopackage(txtResultsFile.Text)
-
-
-        ''read the shapefile weve just created and reproject it to WGS84
-        'Dim sfpath As String = txtResultsFile.Text
-        'Dim sfpathweb As String = Strings.Replace(txtResultsFile.Text, ".shp", "_web.shp")
-        'Dim jsonpath As String = Strings.Replace(txtResultsFile.Text, ".shp", ".json")
-
-
-        'Dim SourceProjection As New MapWinGIS.GeoProjection
-        'SourceProjection.ImportFromEPSG(28992)
-
-        'Dim shapefile As New MapWinGIS.Shapefile
-        'shapefile.Open(txtResultsFile.Text)
-        'shapefile.GeoProjection = SourceProjection
-
-        'Dim TargetProjection As New MapWinGIS.GeoProjection
-        'TargetProjection.ImportFromEPSG(4326)
-
-        'Dim reprojectedSf As Shapefile, n As Integer
-        ''reprojectedSf.Open(sfpath)
-        'reprojectedSf = shapefile.Reproject(TargetProjection, n)
-        'reprojectedSf.SaveAs(sfpathweb)
-
-        'shapefile.Close()
-        'reprojectedSf.Close()
-
-        '' Save the reprojected shapefile in JSON format
-        'Dim SF As clsShapeFile = New clsShapeFile(Me.Klimaatatlas, True)
-        'SF.Path = sfpathweb
-        'SF.Open()
-
-        'Using jsonWriter As New StreamWriter(jsonpath)
-        '    SF.WriteToGeoJSONForWeb(jsonWriter, "Klimaatatlas")
-        'End Using
-        'SF.Close()
 
     End Sub
 

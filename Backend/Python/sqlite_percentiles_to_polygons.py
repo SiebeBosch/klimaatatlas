@@ -26,7 +26,7 @@ def main():
 
     #shp_path = "c:\GITHUB\klimaatatlas\GIS\Watervlakken_Plus4.shp"
     gdf_path = "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_Plus4.gpkg"
-    result_path = "c:\GITHUB\klimaatatlas\GIS\Watervlakken_Plus5.gpkg"
+    result_path = "c:\GITHUB\klimaatatlas\GIS\Watervlakken_Plus6.gpkg"
     
     df = load_data(db_path)
     gdf = gpd.read_file(gdf_path)

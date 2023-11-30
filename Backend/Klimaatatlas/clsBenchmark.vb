@@ -8,6 +8,7 @@ Public Class clsBenchmark
 
     Public Name As String
     Friend FieldNamesPerScenario As Dictionary(Of String, String)
+    Friend TransformationPerScenario As Dictionary(Of String, String)
     Friend ClassificationType As clsKlimaatatlas.enmClassificationType
 
     'classification for discrete values
@@ -17,10 +18,11 @@ Public Class clsBenchmark
     Friend ValuesRange As New SortedDictionary(Of Double, Double) 'key= value, value=verdict
     Friend colorScale As clsColorScale ' Set your lower and upper values here
 
-    Public Sub New(ByRef myKlimaatatlas As clsKlimaatatlas, myName As String, myFieldNamesPerScenario As Dictionary(Of String, String), myClassificationType As clsKlimaatatlas.enmClassificationType)
+    Public Sub New(ByRef myKlimaatatlas As clsKlimaatatlas, myName As String, myFieldNamesPerScenario As Dictionary(Of String, String), myTransformationPerScenario As Dictionary(Of String, String), myClassificationType As clsKlimaatatlas.enmClassificationType)
         Setup = myKlimaatatlas
         Name = myName
         FieldNamesPerScenario = myFieldNamesPerScenario
+        TransformationPerScenario = myTransformationPerScenario
         ClassificationType = myClassificationType
     End Sub
 

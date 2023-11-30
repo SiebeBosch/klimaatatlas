@@ -1,0 +1,78 @@
+{
+  "scenarios": ["Klimaat2014", "Klimaat2085"],
+  "features_dataset": {
+    "_comment": "this attribute describes the water area polygons",
+    "id": "watervlakken",
+    "data_type": "polygons",
+    "storage_type": "geopackage",
+    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_Plus6.gpkg",
+	"tablename":"Watervlakken_Plus6",
+    "fields": [
+      {"fieldtype": "id", "datatype":"SQLITETEXT", "fieldname": "CODE"},
+      {"fieldtype": "featureidx", "datatype":"SQLITEINT", "fieldname": "FEATUREIDX"},
+      {"fieldtype": "depth", "datatype":"SQLITEREAL", "fieldname": "WATERDIEPT"},
+      {"fieldtype": "width", "datatype":"SQLITEREAL", "fieldname": "BREEDTE"},
+      {"fieldtype": "deadend", "datatype":"SQLITETEXT", "fieldname": "doodlopend"},
+      {"fieldtype": "watertype", "datatype":"SQLITETEXT", "fieldname": "type_water"},
+      {"fieldtype": "temperature", "datatype":"SQLITEREAL", "fieldname": "Tex14"},
+      {"fieldtype": "temperature", "datatype":"SQLITEREAL", "fieldname": "Tex85"}
+    ]
+  },
+  "rules": [
+    {
+      "name": "biomassa",
+	  "benchmarks":[
+		{
+			"name":"Texceedance",
+			"comment":"de watertemperatuur die gemiddeld één week per jaar wordt overschreden.",
+			"fieldname":[
+				{"scenario":"Klimaat2014", "field":"Tex14"},
+				{"scenario":"Klimaat2085", "field":"Tex85"}			
+			],
+			"classification":"continuous", 
+			"valuesRange": [{"value":15,"verdict":0},{"value":30,"verdict":1},{"value":45,"verdict":0}],
+		},
+		{
+			"name":"vermesting_N",
+			"comment":"de mate van vermesting met stikstof.",
+			"fieldname":[
+				{"scenario":"Klimaat2014", "field":"Klimaat2014_Nt_50"},
+				{"scenario":"Klimaat2085", "field":"Klimaat2085_Nt_50"}			
+			],
+			"classification":"continuous", 
+			"valuesRange": [{"value":0,"verdict":0},{"value":15,"verdict":1}],
+		},
+		{
+			"name":"vermesting_P",
+			"comment":"de mate van vermesting met fosfor.",
+			"fieldname":[
+				{"scenario":"Klimaat2014", "field":"Klimaat2014_Pt_50"},
+				{"scenario":"Klimaat2085", "field":"Klimaat2085_Pt_50"}			
+			],
+			"classification":"continuous", 
+			"valuesRange": [{"value":0,"verdict":0},{"value":1.5,"verdict":1}],
+		},
+		{
+			"name": "max_biomassa",
+			"comment":"maximale biomassa als functie van de diepte van het waterlichaam.",
+			"fieldname":[
+				{"scenario":"Klimaat2014", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"},
+				{"scenario":"Klimaat2085", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"}			
+			],
+			"classification": "continuous",
+			"valuesRange": [{"value":0,"verdict":0},{"value":1400,"verdict":1}],
+		}
+	],
+      "resultsfield": "biomassa",
+      "components": [
+        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "biomassa_Tex"},
+        {"benchmark": "vermesting_N", "weight": 0.5, "resultsfield": "biomassa_mestN"},
+        {"benchmark": "vermesting_P", "weight": 0.5, "resultsfield": "biomassa_mestP"},
+        {"benchmark": "max_biomassa", "weight": 1, "resultsfield": "biomassa_max"},
+      ]
+    }
+  ],
+  "results": {
+    "dataset": "watervlakken"
+  }
+}
