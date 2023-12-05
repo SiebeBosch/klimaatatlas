@@ -128,7 +128,13 @@ Public Class clsKlimaatatlas
 
             Dim dataset As JObject = _config("features_dataset")
             Dim Path As String = dataset("path").ToString()         'PATH TO THE GEOPACKAGE
+
+            If Not System.IO.File.Exists(Path) Then Throw New Exception("Path to geopacakge does not exist: " & Path)
+
             GpkgTable = dataset("tablename").ToString()             'the table in our geopackage containing our features and attribute data
+
+
+
 
             ' Creating a connection string
             Dim connectionString As String = $"Data Source={Path};Version=3;"
@@ -146,6 +152,7 @@ Public Class clsKlimaatatlas
 
         Catch ex As Exception
             ' You might want to log or display the exception message to understand the nature of the error
+            Log.WriteToDiagnosticsFile("Error setting geopackage connection: " & ex.Message)
             Console.WriteLine(ex.Message)
             Return False
 

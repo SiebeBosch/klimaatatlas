@@ -16,11 +16,15 @@ Public Class clsRule
 
     Public Function Execute() As Boolean
         Try
-
             ' Load the SpatiaLite extension
             If Setup.GpkgCon.State <> ConnectionState.Open Then Setup.GpkgCon.Open()
+            Setup.Log.WriteToDiagnosticsFile("Geopackage successfully opened.")
+
             Setup.GpkgCon.EnableExtensions(True)
+            Setup.Log.WriteToDiagnosticsFile("Geopackage extensions enabled.")
+
             Setup.GpkgCon.LoadExtension("mod_spatialite")
+            Setup.Log.WriteToDiagnosticsFile("Geopackage spatialite extension loaded.")
 
             For Each Scenario As clsScenario In Setup.Scenarios.Values
 
@@ -28,15 +32,19 @@ Public Class clsRule
                 Me.Setup.Generalfunctions.UpdateProgressBar($"Processing rule {Name} for scenario {Scenario.Name}...", 0, 10, True)
 
                 Using transaction As SQLiteTransaction = Setup.GpkgCon.BeginTransaction()
+                    Setup.Log.WriteToDiagnosticsFile("SQLite transaction started")
 
                     Dim dt As New DataTable()
                     Dim columnsToUpdate As New List(Of String)    'keep track of the fields that are needed for the results of this rule
 
                     'establisch a list of fields needed for this rule
                     Dim Fields As List(Of String) = getFieldNamesForScenario(Scenario)
+                    Setup.Log.WriteToDiagnosticsFile("Field names collected for scenario " & Scenario.Name)
 
                     'Ensure necessary columns exist before calculations and add them to the list
                     EnsureColumnExists(Setup.GpkgTable, $"{Scenario.Name}_{Name}", "REAL")
+                    Setup.Log.WriteToDiagnosticsFile($"Made sure column {Scenario.Name}_{Name} exists")
+
                     Fields.Add($"{Scenario.Name}_{Name}")
                     columnsToUpdate.Add($"{Scenario.Name}_{Name}")
 
@@ -131,6 +139,7 @@ Public Class clsRule
 
             Return True
         Catch ex As Exception
+            Setup.Log.WriteToDiagnosticsFile("Error executing rule " & Name & ": " & ex.Message)
             Me.Setup.Log.AddError("Error executing rule " & Name & ": " & ex.Message)
             Return False
         End Try
