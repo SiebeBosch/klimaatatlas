@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Klimaatatlas", "Klimaatatlas.vbproj", "{64EDCD11-5279-4942-B970-07D6170725B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64EDCD11-5279-4942-B970-07D6170725B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64EDCD11-5279-4942-B970-07D6170725B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64EDCD11-5279-4942-B970-07D6170725B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64EDCD11-5279-4942-B970-07D6170725B5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A5E342C-8B1F-412E-9A4C-6A3F4977EBCC}
+	EndGlobalSection
+EndGlobal
