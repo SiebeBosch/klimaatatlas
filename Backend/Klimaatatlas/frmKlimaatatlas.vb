@@ -168,4 +168,8 @@ Public Class frmKlimaatatlas
 
     End Sub
 
+    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        Dim myForm As New frmAbout
+        myForm.ShowDialog()
+    End Sub
 End Class
