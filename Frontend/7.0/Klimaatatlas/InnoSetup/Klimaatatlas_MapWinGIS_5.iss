@@ -5,8 +5,8 @@
 #define MyAppVersion "1.0.5"
 #define MyAppPublisher "Hydroconsult"
 #define MyAppURL "http://www.sobek.tools"
-#define SetupLocation "c:\GITHUB\klimaatatlas\Backend\Klimaatatlas\InnoSetup"
-#define BinLocation "c:\GITHUB\klimaatatlas\Backend\Klimaatatlas\bin\Release\net7.0-windows"
+#define SetupLocation "c:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\InnoSetup"
+#define BinLocation "c:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\bin\Release\net7.0-windows"
 #define x64BitVersion
 #define VsVersion = "2015" 
 ; #define VsVersion = "2017" 
