@@ -1,0 +1,54 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Klimaatatlas
+</name>
+</assembly>
+<members>
+<member name="T:Klimaatatlas.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Klimaatatlas.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Klimaatatlas.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="T:Klimaatatlas.clsFlowchart">
+ <summary>
+ 'This class represents a flowchart.
+ </summary>
+</member>
+<member name="T:Klimaatatlas.clsFlowchartConnection">
+ <summary>
+ This class represents a connection between two nodes in a flowchart.
+ </summary>
+</member>
+<member name="T:Klimaatatlas.clsFlowchartNode">
+ <summary>
+ This class represents a node in a flowchart.
+ </summary>
+</member>
+<member name="T:Klimaatatlas.clsLog">
+ <summary>
+ Geen constructor nodig
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Klimaatatlas.clsLog.AddDebugMessage(System.String)">
+ <summary>
+ Raises the message event with the debug message
+ </summary>
+ <param name="msg">The message</param>
+ <remarks>Paul Meems, 8 Jube 2012</remarks>
+</member>
+</members>
+</doc>

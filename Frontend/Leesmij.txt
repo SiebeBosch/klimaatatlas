@@ -1,0 +1,2 @@
+﻿hier staan de applicaties voor twee .NET frameworks. De oude (4.8). Werkt bij Rijnland!
+En de nieuwe (7.0) werkt NIET bij Rijnland!
