@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "6M7UOby/fFij7LKL4OjcZu0ekBvPwqp2+kHZyqMh72JxBYTwBnn3r/+zXpIw1FRMND/KnQ0mAVRC7JlAKwM9Yw==",
+  "dgSpecHash": "Nm+1WHmXTWszO8Sv9ykW8JnSkgl9bD/Gb0OozKcUfEXchqqfERLldFK3ifz/5nWyGKjdE1FYYra5l8Ycz/V6vw==",
   "success": true,
-  "projectFilePath": "C:\\GITHUB\\klimaatatlas\\Backend\\Klimaatatlas\\Klimaatatlas.vbproj",
+  "projectFilePath": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Klimaatatlas.vbproj",
   "expectedPackageFiles": [
     "C:\\Users\\SiebeBosch\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\SiebeBosch\\.nuget\\packages\\fparsec\\1.0.3\\fparsec.1.0.3.nupkg.sha512",

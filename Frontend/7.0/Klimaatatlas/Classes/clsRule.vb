@@ -23,8 +23,8 @@ Public Class clsRule
             Setup.GpkgCon.EnableExtensions(True)
             Setup.Log.WriteToDiagnosticsFile("Geopackage extensions enabled.")
 
-            'Setup.GpkgCon.LoadExtension("mod_spatialite")
-            'Setup.Log.WriteToDiagnosticsFile("Geopackage spatialite extension loaded.")
+            Setup.GpkgCon.LoadExtension("mod_spatialite")
+            Setup.Log.WriteToDiagnosticsFile("Geopackage spatialite extension loaded.")
 
             For Each Scenario As clsScenario In Setup.Scenarios.Values
 

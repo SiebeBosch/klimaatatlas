@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\GITHUB\\klimaatatlas\\Backend\\Klimaatatlas\\Klimaatatlas.vbproj": {}
+    "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Klimaatatlas.vbproj": {}
   },
   "projects": {
-    "C:\\GITHUB\\klimaatatlas\\Backend\\Klimaatatlas\\Klimaatatlas.vbproj": {
+    "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Klimaatatlas.vbproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\GITHUB\\klimaatatlas\\Backend\\Klimaatatlas\\Klimaatatlas.vbproj",
+        "projectUniqueName": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Klimaatatlas.vbproj",
         "projectName": "Klimaatatlas",
-        "projectPath": "C:\\GITHUB\\klimaatatlas\\Backend\\Klimaatatlas\\Klimaatatlas.vbproj",
+        "projectPath": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Klimaatatlas.vbproj",
         "packagesPath": "C:\\Users\\SiebeBosch\\.nuget\\packages\\",
-        "outputPath": "C:\\GITHUB\\klimaatatlas\\Backend\\Klimaatatlas\\obj\\",
+        "outputPath": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\SiebeBosch\\AppData\\Roaming\\NuGet\\NuGet.Config",
