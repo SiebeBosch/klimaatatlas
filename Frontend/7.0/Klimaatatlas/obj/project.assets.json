@@ -496,107 +496,6 @@
           }
         }
       },
-      "mod_spatialite/4.3.0.1": {
-        "type": "package",
-        "runtimeTargets": {
-          "runtimes/win-x64/native/libfreexl-1.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/libgcc_s_seh-1.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/libgeos.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/libgeos_c.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/libiconv-2.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/liblzma-5.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/libproj-13.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/libstdc++-6.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/libwinpthread-1.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/libxml2-2.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/mod_spatialite.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x64/native/zlib1.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x86/native/libfreexl-1.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/libgcc_s_dw2-1.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/libgeos.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/libgeos_c.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/libiconv-2.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/liblzma-5.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/libproj-13.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/libstdc++-6.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/libwinpthread-1.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/libxml2-2.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/mod_spatialite.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          },
-          "runtimes/win-x86/native/zlib1.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          }
-        }
-      },
       "NETStandard.Library/1.6.1": {
         "type": "package",
         "dependencies": {
@@ -3472,42 +3371,6 @@
         "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.xml",
         "useSharedDesignerContext.txt",
         "version.txt"
-      ]
-    },
-    "mod_spatialite/4.3.0.1": {
-      "sha512": "jdRRlDd05vvxmJntsFJ1QKjQallH5sW76HB9iyKDFUAkeipe13pi8wWR1lGEJvwTPsEeWgMpRrCj5VTzjQhsYg==",
-      "type": "package",
-      "path": "mod_spatialite/4.3.0.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "NOTICE.md",
-        "mod_spatialite.4.3.0.1.nupkg.sha512",
-        "mod_spatialite.nuspec",
-        "runtimes/win-x64/native/libfreexl-1.dll",
-        "runtimes/win-x64/native/libgcc_s_seh-1.dll",
-        "runtimes/win-x64/native/libgeos.dll",
-        "runtimes/win-x64/native/libgeos_c.dll",
-        "runtimes/win-x64/native/libiconv-2.dll",
-        "runtimes/win-x64/native/liblzma-5.dll",
-        "runtimes/win-x64/native/libproj-13.dll",
-        "runtimes/win-x64/native/libstdc++-6.dll",
-        "runtimes/win-x64/native/libwinpthread-1.dll",
-        "runtimes/win-x64/native/libxml2-2.dll",
-        "runtimes/win-x64/native/mod_spatialite.dll",
-        "runtimes/win-x64/native/zlib1.dll",
-        "runtimes/win-x86/native/libfreexl-1.dll",
-        "runtimes/win-x86/native/libgcc_s_dw2-1.dll",
-        "runtimes/win-x86/native/libgeos.dll",
-        "runtimes/win-x86/native/libgeos_c.dll",
-        "runtimes/win-x86/native/libiconv-2.dll",
-        "runtimes/win-x86/native/liblzma-5.dll",
-        "runtimes/win-x86/native/libproj-13.dll",
-        "runtimes/win-x86/native/libstdc++-6.dll",
-        "runtimes/win-x86/native/libwinpthread-1.dll",
-        "runtimes/win-x86/native/libxml2-2.dll",
-        "runtimes/win-x86/native/mod_spatialite.dll",
-        "runtimes/win-x86/native/zlib1.dll"
       ]
     },
     "NETStandard.Library/1.6.1": {
@@ -7425,9 +7288,7 @@
       "MathNet.Symbolics >= 0.24.0",
       "Microsoft.CodeAnalysis.CSharp.Scripting >= 4.8.0",
       "Newtonsoft.Json >= 13.0.3",
-      "System.Data.SQLite >= 1.0.118",
-      "System.Data.SQLite.Core >= 1.0.118",
-      "mod_spatialite >= 4.3.0.1"
+      "System.Data.SQLite >= 1.0.118"
     ]
   },
   "packageFolders": {
@@ -7492,14 +7353,6 @@
           "System.Data.SQLite": {
             "target": "Package",
             "version": "[1.0.118, )"
-          },
-          "System.Data.SQLite.Core": {
-            "target": "Package",
-            "version": "[1.0.118, )"
-          },
-          "mod_spatialite": {
-            "target": "Package",
-            "version": "[4.3.0.1, )"
           }
         },
         "imports": [

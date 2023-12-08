@@ -5,8 +5,8 @@
     "id": "watervlakken",
     "data_type": "polygons",
     "storage_type": "geopackage",
-    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_Plus5.gpkg",
-	"tablename":"Watervlakken_Plus5",
+    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_Plus6.gpkg",
+	"tablename":"Watervlakken_Plus6",
     "fields": [
       {"fieldtype": "id", "datatype":"SQLITETEXT", "fieldname": "CODE"},
       {"fieldtype": "featureidx", "datatype":"SQLITEINT", "fieldname": "FEATUREIDX"},
@@ -56,8 +56,8 @@
 			"name": "max_biomassa",
 			"comment":"maximale biomassa als functie van de diepte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"waterdiept", "transformation":"52.185x^2 - 524.98*x + 1422.2"},
-				{"scenario":"Klimaat2085", "field":"waterdiept", "transformation":"52.185x^2 - 524.98*x + 1422.2"}			
+				{"scenario":"Klimaat2014", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"},
+				{"scenario":"Klimaat2085", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":0,"verdict":0},{"value":1400,"verdict":1}],
@@ -68,7 +68,7 @@
         {"benchmark": "Texceedance", "weight": 1, "resultsfield": "biomassa_Tex"},
         {"benchmark": "vermesting_N", "weight": 0.5, "resultsfield": "biomassa_mestN"},
         {"benchmark": "vermesting_P", "weight": 0.5, "resultsfield": "biomassa_mestP"},
-        {"benchmark": "maximum", "weight": 1, "resultsfield": "biomassa_max"},
+        {"benchmark": "max_biomassa", "weight": 1, "resultsfield": "biomassa_max"},
       ]
     },
     {

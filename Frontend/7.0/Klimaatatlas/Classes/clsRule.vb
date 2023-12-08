@@ -4,6 +4,10 @@ Imports System.IO
 Imports System.Text.RegularExpressions
 Imports System.Transactions
 Imports Klimaatatlas.clsGeneralFunctions
+Imports NetTopologySuite
+Imports NetTopologySuite.Geometries
+Imports NetTopologySuite.IO
+
 Public Class clsRule
     Friend Name As String
     Friend Benchmarks As New Dictionary(Of String, clsBenchmark)
