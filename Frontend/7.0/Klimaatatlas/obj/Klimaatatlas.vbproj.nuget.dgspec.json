@@ -63,14 +63,6 @@
             "System.Data.SQLite": {
               "target": "Package",
               "version": "[1.0.118, )"
-            },
-            "System.Data.SQLite.Core": {
-              "target": "Package",
-              "version": "[1.0.118, )"
-            },
-            "mod_spatialite": {
-              "target": "Package",
-              "version": "[4.3.0.1, )"
             }
           },
           "imports": [
