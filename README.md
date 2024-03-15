@@ -1,5 +1,5 @@
 # Klimaatatlas
-Klimaatatlas voor het berekenen en publiceren van risico's op slechte waterkwaliteit zoals risico op:
+Klimaatatlas is een applicatie voor het berekenen en publiceren van risico's op slechte waterkwaliteit zoals risico op:
 * drijflagen
 * blauwalg
 * botulisme
@@ -8,15 +8,22 @@ Klimaatatlas voor het berekenen en publiceren van risico's op slechte waterkwali
 
 De klimaatatlas bestaat uit de volgende applicaties:
 
-### desktop-applicatie
-Via een desktop-applicatie kan de gebruiker maatlatten en rekenregels configureren en doorrekenen en daarnaast het resultaat publiceren in de interactieve webviewer.
+## Frontend
 
-* Verwijzen naar een watervlakkenkaart met alle relevante gegevensvelden (bijv. waterdiepte, breedte, doodlopendheid, oriëntatie tov de wind, temperatuur die met een bepaalde frequentie voorkomt)
+## desktop-applicatie
+Via een desktop-applicatie, getiteld 'Klimaatatlas', kan de gebruiker maatlatten en rekenregels configureren en doorrekenen en daarnaast het resultaat publiceren in de interactieve webviewer.
+Klimaatatlas is geschreven in VB.NET, in het .NET framework 7.0. Het programma hanteert twee types invoerbestanden: een Geopackage (.gpkg) en een Json-bestand (.json). 
+
+Bij de toepassing voor Hoogheemraadschap van Rijnland bevat de Geopakckage alle bijna 100.000 watervlakken van het Hoogheemraadschap.
+De JSON bevat een beschrijving van de rekenregels die moeten worden toegepast op data uit de geopackage.
+
+De volgende zaken komen voor rekening van de desktop-applicatie:
+* Verwijzen naar een watervlakkenkaart (geopackage; .gpkg) met alle relevante gegevensvelden (bijv. waterdiepte, breedte, doodlopendheid, oriëntatie tov de wind, temperatuur die met een bepaalde frequentie voorkomt)
 * Verwijzen naar de gebruikte SQLite-database (optioneel)
 * Opstellen van 'maatlatten' die worden gebruikt in de rekenregels
 * Opstellen van rekenregels waarlangs het risico op slechte waterkwaliteit wordt berekend. Rekenregels zijn een optelsom van de individuele maatlatten, met een wegingsfactor per maatlat.
 * Doorrekenen van de rekenregels
-* Publiceren van het resultaat
+* Wegschrijven van het resultaat naar de onderhavige geopackage.
 
 Voorbeeld van een maatlat: 
 * bij grote waterdiepte (> 1.5m): risicowaarde t.a.v. kroos = 0
@@ -30,7 +37,7 @@ De applicatie doorloopt alle features uit de watervlakkenkaart, berekent het res
 Het risico wordt weggeschreven naar een kopie van de watervlakkenkaart, tezamen met de relatieve bijdrage van elke maatlat bij de totstandkoming van het risico.
 
 ## backend
-De backend bestaat uit twee delen: een desktop-applicatie en diverse python scripts.
+De backend bestaat uit diverse python scripts.
 
 ### python scripts
 Het python script voert diverse voorbewerkingen uit op de gegevens uit SOBEK en de ZICHT-database. Het gaat hier met name om ruimtelijke interpolaties van de waterkwaliteitsparameters. Het script maakt gebruik van de shapefile met watervlakken en de database met SOBEK-resultaten. De SOBEK-resultaten worden ruimtelijk geïnterpoleerd naar iedere polygoon van de watervlakkenkaart en het resultaat teruggeschreven naar de SQLite database.
@@ -39,16 +46,10 @@ Het python script voert diverse voorbewerkingen uit op de gegevens uit SOBEK en 
 * sobek_timeserie_to_polygons.py leest de SOBEK-tijdreeksen uit een SQLite database (kan uit SOBEK worden geëxporteerd m.b.v. HydroToolbox van Hydroconsult) en schrijft de reeksen naar de database.
 * db_setup.py bevat ondersteunende functies voor de database.
 
-## frontend
-Net als de backend bestaat de frontend uit diverse applicaties. Zo is er voor de specialisten van het waterschap de interactieve webviewer waarmee we de uitkomsten op de kaart plotten. Voor communicatie naar bestuurders en het grote publiek zijn er de ESRI Storymaps.
+### Visualisatie en publicatie
+De verrijkte geopackage kan door de gebruiker weer opgepakt worden als bron voor een interactieve visualisatie in bijvoorbeeld ESRI StoryMaps of ArcGIS Online.
 
-### webviewer
-Om de uitkomsten van de analyses te kunnen tonen op een interactieve kaart is een webviewer ontwikkeld in HTML/CSS/Javascript.
-Deze webviewer wordt op dit moment alleen nog gevuld met puntgegevens.
 
-### ESRI Storymaps
-
-### PowerBI
 
 
 
