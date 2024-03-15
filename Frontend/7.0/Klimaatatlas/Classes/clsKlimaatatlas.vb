@@ -51,6 +51,21 @@ Public Class clsKlimaatatlas
         ProgressLabel = lb
     End Sub
 
+    Public Function GetTablesFromDatabase() As List(Of String)
+        Dim tables As New List(Of String)
+        Dim cmd As New SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;", SQLiteCon)
+        Dim dt As New DataTable()
+
+        Using da As New SQLiteDataAdapter(cmd)
+            da.Fill(dt)
+        End Using
+
+        For Each row As DataRow In dt.Rows
+            tables.Add(row("name"))
+        Next
+
+        Return tables
+    End Function
 
     Public Sub ReadConfigurationFile(jsonPath As String)
         Dim configContent As String = File.ReadAllText(jsonPath)
@@ -388,7 +403,7 @@ Public Class clsKlimaatatlas
                     If classification = enmClassificationType.Discrete Then
                         Dim discreteClasses As New Dictionary(Of String, Double)
                         For Each classItem As JObject In benchmarkItem("classes")
-                            discreteClasses.Add(classItem("name").ToString(), classItem("value").ToObject(Of Double)())
+                            discreteClasses.Add(classItem("name").ToString().Trim.ToUpper, classItem("value").ToObject(Of Double)())
                         Next
                         myBenchmark.SetDiscreteClasses(discreteClasses)
                     ElseIf classification = enmClassificationType.Continuous Then

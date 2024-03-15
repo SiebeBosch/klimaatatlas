@@ -624,5 +624,12 @@ Public Class clsGeneralFunctions
         End Try
     End Function
 
+    Function ByteArrayToHexString(ByVal bytes As Byte()) As String
+        Dim hex As New System.Text.StringBuilder(bytes.Length * 2)
+        For Each b As Byte In bytes
+            hex.AppendFormat("{0:x2}", b)
+        Next
+        Return hex.ToString()
+    End Function
 
 End Class

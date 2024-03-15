@@ -47,7 +47,6 @@ Partial Class frmKlimaatatlas
         tabMaatlatten = New TabPage()
         Label2 = New Label()
         cmbRekenregels = New ComboBox()
-        tabRekenregels = New TabPage()
         MenuStrip1.SuspendLayout()
         TabControl1.SuspendLayout()
         tabSettings.SuspendLayout()
@@ -57,9 +56,10 @@ Partial Class frmKlimaatatlas
         ' btnExecute
         ' 
         btnExecute.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnExecute.Location = New Point(1003, 480)
+        btnExecute.Location = New Point(1146, 640)
+        btnExecute.Margin = New Padding(3, 4, 3, 4)
         btnExecute.Name = "btnExecute"
-        btnExecute.Size = New Size(109, 48)
+        btnExecute.Size = New Size(125, 64)
         btnExecute.TabIndex = 0
         btnExecute.Text = "Execute"
         btnExecute.UseVisualStyleBackColor = True
@@ -67,27 +67,29 @@ Partial Class frmKlimaatatlas
         ' prProgress
         ' 
         prProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        prProgress.Location = New Point(12, 505)
+        prProgress.Location = New Point(14, 673)
+        prProgress.Margin = New Padding(3, 4, 3, 4)
         prProgress.Name = "prProgress"
-        prProgress.Size = New Size(974, 23)
+        prProgress.Size = New Size(1113, 31)
         prProgress.TabIndex = 1
         ' 
         ' lblProgress
         ' 
         lblProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
         lblProgress.AutoSize = True
-        lblProgress.Location = New Point(12, 480)
+        lblProgress.Location = New Point(14, 640)
         lblProgress.Name = "lblProgress"
-        lblProgress.Size = New Size(52, 15)
+        lblProgress.Size = New Size(65, 20)
         lblProgress.TabIndex = 2
         lblProgress.Text = "Progress"
         ' 
         ' btnConfigFile
         ' 
         btnConfigFile.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnConfigFile.Location = New Point(1062, 41)
+        btnConfigFile.Location = New Point(1214, 55)
+        btnConfigFile.Margin = New Padding(3, 4, 3, 4)
         btnConfigFile.Name = "btnConfigFile"
-        btnConfigFile.Size = New Size(24, 24)
+        btnConfigFile.Size = New Size(27, 32)
         btnConfigFile.TabIndex = 5
         btnConfigFile.Text = ".."
         btnConfigFile.UseVisualStyleBackColor = True
@@ -95,26 +97,28 @@ Partial Class frmKlimaatatlas
         ' txtConfigFile
         ' 
         txtConfigFile.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtConfigFile.Location = New Point(108, 42)
+        txtConfigFile.Location = New Point(123, 56)
+        txtConfigFile.Margin = New Padding(3, 4, 3, 4)
         txtConfigFile.Name = "txtConfigFile"
-        txtConfigFile.Size = New Size(946, 23)
+        txtConfigFile.Size = New Size(1081, 27)
         txtConfigFile.TabIndex = 4
         ' 
         ' lblConfigFile
         ' 
         lblConfigFile.AutoSize = True
-        lblConfigFile.Location = New Point(6, 45)
+        lblConfigFile.Location = New Point(7, 60)
         lblConfigFile.Name = "lblConfigFile"
-        lblConfigFile.Size = New Size(65, 15)
+        lblConfigFile.Size = New Size(81, 20)
         lblConfigFile.TabIndex = 3
         lblConfigFile.Text = "Config file:"
         ' 
         ' btnDatabase
         ' 
         btnDatabase.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnDatabase.Location = New Point(1062, 11)
+        btnDatabase.Location = New Point(1214, 15)
+        btnDatabase.Margin = New Padding(3, 4, 3, 4)
         btnDatabase.Name = "btnDatabase"
-        btnDatabase.Size = New Size(24, 24)
+        btnDatabase.Size = New Size(27, 32)
         btnDatabase.TabIndex = 2
         btnDatabase.Text = ".."
         btnDatabase.UseVisualStyleBackColor = True
@@ -122,18 +126,19 @@ Partial Class frmKlimaatatlas
         ' lblDatabase
         ' 
         lblDatabase.AutoSize = True
-        lblDatabase.Location = New Point(6, 15)
+        lblDatabase.Location = New Point(7, 20)
         lblDatabase.Name = "lblDatabase"
-        lblDatabase.Size = New Size(77, 15)
+        lblDatabase.Size = New Size(100, 20)
         lblDatabase.TabIndex = 1
         lblDatabase.Text = "Database file:"
         ' 
         ' txtDatabase
         ' 
         txtDatabase.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtDatabase.Location = New Point(108, 12)
+        txtDatabase.Location = New Point(123, 16)
+        txtDatabase.Margin = New Padding(3, 4, 3, 4)
         txtDatabase.Name = "txtDatabase"
-        txtDatabase.Size = New Size(946, 23)
+        txtDatabase.Size = New Size(1081, 27)
         txtDatabase.TabIndex = 0
         ' 
         ' dlgOpenFile
@@ -146,8 +151,8 @@ Partial Class frmKlimaatatlas
         MenuStrip1.Items.AddRange(New ToolStripItem() {ToolsToolStripMenuItem, DatabaseToolStripMenuItem, AboutToolStripMenuItem})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
-        MenuStrip1.Padding = New Padding(4, 1, 0, 1)
-        MenuStrip1.Size = New Size(1124, 24)
+        MenuStrip1.Padding = New Padding(5, 1, 0, 1)
+        MenuStrip1.Size = New Size(1285, 26)
         MenuStrip1.TabIndex = 4
         MenuStrip1.Text = "MenuStrip1"
         ' 
@@ -155,45 +160,45 @@ Partial Class frmKlimaatatlas
         ' 
         ToolsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {GISToolStripMenuItem})
         ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        ToolsToolStripMenuItem.Size = New Size(46, 22)
+        ToolsToolStripMenuItem.Size = New Size(58, 24)
         ToolsToolStripMenuItem.Text = "Tools"
         ' 
         ' GISToolStripMenuItem
         ' 
         GISToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {SpatialJoinToolStripMenuItem, SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem})
         GISToolStripMenuItem.Name = "GISToolStripMenuItem"
-        GISToolStripMenuItem.Size = New Size(91, 22)
+        GISToolStripMenuItem.Size = New Size(114, 26)
         GISToolStripMenuItem.Text = "GIS"
         ' 
         ' SpatialJoinToolStripMenuItem
         ' 
         SpatialJoinToolStripMenuItem.Name = "SpatialJoinToolStripMenuItem"
-        SpatialJoinToolStripMenuItem.Size = New Size(433, 22)
+        SpatialJoinToolStripMenuItem.Size = New Size(550, 26)
         SpatialJoinToolStripMenuItem.Text = "Spatial Join"
         ' 
         ' SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem
         ' 
         SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Name = "SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem"
-        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Size = New Size(433, 22)
+        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Size = New Size(550, 26)
         SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Text = "Spatial interpolation of point statistics from database to geopackage"
         ' 
         ' DatabaseToolStripMenuItem
         ' 
         DatabaseToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {SpatialInterpolationToolStripMenuItem})
         DatabaseToolStripMenuItem.Name = "DatabaseToolStripMenuItem"
-        DatabaseToolStripMenuItem.Size = New Size(97, 22)
+        DatabaseToolStripMenuItem.Size = New Size(122, 24)
         DatabaseToolStripMenuItem.Text = "GIS Operations"
         ' 
         ' SpatialInterpolationToolStripMenuItem
         ' 
         SpatialInterpolationToolStripMenuItem.Name = "SpatialInterpolationToolStripMenuItem"
-        SpatialInterpolationToolStripMenuItem.Size = New Size(180, 22)
+        SpatialInterpolationToolStripMenuItem.Size = New Size(228, 26)
         SpatialInterpolationToolStripMenuItem.Text = "Spatial Interpolation"
         ' 
         ' AboutToolStripMenuItem
         ' 
         AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        AboutToolStripMenuItem.Size = New Size(52, 22)
+        AboutToolStripMenuItem.Size = New Size(64, 24)
         AboutToolStripMenuItem.Text = "About"
         ' 
         ' TabControl1
@@ -201,11 +206,11 @@ Partial Class frmKlimaatatlas
         TabControl1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         TabControl1.Controls.Add(tabSettings)
         TabControl1.Controls.Add(tabMaatlatten)
-        TabControl1.Controls.Add(tabRekenregels)
-        TabControl1.Location = New Point(12, 27)
+        TabControl1.Location = New Point(14, 36)
+        TabControl1.Margin = New Padding(3, 4, 3, 4)
         TabControl1.Name = "TabControl1"
         TabControl1.SelectedIndex = 0
-        TabControl1.Size = New Size(1100, 447)
+        TabControl1.Size = New Size(1257, 596)
         TabControl1.TabIndex = 6
         ' 
         ' tabSettings
@@ -216,10 +221,11 @@ Partial Class frmKlimaatatlas
         tabSettings.Controls.Add(btnConfigFile)
         tabSettings.Controls.Add(lblConfigFile)
         tabSettings.Controls.Add(txtConfigFile)
-        tabSettings.Location = New Point(4, 24)
+        tabSettings.Location = New Point(4, 29)
+        tabSettings.Margin = New Padding(3, 4, 3, 4)
         tabSettings.Name = "tabSettings"
-        tabSettings.Padding = New Padding(3)
-        tabSettings.Size = New Size(1092, 419)
+        tabSettings.Padding = New Padding(3, 4, 3, 4)
+        tabSettings.Size = New Size(1249, 563)
         tabSettings.TabIndex = 0
         tabSettings.Text = "Instellingen"
         tabSettings.UseVisualStyleBackColor = True
@@ -228,10 +234,11 @@ Partial Class frmKlimaatatlas
         ' 
         tabMaatlatten.Controls.Add(Label2)
         tabMaatlatten.Controls.Add(cmbRekenregels)
-        tabMaatlatten.Location = New Point(4, 24)
+        tabMaatlatten.Location = New Point(4, 29)
+        tabMaatlatten.Margin = New Padding(3, 4, 3, 4)
         tabMaatlatten.Name = "tabMaatlatten"
-        tabMaatlatten.Padding = New Padding(3)
-        tabMaatlatten.Size = New Size(1092, 419)
+        tabMaatlatten.Padding = New Padding(3, 4, 3, 4)
+        tabMaatlatten.Size = New Size(1249, 563)
         tabMaatlatten.TabIndex = 1
         tabMaatlatten.Text = "Maatlatten"
         tabMaatlatten.UseVisualStyleBackColor = True
@@ -239,34 +246,26 @@ Partial Class frmKlimaatatlas
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(17, 15)
+        Label2.Location = New Point(19, 20)
         Label2.Name = "Label2"
-        Label2.Size = New Size(68, 15)
+        Label2.Size = New Size(86, 20)
         Label2.TabIndex = 7
         Label2.Text = "Rekenregel:"
         ' 
         ' cmbRekenregels
         ' 
         cmbRekenregels.FormattingEnabled = True
-        cmbRekenregels.Location = New Point(145, 10)
+        cmbRekenregels.Location = New Point(166, 13)
+        cmbRekenregels.Margin = New Padding(3, 4, 3, 4)
         cmbRekenregels.Name = "cmbRekenregels"
-        cmbRekenregels.Size = New Size(300, 23)
+        cmbRekenregels.Size = New Size(342, 28)
         cmbRekenregels.TabIndex = 0
-        ' 
-        ' tabRekenregels
-        ' 
-        tabRekenregels.Location = New Point(4, 24)
-        tabRekenregels.Name = "tabRekenregels"
-        tabRekenregels.Size = New Size(1092, 419)
-        tabRekenregels.TabIndex = 2
-        tabRekenregels.Text = "Rekenregels"
-        tabRekenregels.UseVisualStyleBackColor = True
         ' 
         ' frmKlimaatatlas
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1124, 540)
+        ClientSize = New Size(1285, 720)
         Controls.Add(TabControl1)
         Controls.Add(lblProgress)
         Controls.Add(prProgress)
@@ -274,6 +273,7 @@ Partial Class frmKlimaatatlas
         Controls.Add(MenuStrip1)
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MainMenuStrip = MenuStrip1
+        Margin = New Padding(3, 4, 3, 4)
         Name = "frmKlimaatatlas"
         Text = "Klimaatatlas"
         WindowState = FormWindowState.Maximized
@@ -308,7 +308,6 @@ Partial Class frmKlimaatatlas
     Friend WithEvents cmbIndicators As ComboBox
     Friend WithEvents TabControl1 As TabControl
     Friend WithEvents tabSettings As TabPage
-    Friend WithEvents tabRekenregels As TabPage
     Friend WithEvents tabMaatlatten As TabPage
     Friend WithEvents Label2 As Label
     Friend WithEvents cmbRekenregels As ComboBox

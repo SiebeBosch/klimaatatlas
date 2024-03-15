@@ -1,12 +1,12 @@
 {
-  "scenarios": ["Klimaat2014", "Klimaat2085"],
+  "scenarios": ["K2023", "K2050", "K2100"],
   "features_dataset": {
     "_comment": "this attribute describes the water area polygons",
     "id": "watervlakken",
     "data_type": "polygons",
     "storage_type": "geopackage",
-    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_Plus6.gpkg",
-	"tablename":"Watervlakken_Plus6",
+    "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_Plus7.gpkg",
+	"tablename":"Watervlakken_Plus7",
     "fields": [
       {"fieldtype": "id", "datatype":"SQLITETEXT", "fieldname": "CODE"},
       {"fieldtype": "featureidx", "datatype":"SQLITEINT", "fieldname": "FEATUREIDX"},
@@ -26,8 +26,9 @@
 			"name":"Texceedance",
 			"comment":"de watertemperatuur die gemiddeld één week per jaar wordt overschreden.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Tex14"},
-				{"scenario":"Klimaat2085", "field":"Tex85"}			
+				{"scenario":"K2023", "field":"Tex14"},
+				{"scenario":"K2050", "field":"Tex85"},		
+				{"scenario":"K2100", "field":"Tex85"}			
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":15,"verdict":0},{"value":30,"verdict":1},{"value":45,"verdict":0}],
@@ -36,8 +37,9 @@
 			"name":"vermesting_N",
 			"comment":"de mate van vermesting met stikstof.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Klimaat2014_Nt_50"},
-				{"scenario":"Klimaat2085", "field":"Klimaat2085_Nt_50"}			
+				{"scenario":"K2023", "field":"K2023_Nt_50pct"},
+				{"scenario":"K2050", "field":"K2050_Nt_50pct"},
+				{"scenario":"K2100", "field":"K2100_Nt_50pct"}			
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":0,"verdict":0},{"value":15,"verdict":1}],
@@ -46,8 +48,9 @@
 			"name":"vermesting_P",
 			"comment":"de mate van vermesting met fosfor.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Klimaat2014_Pt_50"},
-				{"scenario":"Klimaat2085", "field":"Klimaat2085_Pt_50"}			
+				{"scenario":"K2023", "field":"K2023_Pt_50pct"},
+				{"scenario":"K2050", "field":"K2050_Pt_50pct"},
+				{"scenario":"K2100", "field":"K2100_Pt_50pct"}			
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":0,"verdict":0},{"value":1.5,"verdict":1}],
@@ -56,19 +59,20 @@
 			"name": "max_biomassa",
 			"comment":"maximale biomassa als functie van de diepte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"},
-				{"scenario":"Klimaat2085", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"}			
+				{"scenario":"K2023", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"},
+				{"scenario":"K2050", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"},
+				{"scenario":"K2100", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":0,"verdict":0},{"value":1400,"verdict":1}],
 		}
 	],
-      "resultsfield": "biomassa",
+      "resultsfield": "bm",
       "components": [
-        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "biomassa_Tex"},
-        {"benchmark": "vermesting_N", "weight": 0.5, "resultsfield": "biomassa_mestN"},
-        {"benchmark": "vermesting_P", "weight": 0.5, "resultsfield": "biomassa_mestP"},
-        {"benchmark": "max_biomassa", "weight": 1, "resultsfield": "biomassa_max"},
+        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "bm_Tex"},
+        {"benchmark": "vermesting_N", "weight": 0.5, "resultsfield": "bm_mestN"},
+        {"benchmark": "vermesting_P", "weight": 0.5, "resultsfield": "bm_mestP"},
+        {"benchmark": "max_biomassa", "weight": 1, "resultsfield": "bm_max"},
       ]
     },
     {
@@ -78,21 +82,24 @@
 			"name": "doodlopend",
 			"comment":"of het waterlichaam doodlopend is.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"doodlopend"},
-				{"scenario":"Klimaat2085", "field":"doodlopend"}
+				{"scenario":"K2023", "field":"doodlopend"},
+				{"scenario":"K2050", "field":"doodlopend"},
+				{"scenario":"K2100", "field":"doodlopend"}
 			],
 			"classification": "discrete",
 			"classes": [
 				{"name": "nee", "value": 0}, 
-				{"name": "ja", "value": 1}
+				{"name": "Null", "value": 0}, 
+				{"name": "ja", "value": 1}				
 			]
 		},
 		{
 			"name": "diepte",
 			"comment":"diepte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"waterdiept"},
-				{"scenario":"Klimaat2085", "field":"waterdiept"}			
+				{"scenario":"K2023", "field":"waterdiept"},
+				{"scenario":"K2050", "field":"waterdiept"},
+				{"scenario":"K2100", "field":"waterdiept"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":0,"verdict":1},{"value":1.5,"verdict":0}],
@@ -101,8 +108,9 @@
 			"name": "breedte",
 			"comment":"breedte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Breedte"},
-				{"scenario":"Klimaat2085", "field":"Breedte"}			
+				{"scenario":"K2023", "field":"Breedte"},
+				{"scenario":"K2050", "field":"Breedte"},
+				{"scenario":"K2100", "field":"Breedte"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":5,"verdict":1},{"value":15,"verdict":0}],
@@ -111,8 +119,9 @@
 			"name":"Texceedance",
 			"comment":"de watertemperatuur die gemiddeld één week per jaar wordt overschreden.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Tex14"},
-				{"scenario":"Klimaat2085", "field":"Tex85"}			
+				{"scenario":"K2023", "field":"Tex14"},
+				{"scenario":"K2050", "field":"Tex85"},
+				{"scenario":"K2100", "field":"Tex85"}			
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":15,"verdict":0},{"value":27,"verdict":1},{"value":35,"verdict":0}],
@@ -120,9 +129,9 @@
 	],
       "resultsfield": "kroos",
       "components": [
-        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "kroos_doodlopend"},
-        {"benchmark": "breedte", "weight": 1, "resultsfield": "kroos_breedte"},
-        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "kroos_temp"},
+        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "kroos_doodl", "comment": "kroos, aandeel doodlopendheid watergang"},
+        {"benchmark": "breedte", "weight": 1, "resultsfield": "kroos_br", "comment": "kroos, aandeel breedte watergang"},
+        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "kroos_Tex", "comment": "kroos, aandeel overschrijdingstemperatuur"},
       ]
     },
     {
@@ -132,8 +141,9 @@
 			"name": "Texceedance",
 			"comment":"de watertemperatuur die gemiddeld één week per jaar wordt overschreden.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Tex14"},
-				{"scenario":"Klimaat2085", "field":"Tex85"}
+				{"scenario":"K2023", "field":"Tex14"},
+				{"scenario":"K2050", "field":"Tex85"},
+				{"scenario":"K2100", "field":"Tex85"}
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":15,"verdict":0},{"value":28,"verdict":0.5},{"value":35,"verdict":1}],
@@ -142,8 +152,9 @@
 			"name": "overstortfractie",
 			"comment":"fractie overstort.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Klimaat2014_Nt_vov_50"},
-				{"scenario":"Klimaat2085", "field":"Klimaat2085_Nt_vov_50"}			
+				{"scenario":"K2023", "field":"K2023_Nt_vov_50pct"},
+				{"scenario":"K2050", "field":"K2050_Nt_vov_50pct"},
+				{"scenario":"K2100", "field":"K2100_Nt_vov_50pct"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":0,"verdict":0},{"value":15,"verdict":1}],
@@ -152,8 +163,9 @@
 			"name": "bodemtype",
 			"comment":"overwegende bodemsoort: klei, zand of veen.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"BODEMKLASS"},
-				{"scenario":"Klimaat2085", "field":"BODEMKLASS"}			
+				{"scenario":"K2023", "field":"BODEMKLASS"},
+				{"scenario":"K2050", "field":"BODEMKLASS"},
+				{"scenario":"K2100", "field":"BODEMKLASS"}			
 			],
 			"classification": "discrete",
 			"classes": [
@@ -166,8 +178,9 @@
 			"name":"vermesting_N",
 			"comment":"de mate van vermesting met stikstof.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Klimaat2014_Nt_50"},
-				{"scenario":"Klimaat2085", "field":"Klimaat2085_Nt_50"}			
+				{"scenario":"K2023", "field":"K2023_Nt_50pct"},
+				{"scenario":"K2050", "field":"K2050_Nt_50pct"},
+				{"scenario":"K2100", "field":"K2100_Nt_50pct"}			
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":0,"verdict":0},{"value":15,"verdict":1}],
@@ -176,8 +189,9 @@
 			"name":"vermesting_P",
 			"comment":"de mate van vermesting met fosfor.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Klimaat2014_Pt_50"},
-				{"scenario":"Klimaat2085", "field":"Klimaat2085_Pt_50"}			
+				{"scenario":"K2023", "field":"K2023_Pt_50pct"},
+				{"scenario":"K2050", "field":"K2050_Pt_50pct"},
+				{"scenario":"K2100", "field":"K2100_Pt_50pct"}			
 			],
 			"classification":"continuous", 
 			"valuesRange": [{"value":0,"verdict":0},{"value":1.5,"verdict":1}],
@@ -186,8 +200,9 @@
 			"name": "diepte",
 			"comment":"diepte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"waterdiept"},
-				{"scenario":"Klimaat2085", "field":"waterdiept"}			
+				{"scenario":"K2023", "field":"waterdiept"},
+				{"scenario":"K2050", "field":"waterdiept"},
+				{"scenario":"K2100", "field":"waterdiept"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":0,"verdict":1},{"value":1.5,"verdict":0}],
@@ -196,8 +211,9 @@
 			"name": "doodlopend",
 			"comment":"of het waterlichaam doodlopend is.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"doodlopend"},
-				{"scenario":"Klimaat2085", "field":"doodlopend"}
+				{"scenario":"K2023", "field":"doodlopend"},
+				{"scenario":"K2050", "field":"doodlopend"},
+				{"scenario":"K2100", "field":"doodlopend"}
 			],
 			"classification": "discrete",
 			"classes": [
@@ -209,23 +225,24 @@
 			"name": "verblijftijd",
 			"comment":"mediaan van de verblijftijd van het water in seconden.",
 			"fieldname":[
-				{"scenario":"Klimaat2014", "field":"Klimaat2014_ResTim_50"},
-				{"scenario":"Klimaat2085", "field":"Klimaat2085_ResTim_50"}
+				{"scenario":"K2023", "field":"K2023_ResTim_50pct"},
+				{"scenario":"K2050", "field":"K2050_ResTim_50pct"},
+				{"scenario":"K2100", "field":"K2100_ResTim_50pct"}
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":1E6,"verdict":0},{"value":1E8,"verdict":1}],
 		},
 	],
-      "resultsfield": "zuurstofloosheid",
+      "resultsfield": "o2def",
       "components": [
-        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "oxy_temp"},
-        {"benchmark": "overstortfractie", "weight": 1, "resultsfield": "oxy_overstort"},
-        {"benchmark": "bodemtype", "weight": 1, "resultsfield": "oxy_bodem"},
-        {"benchmark": "vermesting_N", "weight": 0.5, "resultsfield": "oxy_stikstof"},
-        {"benchmark": "vermesting_P", "weight": 0.5, "resultsfield": "oxy_fosfor"},
-        {"benchmark": "diepte", "weight": 1, "resultsfield": "oxy_diepte"},
-        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "oxy_doodlopend"},
-        {"benchmark": "verblijftijd", "weight": 1, "resultsfield": "oxy_verblijf"},
+        {"benchmark": "Texceedance", "weight": 1, "resultsfield": "o2Tex", "comment":"zuurstoftekort, aandeel overschrijdingstemperatuur."},
+        {"benchmark": "overstortfractie", "weight": 1, "resultsfield": "o2vov", "comment":"zuurstoftekort, aandeel riooloverstort."},
+        {"benchmark": "bodemtype", "weight": 1, "resultsfield": "o2bt", "comment":"zuurstoftekort, aandeel bodemtype."},
+        {"benchmark": "vermesting_N", "weight": 0.5, "resultsfield": "o2N", "comment":"zuurstoftekort, aandeel stikstof."},
+        {"benchmark": "vermesting_P", "weight": 0.5, "resultsfield": "o2P", "comment":"zuurstoftekort, aandeel fosfor."},
+        {"benchmark": "diepte", "weight": 1, "resultsfield": "o2diep", "comment":"zuurstoftekort, aandeel waterdiepte."},
+        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "o2dl", "comment":"zuurstoftekort, aandeel doodlopendheid."},
+        {"benchmark": "verblijftijd", "weight": 1, "resultsfield": "o2res", "comment":"zuurstoftekort, aandeel verblijftijd."},
       ]
     }
   ],

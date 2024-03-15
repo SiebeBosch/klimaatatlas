@@ -89,6 +89,66 @@ Namespace My
                 Me("Resultsfile") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property DatabaseTable() As String
+            Get
+                Return CType(Me("DatabaseTable"),String)
+            End Get
+            Set
+                Me("DatabaseTable") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property Geopackage() As String
+            Get
+                Return CType(Me("Geopackage"),String)
+            End Get
+            Set
+                Me("Geopackage") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property GeopackageLayer() As String
+            Get
+                Return CType(Me("GeopackageLayer"),String)
+            End Get
+            Set
+                Me("GeopackageLayer") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property PolygonSF() As String
+            Get
+                Return CType(Me("PolygonSF"),String)
+            End Get
+            Set
+                Me("PolygonSF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property InterpolationInsidePolygons() As Boolean
+            Get
+                Return CType(Me("InterpolationInsidePolygons"),Boolean)
+            End Get
+            Set
+                Me("InterpolationInsidePolygons") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

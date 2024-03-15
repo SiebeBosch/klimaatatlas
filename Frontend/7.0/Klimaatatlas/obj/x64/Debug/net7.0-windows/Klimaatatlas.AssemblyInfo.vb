@@ -16,7 +16,7 @@ Imports System.Reflection
 <Assembly: System.Reflection.AssemblyCompanyAttribute("Klimaatatlas"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Debug"),  _
  Assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.7"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f01ddffc209773f6034b16a2bdea738ea093cb8c"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("Klimaatatlas"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("Klimaatatlas"),  _
  Assembly: System.Reflection.AssemblyVersionAttribute("1.0.7"),  _
