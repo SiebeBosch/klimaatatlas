@@ -24,57 +24,66 @@ Partial Class frmSpatialInterpolation
     Private Sub InitializeComponent()
         Dim resources As ComponentModel.ComponentResourceManager = New ComponentModel.ComponentResourceManager(GetType(frmSpatialInterpolation))
         GroupBox1 = New GroupBox()
-        radDatabase = New RadioButton()
-        txtDatabase = New TextBox()
-        txtTableName = New TextBox()
+        Label3 = New Label()
+        btnDatabase = New Button()
+        cmbDatabaseTable = New ComboBox()
         Label1 = New Label()
-        OpenFileDialog1 = New OpenFileDialog()
+        txtDatabase = New TextBox()
+        dlgOpenFile = New OpenFileDialog()
         GroupBox2 = New GroupBox()
-        RadioButton1 = New RadioButton()
-        txtGeopackage = New TextBox()
+        Label4 = New Label()
+        btnGeopackage = New Button()
+        cmbGeopackageLayer = New ComboBox()
+        txtPolygonSf = New TextBox()
+        chkInterpolationInsidePolygons = New CheckBox()
         Label2 = New Label()
-        txtGpkgLayer = New TextBox()
+        txtGeopackage = New TextBox()
+        btnExecute = New Button()
+        dlgFolder = New FolderBrowserDialog()
         GroupBox1.SuspendLayout()
         GroupBox2.SuspendLayout()
         SuspendLayout()
         ' 
         ' GroupBox1
         ' 
+        GroupBox1.Controls.Add(Label3)
+        GroupBox1.Controls.Add(btnDatabase)
+        GroupBox1.Controls.Add(cmbDatabaseTable)
         GroupBox1.Controls.Add(Label1)
-        GroupBox1.Controls.Add(txtTableName)
         GroupBox1.Controls.Add(txtDatabase)
-        GroupBox1.Controls.Add(radDatabase)
-        GroupBox1.Location = New Point(12, 12)
+        GroupBox1.Location = New Point(11, 12)
         GroupBox1.Name = "GroupBox1"
         GroupBox1.Size = New Size(1157, 125)
         GroupBox1.TabIndex = 0
         GroupBox1.TabStop = False
         GroupBox1.Text = "Data source"
         ' 
-        ' radDatabase
+        ' Label3
         ' 
-        radDatabase.AutoSize = True
-        radDatabase.Location = New Point(16, 26)
-        radDatabase.Name = "radDatabase"
-        radDatabase.Size = New Size(93, 24)
-        radDatabase.TabIndex = 0
-        radDatabase.TabStop = True
-        radDatabase.Text = "Database"
-        radDatabase.UseVisualStyleBackColor = True
+        Label3.AutoSize = True
+        Label3.Location = New Point(6, 28)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(75, 20)
+        Label3.TabIndex = 10
+        Label3.Text = "Database:"
         ' 
-        ' txtDatabase
+        ' btnDatabase
         ' 
-        txtDatabase.Location = New Point(140, 25)
-        txtDatabase.Name = "txtDatabase"
-        txtDatabase.Size = New Size(740, 27)
-        txtDatabase.TabIndex = 1
+        btnDatabase.Location = New Point(851, 24)
+        btnDatabase.Name = "btnDatabase"
+        btnDatabase.Size = New Size(29, 29)
+        btnDatabase.TabIndex = 9
+        btnDatabase.Text = ".."
+        btnDatabase.UseVisualStyleBackColor = True
         ' 
-        ' txtTableName
+        ' cmbDatabaseTable
         ' 
-        txtTableName.Location = New Point(939, 25)
-        txtTableName.Name = "txtTableName"
-        txtTableName.Size = New Size(212, 27)
-        txtTableName.TabIndex = 2
+        cmbDatabaseTable.FormattingEnabled = True
+        cmbDatabaseTable.Location = New Point(939, 25)
+        cmbDatabaseTable.Margin = New Padding(3, 4, 3, 4)
+        cmbDatabaseTable.Name = "cmbDatabaseTable"
+        cmbDatabaseTable.Size = New Size(210, 28)
+        cmbDatabaseTable.TabIndex = 8
         ' 
         ' Label1
         ' 
@@ -85,40 +94,77 @@ Partial Class frmSpatialInterpolation
         Label1.TabIndex = 3
         Label1.Text = "Table:"
         ' 
-        ' OpenFileDialog1
+        ' txtDatabase
         ' 
-        OpenFileDialog1.FileName = "dlgOpenFile"
+        txtDatabase.Location = New Point(139, 25)
+        txtDatabase.Name = "txtDatabase"
+        txtDatabase.Size = New Size(706, 27)
+        txtDatabase.TabIndex = 1
+        ' 
+        ' dlgOpenFile
+        ' 
+        dlgOpenFile.FileName = "dlgOpenFile"
         ' 
         ' GroupBox2
         ' 
-        GroupBox2.Controls.Add(txtGpkgLayer)
+        GroupBox2.Controls.Add(Label4)
+        GroupBox2.Controls.Add(btnGeopackage)
+        GroupBox2.Controls.Add(cmbGeopackageLayer)
+        GroupBox2.Controls.Add(txtPolygonSf)
+        GroupBox2.Controls.Add(chkInterpolationInsidePolygons)
         GroupBox2.Controls.Add(Label2)
         GroupBox2.Controls.Add(txtGeopackage)
-        GroupBox2.Controls.Add(RadioButton1)
-        GroupBox2.Location = New Point(12, 143)
+        GroupBox2.Location = New Point(11, 143)
         GroupBox2.Name = "GroupBox2"
-        GroupBox2.Size = New Size(1157, 125)
+        GroupBox2.Size = New Size(1157, 233)
         GroupBox2.TabIndex = 1
         GroupBox2.TabStop = False
         GroupBox2.Text = "Data target"
         ' 
-        ' RadioButton1
+        ' Label4
         ' 
-        RadioButton1.AutoSize = True
-        RadioButton1.Location = New Point(16, 36)
-        RadioButton1.Name = "RadioButton1"
-        RadioButton1.Size = New Size(113, 24)
-        RadioButton1.TabIndex = 4
-        RadioButton1.TabStop = True
-        RadioButton1.Text = "Geopackage"
-        RadioButton1.UseVisualStyleBackColor = True
+        Label4.AutoSize = True
+        Label4.Location = New Point(17, 40)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(95, 20)
+        Label4.TabIndex = 11
+        Label4.Text = "Geopackage:"
         ' 
-        ' txtGeopackage
+        ' btnGeopackage
         ' 
-        txtGeopackage.Location = New Point(140, 36)
-        txtGeopackage.Name = "txtGeopackage"
-        txtGeopackage.Size = New Size(740, 27)
-        txtGeopackage.TabIndex = 4
+        btnGeopackage.Location = New Point(851, 36)
+        btnGeopackage.Name = "btnGeopackage"
+        btnGeopackage.Size = New Size(29, 29)
+        btnGeopackage.TabIndex = 10
+        btnGeopackage.Text = ".."
+        btnGeopackage.UseVisualStyleBackColor = True
+        ' 
+        ' cmbGeopackageLayer
+        ' 
+        cmbGeopackageLayer.FormattingEnabled = True
+        cmbGeopackageLayer.Location = New Point(939, 35)
+        cmbGeopackageLayer.Margin = New Padding(3, 4, 3, 4)
+        cmbGeopackageLayer.Name = "cmbGeopackageLayer"
+        cmbGeopackageLayer.Size = New Size(210, 28)
+        cmbGeopackageLayer.TabIndex = 7
+        ' 
+        ' txtPolygonSf
+        ' 
+        txtPolygonSf.Location = New Point(405, 80)
+        txtPolygonSf.Name = "txtPolygonSf"
+        txtPolygonSf.Size = New Size(744, 27)
+        txtPolygonSf.TabIndex = 6
+        ' 
+        ' chkInterpolationInsidePolygons
+        ' 
+        chkInterpolationInsidePolygons.AutoSize = True
+        chkInterpolationInsidePolygons.Location = New Point(139, 83)
+        chkInterpolationInsidePolygons.Margin = New Padding(3, 4, 3, 4)
+        chkInterpolationInsidePolygons.Name = "chkInterpolationInsidePolygons"
+        chkInterpolationInsidePolygons.Size = New Size(261, 24)
+        chkInterpolationInsidePolygons.TabIndex = 5
+        chkInterpolationInsidePolygons.Text = "Interpolation within polygons only:"
+        chkInterpolationInsidePolygons.UseVisualStyleBackColor = True
         ' 
         ' Label2
         ' 
@@ -129,18 +175,28 @@ Partial Class frmSpatialInterpolation
         Label2.TabIndex = 4
         Label2.Text = "Layer:"
         ' 
-        ' txtGpkgLayer
+        ' txtGeopackage
         ' 
-        txtGpkgLayer.Location = New Point(939, 35)
-        txtGpkgLayer.Name = "txtGpkgLayer"
-        txtGpkgLayer.Size = New Size(212, 27)
-        txtGpkgLayer.TabIndex = 4
+        txtGeopackage.Location = New Point(139, 36)
+        txtGeopackage.Name = "txtGeopackage"
+        txtGeopackage.Size = New Size(706, 27)
+        txtGeopackage.TabIndex = 4
+        ' 
+        ' btnExecute
+        ' 
+        btnExecute.Location = New Point(1066, 394)
+        btnExecute.Name = "btnExecute"
+        btnExecute.Size = New Size(94, 45)
+        btnExecute.TabIndex = 2
+        btnExecute.Text = "Execute"
+        btnExecute.UseVisualStyleBackColor = True
         ' 
         ' frmSpatialInterpolation
         ' 
         AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1181, 450)
+        ClientSize = New Size(1181, 451)
+        Controls.Add(btnExecute)
         Controls.Add(GroupBox2)
         Controls.Add(GroupBox1)
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
@@ -155,13 +211,20 @@ Partial Class frmSpatialInterpolation
 
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents txtDatabase As TextBox
-    Friend WithEvents radDatabase As RadioButton
     Friend WithEvents Label1 As Label
     Friend WithEvents txtTableName As TextBox
-    Friend WithEvents OpenFileDialog1 As OpenFileDialog
+    Friend WithEvents dlgOpenFile As OpenFileDialog
     Friend WithEvents GroupBox2 As GroupBox
-    Friend WithEvents txtGpkgLayer As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents txtGeopackage As TextBox
-    Friend WithEvents RadioButton1 As RadioButton
+    Friend WithEvents txtPolygonSf As TextBox
+    Friend WithEvents chkInterpolationInsidePolygons As CheckBox
+    Friend WithEvents cmbGeopackageLayer As ComboBox
+    Friend WithEvents cmbDatabaseTable As ComboBox
+    Friend WithEvents btnGeopackage As Button
+    Friend WithEvents btnDatabase As Button
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Label4 As Label
+    Friend WithEvents btnExecute As Button
+    Friend WithEvents dlgFolder As FolderBrowserDialog
 End Class

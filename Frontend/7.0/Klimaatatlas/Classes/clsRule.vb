@@ -73,10 +73,14 @@ Public Class clsRule
                     Setup.Log.WriteToDiagnosticsFile("Number of rows to process: " & dt.Rows.Count)
                     For Each row As DataRow In dt.Rows
                         iRow += 1
+
+                        Dim RowSuccessfull As Boolean = True
+
                         Me.Setup.Generalfunctions.UpdateProgressBar("", iRow, nRow)
                         Dim fid As Integer = Convert.ToInt32(row("fid"))
                         Dim totalWeight As Double = 0
                         Dim ResultSum As Double = 0
+                        Dim result As Double
 
                         For Each Component As clsEquationComponent In EquationComponents
                             Dim FieldName As String = Component.Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper)
@@ -89,10 +93,22 @@ Public Class clsRule
                             End If
 
                             totalWeight += Component.Weight
-                            Component.Result = Component.Benchmark.getResult(value) * Component.Weight
-                            ResultSum += Component.Result
+                            If Not Component.Benchmark.getResult(value, result) Then
+                                RowSuccessfull = False
+                                Me.Setup.Log.AddError("Error calculating result for row " & iRow & " and field " & FieldName & " and value " & value.ToString & " for benchmark " & Component.Benchmark.Name & ".")
+                                Exit For
+                            Else
+                                Component.Result = result * Component.Weight
+                                ResultSum += Component.Result
+                            End If
                         Next
 
+                        'if the row was not successfull, skip to the next row
+                        If Not RowSuccessfull Then
+                            Continue For
+                        End If
+
+                        'calculate the contribution of each component
                         For Each Component As clsEquationComponent In EquationComponents
                             Dim contribution As Double = Component.Result / totalWeight
 
@@ -203,11 +219,22 @@ Public Class clsEquationComponent
         ResultsFieldName = myResultsFieldName
     End Sub
 
-    Public Function calculateResult(value As Object) As Boolean
-        'this function calculates the result of this component for a given value
-        'then applies the weight to it and writes it to the Result property
-        Result = Benchmark.getResult(value) * Weight
-        Return True
+    Public Function calculateweightedResult(value As Object) As Boolean
+        Try
+            'this function calculates the result of this component for a given value
+            'then applies the weight to it and writes it to the Result property
+            Dim myResult As Double
+            If Benchmark.getResult(value, myResult) Then
+                Result = myResult * Weight
+                Return True
+            Else
+                Throw New Exception("Error retrieving result for benchmark " & Benchmark.Name & " and value " & value.ToString)
+            End If
+        Catch ex As Exception
+            Me.Setup.Log.AddError("Error in function calculateResult of class clsRule: " & ex.Message)
+            Return False
+        End Try
+
     End Function
 
 End Class

@@ -1,6 +1,12 @@
 ﻿Imports System.Data.Entity
 Imports System.Data.SQLite
+Imports System.Text
 Imports System.Windows.Forms
+Imports GeoLibrary.Model
+Imports System
+Imports GeoLibrary
+Imports GeoLibrary.IO.Wkb
+Imports GeoLibrary.IO.Wkt
 
 Public Class clsGeoPackage
 
@@ -9,7 +15,6 @@ Public Class clsGeoPackage
     Private Setup As clsKlimaatatlas
 
     Dim Dataset As clsDataset
-
 
     Public Enum enmGeopackageLayerTypeSelection
         both = 0
@@ -28,7 +33,6 @@ Public Class clsGeoPackage
         'SqliteCon.ConnectionString = "Data Source=" & Database & ";Version=3;"
         con = New SQLiteConnection($"Data Source={Path};Version=3;")
     End Sub
-
 
     Public Sub PopulateComboboxWithLayerNames(ByRef myCombobox As ComboBox)
         Try
@@ -52,6 +56,54 @@ Public Class clsGeoPackage
 
 
     End Sub
+
+    Public Function getGeometries(LayerName As String) As List(Of MapWinGIS.Shape)
+        Dim geometries As New List(Of MapWinGIS.Shape)
+        Try
+            ' Open connection if not already open
+            If Not con.State = ConnectionState.Open Then con.Open()
+
+            ' SQL query to select the geometry column from the specified layer
+            Dim commandText As String = $"SELECT geom FROM {LayerName};"
+
+            Using command As New SQLiteCommand(commandText, con)
+                Using reader As SQLiteDataReader = command.ExecuteReader()
+                    While reader.Read()
+                        ' Assuming geom is in the first column and is of type BLOB
+                        Dim blob As Byte() = reader.GetValue(0)
+
+                        'the blob contains more than just the geometry, it also contains the header and envelope
+                        'we must pass only the geometry section to the parser
+                        'in order to get the geometry we must skip the first 40 bytes of the blob
+                        Dim headerlength As Integer = 40
+                        Dim wkb As Byte() = New Byte(blob.Length - headerlength - 1) {}
+                        Array.Copy(blob, headerlength, wkb, 0, blob.Length - headerlength - 1)
+
+                        'display both
+                        Debug.Print("blob is " & Setup.Generalfunctions.ByteArrayToHexString(blob))
+                        Debug.Print("wkb is " & Setup.Generalfunctions.ByteArrayToHexString(wkb))
+
+
+                        Dim geometry = WkbReader.Read(Setup.Generalfunctions.ByteArrayToHexString(wkb))
+                        Dim wkt As String = geometry.ToWkt()
+
+                        ' Now create and import the shape using the adjusted byte array
+                        Dim myShape As New MapWinGIS.Shape
+                        myShape.Create(MapWinGIS.ShpfileType.SHP_POLYGON)
+                        myShape.ImportFromWKT(wkt)
+                        geometries.Add(myShape)
+                    End While
+                End Using
+            End Using
+
+            con.Close()
+        Catch ex As Exception
+            MessageBox.Show("An error occurred while reading geometries: " & ex.Message)
+        End Try
+        Return geometries
+    End Function
+
+
     Public Function getFieldTypeStr(LayerName As String, FieldName As String) As String
         Try
             If Not con.State = ConnectionState.Open Then con.Open()
@@ -84,7 +136,7 @@ Public Class clsGeoPackage
 
     Public Function ChangeFieldType(LayerName As String, FieldName As String, NewFieldType As String) As Boolean
         Try
-            Me.Setup.GeneralFunctions.UpdateProgressBar($"Changing field type for field {FieldName} in layer {LayerName} to {NewFieldType}", 0, 10, True)
+            Me.Setup.Generalfunctions.UpdateProgressBar($"Changing field type for field {FieldName} in layer {LayerName} to {NewFieldType}", 0, 10, True)
 
             ' Open connection if necessary
             If Not con.State = ConnectionState.Open Then con.Open()
@@ -139,11 +191,11 @@ Public Class clsGeoPackage
                 command.ExecuteNonQuery()
             End Using
 
-            Me.Setup.GeneralFunctions.UpdateProgressBar("", 10, 10, True)
+            Me.Setup.Generalfunctions.UpdateProgressBar("", 10, 10, True)
 
             con.Close()
 
-            Me.Setup.GeneralFunctions.UpdateProgressBar($"Operation complete", 0, 10, True)
+            Me.Setup.Generalfunctions.UpdateProgressBar($"Operation complete", 0, 10, True)
 
             Return True
         Catch ex As Exception
@@ -219,11 +271,11 @@ Public Class clsGeoPackage
         Try
             If Not con.State = ConnectionState.Open Then con.Open()
             Dim i As Integer = 0
-            Me.Setup.GeneralFunctions.UpdateProgressBar("Removing layers from geopackage...", 0, 10, True)
+            Me.Setup.Generalfunctions.UpdateProgressBar("Removing layers from geopackage...", 0, 10, True)
 
             For Each layerName As String In checkedListBox.CheckedItems
                 i += 1
-                Me.Setup.GeneralFunctions.UpdateProgressBar("", i, checkedListBox.CheckedItems.Count)
+                Me.Setup.Generalfunctions.UpdateProgressBar("", i, checkedListBox.CheckedItems.Count)
                 ' Delete the layer from the geometry columns
                 Using command As New SQLiteCommand($"DELETE FROM gpkg_geometry_columns WHERE table_name = @layerName;", con)
                     command.Parameters.AddWithValue("@layerName", layerName)
@@ -240,7 +292,7 @@ Public Class clsGeoPackage
             VacuumDatabase(con)
 
             con.Close()
-            Me.Setup.GeneralFunctions.UpdateProgressBar("Operation complete.", 0, 10, True)
+            Me.Setup.Generalfunctions.UpdateProgressBar("Operation complete.", 0, 10, True)
 
         Catch ex As Exception
             MessageBox.Show("An error occurred while deleting the layers: " & ex.Message)
@@ -265,6 +317,124 @@ Public Class clsGeoPackage
         End Try
     End Sub
 
+    Public Function ParseBlobToPolygonWkt(blob As Byte()) As String
+        Try
+            'this function parses the blob to a WKT string
+            'notice that for now we only support polygons
+            Dim position As Integer = 0
+
+            ' Read the magic number 'GP'
+            Dim magicNumberBytes() As Byte = {blob(position), blob(position + 1)}
+            Dim magicNumber As String = BitConverter.ToString(magicNumberBytes)
+            position += 2 ' Move past the 2 bytes of the magic number
+
+            ' Read the version
+            Dim version As Byte = blob(position)
+            Dim versionHex As String = version.ToString("X2")
+            position += 1 ' Move past the version byte
+
+            ' Read the flags
+            Dim flags As Byte = blob(position)
+            Dim flagsHex As String = flags.ToString("X2")
+
+            position += 1 ' Move past the flags byte
+
+            ' Example: To check the endianess (most significant bit of flags)
+            'If you Then 're working with binary data from a GeoPackage on a little-endian system
+            '(which is common in personal computers using Intel or AMD processors),
+            'understanding that the data is in little-endian format means you can directly
+            'read the values from the file into memory without needing to reorder the bytes.
+            'However, if you were to process this data on a big-endian system,
+            'you would need to reverse the byte order of multi-byte fields to interpret the data correctly.
+            Dim isLittleEndian As Boolean = (flags And &H1) = &H1
+
+            'the next four bytes represent the SRID
+            Dim sridBytes() As Byte = {blob(position), blob(position + 1), blob(position + 2), blob(position + 3)}
+            Dim srid As Integer = BitConverter.ToInt32(sridBytes, 0)
+            position += 4
+
+            ' Read the envelope
+            Dim envelope As New Envelope
+            envelope.MinX = BitConverter.ToDouble(blob, position)
+            position += 8
+            envelope.MaxX = BitConverter.ToDouble(blob, position)
+            position += 8
+            envelope.MinY = BitConverter.ToDouble(blob, position)
+            position += 8
+            envelope.MaxY = BitConverter.ToDouble(blob, position)
+            position += 8
+
+            'immediately after the envelope, the endianness of the geometry is stored
+            'this is the same as the endianness of the flags
+            Dim isGeometryLittleEndian As Boolean = isLittleEndian
+            position += 1
+
+            ' Read the geometry type. This is a 4-byte unsigned integer
+            Dim geometryType As Integer = BitConverter.ToInt32(blob, position)
+            position += 4
+
+            'read the number of linear rings
+            Dim numRings As Integer = BitConverter.ToInt32(blob, position)
+            position += 4
+
+            'read the number of outer ring coordinates
+            Dim numOuterRingCoordinates As Integer = BitConverter.ToInt32(blob, position)
+            position += 4
+
+
+
+
+
+
+
+
+
+
+
+            ' Skip header and envelope (assuming minimal envelope and little-endian format)
+            position += 48 ' 8 bytes for header, 32 for envelope, 8 for type and ring count
+
+            ' Read number of rings
+            numRings = BitConverter.ToInt32(blob, position)
+            position += 4
+
+            Dim wkt As New StringBuilder("POLYGON(")
+
+            For i As Integer = 0 To numRings - 1
+                ' Read number of points in this ring
+                Dim numPoints As Integer = BitConverter.ToInt32(blob, position)
+                position += 4
+
+                wkt.Append("(")
+                For j As Integer = 0 To numPoints - 1
+                    ' Read each point
+                    Dim x As Double = BitConverter.ToDouble(blob, position)
+                    position += 8
+                    Dim y As Double = BitConverter.ToDouble(blob, position)
+                    position += 8
+
+                    wkt.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0} {1}", x, y)
+
+                    If j < numPoints - 1 Then
+                        wkt.Append(", ")
+                    End If
+                Next
+                wkt.Append(")")
+
+                If i < numRings - 1 Then
+                    wkt.Append(", ")
+                End If
+            Next
+
+            wkt.Append(")")
+
+            Return wkt.ToString()
+        Catch ex As Exception
+            Me.Setup.Log.AddError("Error parsing geopackage geometry: " & ex.Message)
+            Return String.Empty
+        End Try
+
+    End Function
 
 
     Public Sub DeleteUnselectedLayers(ByRef checkedListBox As CheckedListBox)
@@ -278,7 +448,7 @@ Public Class clsGeoPackage
             End Using
 
             Dim i As Integer = 0
-            Me.Setup.GeneralFunctions.UpdateProgressBar("Processing layer selection...", 0, 10, True)
+            Me.Setup.Generalfunctions.UpdateProgressBar("Processing layer selection...", 0, 10, True)
 
             ' Create a list of all selected layer names
             Dim selectedLayers As New List(Of String)
@@ -294,7 +464,7 @@ Public Class clsGeoPackage
                     While reader.Read()
                         Dim layerName As String = reader.GetString(0)
                         i += 1
-                        Me.Setup.GeneralFunctions.UpdateProgressBar("", i, nLayers, True)
+                        Me.Setup.Generalfunctions.UpdateProgressBar("", i, nLayers, True)
 
                         ' Skip the layer if it's selected
                         If selectedLayers.Contains(layerName) Then Continue While
@@ -322,8 +492,7 @@ Public Class clsGeoPackage
             VacuumDatabase(con)
 
             con.Close()
-            Me.Setup.GeneralFunctions.UpdateProgressBar("Operation complete.", 0, 10, True)
-
+            Me.Setup.Generalfunctions.UpdateProgressBar("Operation complete.", 0, 10, True)
         Catch ex As Exception
             MessageBox.Show("An error occurred while deleting the unselected layers: " & ex.Message)
         End Try
@@ -333,3 +502,12 @@ Public Class clsGeoPackage
 
 
 End Class
+
+Public Class Envelope
+    Public Property MinX As Double
+    Public Property MaxX As Double
+    Public Property MinY As Double
+    Public Property MaxY As Double
+
+End Class
+

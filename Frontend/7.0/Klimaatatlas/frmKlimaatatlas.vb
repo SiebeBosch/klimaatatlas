@@ -172,4 +172,9 @@ Public Class frmKlimaatatlas
         Dim myForm As New frmAbout
         myForm.ShowDialog()
     End Sub
+
+    Private Sub SpatialInterpolationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpatialInterpolationToolStripMenuItem.Click
+        Dim myForm As New frmSpatialInterpolation(Me.Klimaatatlas)
+        myForm.Show()
+    End Sub
 End Class
