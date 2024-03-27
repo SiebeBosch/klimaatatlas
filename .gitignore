@@ -10,6 +10,9 @@ data/*
 # C extensions
 *.so
 
+# 
+./Frontend/7.0/Klimaatatlas/InnoSetup/*.exe
+
 # Distribution / packaging
 .Python
 build/
@@ -131,3 +134,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+Frontend/7.0/Klimaatatlas/.vs/Klimaatatlas/FileContentIndex/1882b281-578e-4436-8f38-ec602a99d2bd.vsidx
+Frontend/7.0/Klimaatatlas/InnoSetup/KlimaatatlasSetup-v1.1.0-x64.exe
