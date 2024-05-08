@@ -1,0 +1,39 @@
+
+project:
+  type: website
+
+website:
+  title: "Klimaatatlas"
+  navbar:
+    left:
+      - index.qmd
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - section: "Tutorial"
+        contents:
+          - tutorial/tutorial.qmd
+      - section: "Gebruikshandleiding"
+        contents:
+          - GUI/structure.qmd
+          - GUI/workings.qmd
+          - GUI/general.qmd
+          - GUI/models.qmd
+          - GUI/seizoenen.qmd
+          - GUI/volume.qmd
+          - GUI/patterns.qmd
+          - GUI/extra.qmd
+      - section: "Technische documentatie"
+      - section: "Praktijkcases"
+        contents:
+          - cases/denbosch.qmd
+          
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+
