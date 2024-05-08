@@ -26,36 +26,36 @@ Public Class clsBenchmark
         ClassificationType = myClassificationType
     End Sub
 
-    Public Function getResult(value As Object, ByRef Result As Double) As Boolean
-        Result = 0
+    Public Function getResult(value As Object) As (Boolean, Double)
+        Dim Result As Double = 0
         If ClassificationType = clsKlimaatatlas.enmClassificationType.Discrete Then
             'cast the value to a string and look up its value in the classes list
             If IsDBNull(value) Then
                 If Classes.ContainsKey("NULL") Then
                     Result = Classes.Item("NULL")
-                    Return True
+                    Return (True, Result)
                 Else
-                    Return False
+                    Return (False, Double.NaN)
                 End If
             End If
             Dim valueString As String = value.ToString
             For i = 0 To Classes.Count - 1
                 If Classes.Keys(i) = valueString.Trim.ToUpper Then
                     Result = Classes.Values(i)
-                    Return True
+                    Return (True, Result)
                 End If
             Next
-            Return False
+            Return (False, Double.NaN)
         ElseIf ClassificationType = clsKlimaatatlas.enmClassificationType.Continuous Then
             'interpolate the value in the values range
-            If IsDBNull(value) Then Return False
+            If IsDBNull(value) Then Return (False, Double.NaN)
             Dim valueDouble As Double = CDbl(value)
             If valueDouble <= ValuesRange.Keys(0) Then
                 Result = ValuesRange.Values(0)
-                Return True
+                Return (True, Result)
             ElseIf valueDouble > ValuesRange.Keys(ValuesRange.Keys.Count - 1) Then
                 Result = ValuesRange.Values(ValuesRange.Keys.Count - 1)
-                Return True
+                Return (True, Result)
             Else
                 Dim i As Integer = 0
                 While valueDouble > ValuesRange.Keys(i)
@@ -66,10 +66,10 @@ Public Class clsBenchmark
                 Dim lowerVerdict As Double = ValuesRange.Values(i - 1)
                 Dim upperVerdict As Double = ValuesRange.Values(i)
                 Result = lowerVerdict + (valueDouble - lowerValue) * (upperVerdict - lowerVerdict) / (upperValue - lowerValue)
-                Return True
+                Return (True, Result)
             End If
         Else
-            Return False
+            Return (False, Double.NaN)
         End If
     End Function
 

@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|c:\\github\\klimaatatlas\\frontend\\7.0\\klimaatatlas\\klimaatatlas.vbproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
-      "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:klimaatatlas.vbproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+      "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|c:\\github\\klimaatatlas\\frontend\\7.0\\klimaatatlas\\classes\\clsklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:classes\\clsklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\classes\\clsrule.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
       "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:classes\\clsrule.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\classes\\clsbenchmark.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
-      "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:classes\\clsbenchmark.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\frmklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
       "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:frmklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\classes\\clsklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
-      "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:classes\\clsklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+      "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\classes\\clsbenchmark.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:classes\\clsbenchmark.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\klimaatatlas.vbproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:klimaatatlas.vbproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\klimaatatlas.vbproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
@@ -34,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,15 +50,14 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Klimaatatlas",
               "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Klimaatatlas.vbproj",
               "RelativeDocumentMoniker": "Klimaatatlas.vbproj",
               "ToolTip": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Klimaatatlas.vbproj",
               "RelativeToolTip": "Klimaatatlas.vbproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003380|",
-              "WhenOpened": "2024-03-21T11:49:03.201Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-21T11:49:03.201Z"
             },
             {
               "$type": "Document",
@@ -74,13 +73,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "clsBenchmark.vb",
               "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsBenchmark.vb",
               "RelativeDocumentMoniker": "Classes\\clsBenchmark.vb",
               "ToolTip": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsBenchmark.vb",
               "RelativeToolTip": "Classes\\clsBenchmark.vb",
-              "ViewState": "AQIAAEAAAAAAAAAAAADwv0kAAAAEAAAA",
+              "ViewState": "AQIAAC8AAAAAAAAAAAAqwDkAAAAlAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2024-03-15T16:25:51.227Z"
             },
@@ -92,36 +91,34 @@
               "RelativeDocumentMoniker": "Classes\\clsRule.vb",
               "ToolTip": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsRule.vb",
               "RelativeToolTip": "Classes\\clsRule.vb",
-              "ViewState": "AQIAAEwAAAAAAAAAAADwv1IAAAAsAAAA",
+              "ViewState": "AQIAAJkAAAAAAAAAAAAlwBQAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2024-03-15T16:14:32.399Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-15T16:14:32.399Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "clsKlimaatatlas.vb",
               "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsKlimaatatlas.vb",
               "RelativeDocumentMoniker": "Classes\\clsKlimaatatlas.vb",
               "ToolTip": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsKlimaatatlas.vb",
               "RelativeToolTip": "Classes\\clsKlimaatatlas.vb",
-              "ViewState": "AQIAAHQBAAAAAAAAAAAnwHoBAAAmAAAA",
+              "ViewState": "AQIAACICAAAAAAAAAAAlwCgCAAALAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2024-03-15T16:08:33.095Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "frmKlimaatatlas.vb",
               "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\frmKlimaatatlas.vb",
               "RelativeDocumentMoniker": "frmKlimaatatlas.vb",
               "ToolTip": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\frmKlimaatatlas.vb",
               "RelativeToolTip": "frmKlimaatatlas.vb",
-              "ViewState": "AQIAAGQAAAAAAAAAAADwv20AAAAIAAAA",
+              "ViewState": "AQIAAGIAAAAAAAAAAAAlwG0AAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2024-03-14T19:56:49.961Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-14T19:56:49.961Z"
             }
           ]
         }

@@ -219,6 +219,7 @@
 			"classification": "discrete",
 			"classes": [
 				{"name": "nee", "value": 0}, 
+				{"name": "Null", "value": 0}, 
 				{"name": "ja", "value": 1}
 			]
 		},

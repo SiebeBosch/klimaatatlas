@@ -93,18 +93,20 @@ Public Class clsRule
                             End If
 
                             totalWeight += Component.Weight
-                            If Not Component.Benchmark.getResult(value, result) Then
+                            Dim myResult As (Boolean, Double) = Component.Benchmark.getResult(value)
+                            If Not myResult.Item1 Then
                                 RowSuccessfull = False
                                 Me.Setup.Log.AddError("Error calculating result for row " & iRow & " and field " & FieldName & " and value " & value.ToString & " for benchmark " & Component.Benchmark.Name & ".")
                                 Exit For
                             Else
-                                Component.Result = result * Component.Weight
+                                Component.Result = myResult.Item2 * Component.Weight
                                 ResultSum += Component.Result
                             End If
                         Next
 
                         'if the row was not successfull, skip to the next row
                         If Not RowSuccessfull Then
+                            'Me.Setup.Log.AddError("Unable to process row with fid " & fid & ". Skipping to the next row.")
                             Continue For
                         End If
 
@@ -223,9 +225,9 @@ Public Class clsEquationComponent
         Try
             'this function calculates the result of this component for a given value
             'then applies the weight to it and writes it to the Result property
-            Dim myResult As Double
-            If Benchmark.getResult(value, myResult) Then
-                Result = myResult * Weight
+            Dim myResult As (Boolean, Double)
+            If Benchmark.getResult(value).Item1 Then
+                Result = myResult.Item2 * Weight
                 Return True
             Else
                 Throw New Exception("Error retrieving result for benchmark " & Benchmark.Name & " and value " & value.ToString)
