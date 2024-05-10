@@ -11,6 +11,7 @@ De klimaatatlas werd ontwikkeld in opdracht van het Hoogheemraadschap van Rijnla
 Het programma is ontworpen om te identificeren welke regio's en locaties in het beheergebied gevoelig zijn voor slechte waterkwaliteit. 
 
 Denk hierbij aan het risico op: 
+
 * drijflagen
 * algen
 * zuurstofloosheid
