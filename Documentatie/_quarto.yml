@@ -26,3 +26,5 @@ format:
     theme: cosmo
     css: CSS/styles.css
     toc: true
+
+output-dir: ../docs
