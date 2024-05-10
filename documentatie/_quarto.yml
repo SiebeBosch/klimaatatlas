@@ -13,8 +13,8 @@ website:
     contents:
       - section: "Tutorial"
         contents:
-          - tutorial/tutorial.qmd
-      - section: "Gebruikshandleiding"
+          - Tutorial/tutorial.qmd
+      - section: "Gebruikershandleiding"
         contents:
           - GUI/structure.qmd
           - GUI/workings.qmd
@@ -25,9 +25,11 @@ website:
           - GUI/patterns.qmd
           - GUI/extra.qmd
       - section: "Technische documentatie"
-      - section: "Praktijkcases"
         contents:
-          - cases/denbosch.qmd
+          - GUI/structure.qmd
+      - section: "Voorbewerkingen"
+        contents:
+          - GUI/structure.qmd
           
 format:
   html:
