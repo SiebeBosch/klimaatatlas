@@ -178,7 +178,8 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#inleiding" id="toc-inleiding" class="nav-link active" data-scroll-target="#inleiding">Inleiding</a></li>
   <li><a href="#toepassing" id="toc-toepassing" class="nav-link" data-scroll-target="#toepassing">Toepassing</a></li>
-  <li><a href="#opbouw" id="toc-opbouw" class="nav-link" data-scroll-target="#opbouw">Opbouw</a></li>
+  <li><a href="#werkwijze" id="toc-werkwijze" class="nav-link" data-scroll-target="#werkwijze">Werkwijze</a></li>
+  <li><a href="#architectuur" id="toc-architectuur" class="nav-link" data-scroll-target="#architectuur">Architectuur</a></li>
   </ul>
 </nav>
     </div>
@@ -230,11 +231,31 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="toepassing" class="level1">
 <h1>Toepassing</h1>
-<p>Dit instrumentarium kan worden gebruikt om in te schatten wat de impact is van klimaatverandering op de waterkwaliteit, maar ook om bij ingrepen in het watersysteem, bijvoorbeeld door nieuwbouwprojecten, te bepalen of aanvullende maatregelen nodig zijn om een goede waterkwaliteit te kunnen (blijven) garanderen. Hiermee sluit het Hoogheemraadschap van Rijnland aan op De Nieuwe Omgevingswet, die op 1 januari 2024 is ingegaan.</p>
+<p>Dit instrument kan worden gebruikt om in te schatten wat de impact is van klimaatverandering op de waterkwaliteit, maar ook om bij ingrepen in het watersysteem, bijvoorbeeld door nieuwbouwprojecten, te bepalen of aanvullende maatregelen nodig zijn om een goede waterkwaliteit te kunnen (blijven) garanderen. Hiermee sluit het Hoogheemraadschap van Rijnland aan op De Nieuwe Omgevingswet, die op 1 januari 2024 is ingegaan.</p>
 </section>
-<section id="opbouw" class="level1">
-<h1>Opbouw</h1>
+<section id="werkwijze" class="level1">
+<h1>Werkwijze</h1>
+<p>Invoer is een watervlakkenkaart in Geopackage-formaat.</p>
+<p>In een JSON-bestand definieert de gebruiker vervolgens zogeheten ‘maatlatten’ waarvan het resultaat altijd tussen 0 (geen risico) en 1 (maximaal risico) ligt. Voorbeeld voor een maatlat is de invloed van de watertemperatuur op algengroei. Onder 15 graden celcius is algengroei nihil (waarde 0), bij 27 graden is algengroei maximaal (waarde 1) en boven 27 graden loopt de algengroei weer terug. Bij 35 graden is het risico weer terug op 0.</p>
+<p>Enkele voorbeelden van maatlatten voor algengroei:</p>
+<ul>
+<li>waterdiepte: geringe waterdiepte = hoog risico; grote waterdiepte = klein risico</li>
+<li>doodlopendheid watergang: doodlopend = hoog risico; vrij doorstromend = klein risico</li>
+<li>fractie riooloverstort: groot aandeel overstortwater = hoog risico; klein aandeel = klein risico</li>
+</ul>
+<p>Voor elke waterkwaliteitsgrootheid kan de gebruiker één of meerdere maatlatten combineren. Iedere maatlat krijgt daarbij zijn eigen weegfactor mee. Bijvoorbeeld: watertemperatuur weegfactor 3; doodlopendheid watergang weegfactor 1.</p>
+<p>Het Geopackage-bestand wordt samen met het json-bestand ingevoerd in de desktopapplicatie ‘Klimaatatlas’. Het resultaat van de berekening wordt weer weggeschreven naar de geopackage en bestaat voor ieder watervlak en grootheid uit een risicowaarde die altijd tussen 0 en 1 ligt. Dit risico kan op een kaart worden getoond en de totstandkoming van het risicogetal kan altijd worden herleid naar de bijdrage van de individuele maatlatten.</p>
+</section>
+<section id="architectuur" class="level1">
+<h1>Architectuur</h1>
 <p>De software bestaat uit een verzameling aan tools en scripts. In deze handleiding leggen we de werking ervan uit en werken we een aantal workflows uit waarmee het risico op slechte waterkwaliteit in kaart kan worden gebracht.</p>
+<ul>
+<li>Klimaatatlas: dit is de desktopapplicatie die voor ieder watervlak en waterkwaliteitsgrootheid het risicogetal berekent en wegschrijft</li>
+<li>HydroToolbox: een externe desktopapplicatie van Hydroconsult waarmee waterkwaliteitsresultaten uit SOEK kunnen worden vertaald naar input voor de klimaatatlas.</li>
+<li>Geopackage: een GIS-bestand met watervlakken</li>
+<li>.json-bestand: een tekstbestand waarin de gebruiker de maatlatten definieert. Samen met de geopackage vormt dit bestand de input voor het programma ‘Klimaatatlas’.</li>
+</ul>
+<p>Het rekenresultaat wordt weer weggeschreven naar de geopackage. Dit bestand kan verder worden gebruikt voor visualisatie, presentatie en analyse.</p>
 
 
 </section>
