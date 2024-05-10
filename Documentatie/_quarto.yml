@@ -1,0 +1,33 @@
+
+project:
+  type: website
+
+website:
+  title: "Klimaatatlas"
+  navbar:
+    left:
+      - index.qmd
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - section: "Tutorial"
+        contents:
+      - section: "Gebruikershandleiding"
+        contents:
+          - Gebruikershandleiding/installatie.qmd
+      - section: "Technische documentatie"
+        contents:
+      - section: "Voorbewerkingen"
+        contents:
+          - Voorbewerkingen/sobek.qmd
+          
+format:
+  html:
+    theme: cosmo
+    css: CSS/styles.css
+    toc: true
+
+# Output directory set to ../docs
+output-dir: ../docs
+
