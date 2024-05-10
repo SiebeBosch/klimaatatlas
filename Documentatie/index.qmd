@@ -1,5 +1,5 @@
 ---
-title: "documentatie klimaatatlas"
+title: "Klimaatatlas"
 author: "Siebe Bosch"
 date: "`r Sys.Date()`"  # This will print the current date
 format: html
@@ -7,9 +7,21 @@ format: html
 
 # Inleiding
 
-De klimaatatlas werd ontwikkeld in opdracht van het Hoogheemraadschap van Rijnland. Het is ontworpen om te identificeren welke regio's en locaties in het beheergebied gevoelig zijn voor slechte waterkwaliteit. Denk hierbij aan het risico op drijflagen, botulisme of eutrofiëring in het algemeen.
+De klimaatatlas werd ontwikkeld in opdracht van het Hoogheemraadschap van Rijnland. 
+Het programma is ontworpen om te identificeren welke regio's en locaties in het beheergebied gevoelig zijn voor slechte waterkwaliteit. 
+
+Denk hierbij aan het risico op: 
+* drijflagen
+* algen
+* zuurstofloosheid
+* botulisme
+* eutrofiëring
 
 # Toepassing
-Dit instrumentarium kan worden gebruikt om in te schatten wat de impact is van klimaatverandering op de waterkwaliteit, maar ook om bij ingrepen in het watersysteem, bijvoorbeeld door nieuwbouwprojecten, te bepalen of aanvullende maatregelen nodig zijn om een goede waterkwaliteit te kunnen (blijven) garanderen. Hiermee sluit het Hoogheemraadschap met dit project aan op De Nieuwe Omgevingswet, die op 1 januari 2024 is ingegaan.
+Dit instrumentarium kan worden gebruikt om in te schatten wat de impact is van klimaatverandering op de waterkwaliteit, maar ook om bij ingrepen in het watersysteem, bijvoorbeeld door nieuwbouwprojecten, te bepalen of aanvullende maatregelen nodig zijn om een goede waterkwaliteit te kunnen (blijven) garanderen. 
+Hiermee sluit het Hoogheemraadschap van Rijnland aan op De Nieuwe Omgevingswet, die op 1 januari 2024 is ingegaan.
 
-De software bestaat uit een verzameling aan tools en scripts. In deze Wiki leggen we de werking ervan uit en werken we een aantal workflows uit waarmee het risico op slechte waterkwaliteit in kaart kan worden gebracht.
+# Opbouw
+De software bestaat uit een verzameling aan tools en scripts. 
+In deze handleiding leggen we de werking ervan uit en werken we een aantal workflows uit waarmee het risico op slechte waterkwaliteit in kaart kan worden gebracht.
+
