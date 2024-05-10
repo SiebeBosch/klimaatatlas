@@ -1,4 +1,3 @@
-
 project:
   type: website
 
@@ -21,13 +20,9 @@ website:
       - section: "Voorbewerkingen"
         contents:
           - Voorbewerkingen/sobek.qmd
-          
+
 format:
   html:
     theme: cosmo
     css: CSS/styles.css
     toc: true
-
-# Output directory set to ../docs
-output-dir: ../docs
-
