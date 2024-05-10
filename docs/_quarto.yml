@@ -13,28 +13,19 @@ website:
     contents:
       - section: "Tutorial"
         contents:
-          - Tutorial/tutorial.qmd
       - section: "Gebruikershandleiding"
         contents:
-          - GUI/structure.qmd
-          - GUI/workings.qmd
-          - GUI/general.qmd
-          - GUI/models.qmd
-          - GUI/seizoenen.qmd
-          - GUI/volume.qmd
-          - GUI/patterns.qmd
-          - GUI/extra.qmd
+          - Gebruikershandleiding/installatie.qmd
       - section: "Technische documentatie"
         contents:
-          - GUI/structure.qmd
       - section: "Voorbewerkingen"
         contents:
-          - GUI/structure.qmd
+          - Voorbewerkingen/sobek.qmd
           
 format:
   html:
     theme: cosmo
-    css: styles.css
+    css: CSS/styles.css
     toc: true
 
 

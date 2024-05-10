@@ -1,5 +1,29 @@
 [
   {
+    "objectID": "Voorbewerkingen/sobek.html",
+    "href": "Voorbewerkingen/sobek.html",
+    "title": "SOBEK-modeluitkomsten",
+    "section": "",
+    "text": "De klimaatatlas kan worden gevoed met rekenresultaten (waterkwaliteit) uit SOBEK. Over het algemeen zal een SOBEK-modelschematisatie echter een stuk grover zijn dan de watervlakkenkaart die we in de klimaatatlas opbouwen.\nHet exporteren van SOBEK waterkwaliteitsresultaat naar de watervlakken vergt een aantal stappen met het programma HydroToolbox (Hydroconsult):",
+    "crumbs": [
+      "documentatie klimaatatlas",
+      "Voorbewerkingen",
+      "SOBEK-modeluitkomsten"
+    ]
+  },
+  {
+    "objectID": "Gebruikershandleiding/installatie.html",
+    "href": "Gebruikershandleiding/installatie.html",
+    "title": "documentatie klimaatatlas",
+    "section": "",
+    "text": "Installeren van Klimaatatlas",
+    "crumbs": [
+      "documentatie klimaatatlas",
+      "Gebruikershandleiding",
+      "documentatie klimaatatlas"
+    ]
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "documentatie klimaatatlas",

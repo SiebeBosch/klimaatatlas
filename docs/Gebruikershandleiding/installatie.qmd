@@ -1,0 +1,11 @@
+---
+title: "documentatie klimaatatlas"
+author: "Siebe Bosch"
+date: "`r Sys.Date()`"  # This will print the current date
+format: html
+---
+
+# Installeren van Klimaatatlas
+
+
+

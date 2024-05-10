@@ -1,0 +1,16 @@
+---
+title: "SOBEK-modeluitkomsten"
+author: "Siebe Bosch"
+date: "`r Sys.Date()`"  # This will print the current date
+format: html
+---
+
+# Voorbewerking van SOBEK-modeluitkomsten
+
+De klimaatatlas kan worden gevoed met rekenresultaten (waterkwaliteit) uit SOBEK. 
+Over het algemeen zal een SOBEK-modelschematisatie echter een stuk grover zijn dan de watervlakkenkaart die we in de klimaatatlas opbouwen.
+
+Het exporteren van SOBEK waterkwaliteitsresultaat naar de watervlakken vergt een aantal stappen met het programma HydroToolbox (Hydroconsult):
+
+## Installeren HydroToolbox:
+
