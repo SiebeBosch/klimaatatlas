@@ -1,11 +1,13 @@
 ---
-title: "documentatie klimaatatlas"
+title: "Installatie klimaatatlas"
 author: "Siebe Bosch"
 date: "`r Sys.Date()`"  # This will print the current date
 format: html
 ---
 
 # Installeren van Klimaatatlas
+
+Het installatiebestand van Klimaatatlas versie 1.10 vindt u <a href="https://www.dropbox.com/scl/fi/v600hj6di3ym8brggwefa/KlimaatatlasSetup-v1.1.0-x64.zip?rlkey=7aqm94w2phyc63v8ma9ez0ljb&dl=0">hier</a>.
 
 
 

@@ -20,12 +20,13 @@ website:
         contents:
       - section: "Voorbewerkingen"
         contents:
-          - Voorbewerkingen/sobek.qmd
+          - href: Voorbewerkingen/sobek.qmd
+            text: "SOBEK exporteren"
+
 
 format:
   html:
     theme: cosmo
-    css: CSS/styles.css
+    css: CSS/custom.css
     toc: true
-
-output-dir: ../docs
+    include-in-header: header.html
