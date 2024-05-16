@@ -36,18 +36,6 @@
     ]
   },
   {
-    "objectID": "Gebruikershandleiding/installatie.html",
-    "href": "Gebruikershandleiding/installatie.html",
-    "title": "Klimaatatlas installeren",
-    "section": "",
-    "text": "Klimaatatlas installeren\nHet installatiebestand van Klimaatatlas versie 1.10 vindt u hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
-    "crumbs": [
-      "Klimaatatlas",
-      "Gebruikershandleiding",
-      "Klimaatatlas installeren"
-    ]
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Klimaatatlas",
@@ -64,6 +52,54 @@
       "Klimaatatlas",
       "Gebruikershandleiding",
       "Basisgebruik"
+    ]
+  },
+  {
+    "objectID": "Gebruikershandleiding/installatie.html",
+    "href": "Gebruikershandleiding/installatie.html",
+    "title": "Klimaatatlas installeren",
+    "section": "",
+    "text": "Klimaatatlas installeren\nHet installatiebestand van Klimaatatlas versie 1.10 vindt u hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Klimaatatlas installeren"
+    ]
+  },
+  {
+    "objectID": "Technische_documentatie/configuratiebestand.html",
+    "href": "Technische_documentatie/configuratiebestand.html",
+    "title": "Configuratiebestand rekenregels",
+    "section": "",
+    "text": "Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. Hierin ligt vast welke risicoparameters voor waterkwaliteit worden berekend, van welke maatlatten die gebruik maken en welke weegfactoren gelden voor elke maatlat.\nIn dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.\nOm te beginnen bestaat het JSON-bestand uit een tekstbestand waarbij alle inhoud tussen twee accolades staat. De accolades markeren het begin en eind van een JSON-object. Een JSON-object kan op zijn beurt weer JSON-objecten bevatten:\n{\n    \"titel\": \"dit is een attribuut binnen het hoofd-json-object\",\n    \"array\":[\"een\", \"array\", \"is\", \"een\", \"lijst\", \"met\", \"waarden\"],\n    \"item1\": {\n        \"titel\": \"dit is een json-object in een json-object\",\n        \"opmerking\": \"json-objecten kunnen dus genest worden\"\n    },\n    \"item2\": {\n        \"titel\": \"dit is het tweede object binnen het hoofdobject\",\n        \"opmerking\": \"merk op dat een object altijd eindigt met een komma als daarna nog een object volgt\"\n    }\n}\nHieronder bespreken we welke zaken in het JSON-bestand kunnen staan.\n\n\nHet bestand begint met een array waarin vastligt welke scenario’s moeten worden doorgerekend. We merken op dat de namen van scenario’s niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.\n\"scenarios\": [\"K2023\", \"K2050\", \"K2100\"],\n\n\n\nCruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.\n\"features_dataset\": {\n    \"_comment\": \"this attribute describes the water area polygons\",\n    \"id\": \"watervlakken\",\n    \"data_type\": \"polygons\",\n    \"storage_type\": \"geopackage\",\n    \"path\": \"c:\\\\GITHUB\\\\klimaatatlas\\\\GIS\\\\Watervlakken_Plus7.gpkg\",\n    \"tablename\":\"Watervlakken_Plus7\",\n    \"fields\": [\n        {\"fieldtype\": \"id\", \"datatype\":\"SQLITETEXT\", \"fieldname\": \"CODE\"},\n        {\"fieldtype\": \"featureidx\", \"datatype\":\"SQLITEINT\", \"fieldname\": \"FEATUREIDX\"},\n        {\"fieldtype\": \"depth\", \"datatype\":\"SQLITEREAL\", \"fieldname\": \"WATERDIEPT\"}\n    ]\n},\n\nIn JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash  een eigen andere toepassing heeft.\nHet attribuut “data_type” kan op dit moment alleen de waarde “polygons” bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.\nHet attribuut “storage_type” kan op dit moment alleen de waarde “geopackage” bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.\nHet attribuut “datatype” kan de volgende waarden bevatten:\n\nSQLITETEXT: geeft aan dat het veld tekstuele waarden bevat\nSQLITEINT: geeft aan dat het veld gehele getallen bevat\nSQLITEREAL: geeft aan dat het veld getallen met decimalen bevat",
+    "crumbs": [
+      "Klimaatatlas",
+      "Technische documentatie",
+      "Configuratiebestand"
+    ]
+  },
+  {
+    "objectID": "Technische_documentatie/configuratiebestand.html#scenarios",
+    "href": "Technische_documentatie/configuratiebestand.html#scenarios",
+    "title": "Configuratiebestand rekenregels",
+    "section": "",
+    "text": "Het bestand begint met een array waarin vastligt welke scenario’s moeten worden doorgerekend. We merken op dat de namen van scenario’s niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.\n\"scenarios\": [\"K2023\", \"K2050\", \"K2100\"],",
+    "crumbs": [
+      "Klimaatatlas",
+      "Technische documentatie",
+      "Configuratiebestand"
+    ]
+  },
+  {
+    "objectID": "Technische_documentatie/configuratiebestand.html#features-dataset",
+    "href": "Technische_documentatie/configuratiebestand.html#features-dataset",
+    "title": "Configuratiebestand rekenregels",
+    "section": "",
+    "text": "Cruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.\n\"features_dataset\": {\n    \"_comment\": \"this attribute describes the water area polygons\",\n    \"id\": \"watervlakken\",\n    \"data_type\": \"polygons\",\n    \"storage_type\": \"geopackage\",\n    \"path\": \"c:\\\\GITHUB\\\\klimaatatlas\\\\GIS\\\\Watervlakken_Plus7.gpkg\",\n    \"tablename\":\"Watervlakken_Plus7\",\n    \"fields\": [\n        {\"fieldtype\": \"id\", \"datatype\":\"SQLITETEXT\", \"fieldname\": \"CODE\"},\n        {\"fieldtype\": \"featureidx\", \"datatype\":\"SQLITEINT\", \"fieldname\": \"FEATUREIDX\"},\n        {\"fieldtype\": \"depth\", \"datatype\":\"SQLITEREAL\", \"fieldname\": \"WATERDIEPT\"}\n    ]\n},\n\nIn JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash  een eigen andere toepassing heeft.\nHet attribuut “data_type” kan op dit moment alleen de waarde “polygons” bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.\nHet attribuut “storage_type” kan op dit moment alleen de waarde “geopackage” bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.\nHet attribuut “datatype” kan de volgende waarden bevatten:\n\nSQLITETEXT: geeft aan dat het veld tekstuele waarden bevat\nSQLITEINT: geeft aan dat het veld gehele getallen bevat\nSQLITEREAL: geeft aan dat het veld getallen met decimalen bevat",
+    "crumbs": [
+      "Klimaatatlas",
+      "Technische documentatie",
+      "Configuratiebestand"
     ]
   }
 ]

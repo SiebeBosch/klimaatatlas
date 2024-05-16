@@ -33,3 +33,15 @@ h1, h2, h3, h4, h5, h6 {
   clear: both; /* Ensures the caption stays below the floated image */
   padding-top: 10px; /* Adjust padding as needed */
 }
+
+pre, code {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+pre {
+  border: 1px solid #444444;
+}

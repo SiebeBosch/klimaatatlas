@@ -21,6 +21,8 @@ website:
             text: "Basisgebruik"
       - section: "Technische documentatie"
         contents:
+          - href: Technische_documentatie/configuratiebestand.qmd
+            text: "Configuratiebestand"
       - section: "Voorbewerkingen"
         contents:
           - href: Voorbewerkingen/sobek.qmd
