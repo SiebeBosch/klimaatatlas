@@ -1,18 +1,18 @@
 ---
-title: "SOBEK-modeluitkomsten"
+title: "SOBEK-modeluitkomsten exporteren"
 author: "Siebe Bosch"
 date: "`r Sys.Date()`"  # This will print the current date
 format: html
 ---
 
-# Voorbewerking van SOBEK-modeluitkomsten
+## Inleiding
 
 De klimaatatlas kan worden gevoed met rekenresultaten (waterkwaliteit) uit SOBEK. 
 Over het algemeen zal een SOBEK-modelschematisatie echter een stuk grover zijn dan de watervlakkenkaart die we in de klimaatatlas opbouwen.
 
 Het exporteren van SOBEK waterkwaliteitsresultaat naar de watervlakken vergt een aantal stappen met het programma HydroToolbox (Hydroconsult). De community-editie van HydroToolbox kan hiervoor kosteloos gebruikt worden. De installatiebestanden zijn [hier](https://www.dropbox.com/scl/fi/qwtxbp9ljbjrnwl0qqp63/HydroToolboxSetup-v2.9.9.7-x64.zip?rlkey=hrp5a9w4nbfjgsrm3zy8uqa3z&dl=0) te vinden. 
 
-## Installeren HydroToolbox:
+### Installeren HydroToolbox:
 
 
 ::: {.columns}
@@ -27,9 +27,9 @@ Het exporteren van SOBEK waterkwaliteitsresultaat naar de watervlakken vergt een
 :::
 :::
 
-## Exporteren SOBEK-resultaten:
+### Exporteren SOBEK-resultaten:
 
-### Modelschematisaties inladen
+#### Modelschematisaties inladen
 ::: {.columns}
 ::: {.column width="50%"}
 <a href="img/frm_sobek_cases.png" target="_blank" style="display: block; text-align: center;">
@@ -49,7 +49,7 @@ Het exporteren van SOBEK waterkwaliteitsresultaat naar de watervlakken vergt een
 :::
 
 
-### Watervlakkenkaart instellen
+#### Watervlakkenkaart instellen
 ::: {.columns}
 ::: {.column width="50%"}
 * Kies uit het menu de optie 'Postprocessing' - 'Export' - 'WQ Results'
@@ -68,7 +68,7 @@ Het exporteren van SOBEK waterkwaliteitsresultaat naar de watervlakken vergt een
 :::
 
 
-### Wegingsfactoren vaststellen
+#### Wegingsfactoren vaststellen
 
 Als de database geen wegingsfactoren bevat, moeten die eerst worden vastgesteld. Voor ieder watervlak moet worden berekend:
 
@@ -95,7 +95,7 @@ Deze informatie kan automatisch worden vastgesteld en weggeschreven naar de data
 :::
 
 
-### Waterkwaliteitsparameters selecteren
+#### Waterkwaliteitsparameters selecteren
 
 Onder 'substances, filters and rules' is het mogelijk om aan te vinken welke kwaliteitsparameters moeten worden geëxporteerd naar de watervlakken.
 
@@ -109,7 +109,7 @@ Onder 'substances, filters and rules' is het mogelijk om aan te vinken welke kwa
 :::
 :::
 
-### Percentielwaarden selecteren
+#### Percentielwaarden selecteren
 
 ::: {.columns}
 ::: {.column width="50%"}
@@ -122,7 +122,7 @@ Onder 'Statistics' moet nu worden geselecteerd welke percentielwaarden van de ge
 :::
 :::
 
-### De resultaten exporteren
+#### De resultaten exporteren
 
 Met de button 'Export' wordt het proces gestart. HydroToolbox zal nu voor de geselecteerde kwaliteitesparameters de gevraagde percentielwaarden uit SOBEK opvragen. Daarna zal het programma deze percentielwaarden ruimtelijk interpoleren naar de watervlakkenkaart, gebruikmakend van de wegingsfactoren die per watervlak zijn vastgelegd in de database. Het resultaat voor iedere combinatie van:
 

@@ -1,0 +1,6 @@
+# Publiceren in ArcGIS online
+
+Het resultaat van de klimaatatlas kan worden gepubliceerd met ArcGIS online. In dit hoofdstuk zetten we uiteen hoe dit te doen.
+
+
+

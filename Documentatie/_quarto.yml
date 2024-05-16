@@ -8,6 +8,8 @@ website:
     left:
       - index.qmd
   sidebar:
+    logo: img/rijnland_logo.jpg
+    logo-href: https://www.rijnland.net
     style: "docked"
     search: true
     contents:
@@ -15,18 +17,22 @@ website:
         contents:
       - section: "Gebruikershandleiding"
         contents:
-          - href: Gebruikershandleiding/installatie.qmd
+          - href: gebruikershandleiding/installatie.qmd
             text: "Klimaatatlas installeren"
-          - href: Gebruikershandleiding/basisgebruik.qmd
+          - href: gebruikershandleiding/basisgebruik.qmd
             text: "Basisgebruik"
       - section: "Technische documentatie"
         contents:
-          - href: Technische_documentatie/configuratiebestand.qmd
+          - href: technische_documentatie/configuratiebestand.qmd
             text: "Configuratiebestand"
-      - section: "Voorbewerkingen"
+      - section: "voorbewerkingen"
         contents:
-          - href: Voorbewerkingen/sobek.qmd
+          - href: voorbewerkingen/sobek.qmd
             text: "SOBEK exporteren"
+      - section: "Nabewerkingen"
+        contents:
+          - href: nabewerkingen/arcgis_online.qmd
+            text: "ArcGIS online"
 
 
 format:

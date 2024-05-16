@@ -1,6 +1,13 @@
-# Klimaatatlas installeren
+---
+title: "Klimaatatlas installeren"
+author: "Siebe Bosch"
+date: "`r Sys.Date()`"  # This will print the current date
+format: html
+---
 
-Het installatiebestand van Klimaatatlas versie 1.10 vindt u <a href="https://www.dropbox.com/scl/fi/v600hj6di3ym8brggwefa/KlimaatatlasSetup-v1.1.0-x64.zip?rlkey=7aqm94w2phyc63v8ma9ez0ljb&dl=0">hier</a>.
+## Stappenplan
+
+Het installatiebestand van Klimaatatlas versie 1.1.1 vindt u <a href="https://www.dropbox.com/s/t3k8o8cscxz6dso/KlimaatatlasSetup-v1.1.1-x64.zip?dl=0>hier</a>.
 
 U installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.
 

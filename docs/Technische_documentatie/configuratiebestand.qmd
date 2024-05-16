@@ -1,0 +1,65 @@
+# Configuratiebestand rekenregels
+
+Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. Hierin ligt vast welke risicoparameters voor waterkwaliteit worden berekend, van welke maatlatten die gebruik maken en welke weegfactoren gelden voor elke maatlat.
+
+In dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.
+
+Om te beginnen bestaat het JSON-bestand uit een tekstbestand waarbij alle inhoud tussen twee accolades staat. De accolades markeren het begin en eind van een JSON-object. Een JSON-object kan op zijn beurt weer JSON-objecten bevatten:
+
+    {
+        "titel": "dit is een attribuut binnen het hoofd-json-object",
+        "array":["een", "array", "is", "een", "lijst", "met", "waarden"],
+        "item1": {
+            "titel": "dit is een json-object in een json-object",
+            "opmerking": "json-objecten kunnen dus genest worden"
+        },
+        "item2": {
+            "titel": "dit is het tweede object binnen het hoofdobject",
+            "opmerking": "merk op dat een object altijd eindigt met een komma als daarna nog een object volgt"
+        }
+    }
+
+Hieronder bespreken we welke zaken in het JSON-bestand kunnen staan.
+
+## Scenario's
+
+Het bestand begint met een array waarin vastligt welke scenario's moeten worden doorgerekend. We merken op dat de namen van scenario's niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.
+
+    "scenarios": ["K2023", "K2050", "K2100"],
+
+
+## Features dataset
+
+Cruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.
+
+    "features_dataset": {
+        "_comment": "this attribute describes the water area polygons",
+        "id": "watervlakken",
+        "data_type": "polygons",
+        "storage_type": "geopackage",
+        "path": "c:\\GITHUB\\klimaatatlas\\GIS\\Watervlakken_Plus7.gpkg",
+	    "tablename":"Watervlakken_Plus7",
+        "fields": [
+            {"fieldtype": "id", "datatype":"SQLITETEXT", "fieldname": "CODE"},
+            {"fieldtype": "featureidx", "datatype":"SQLITEINT", "fieldname": "FEATUREIDX"},
+            {"fieldtype": "depth", "datatype":"SQLITEREAL", "fieldname": "WATERDIEPT"}
+        ]
+    },
+
+* In JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash \ een eigen andere toepassing heeft.
+
+* Het attribuut "data_type" kan op dit moment alleen de waarde "polygons" bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.
+
+* Het attribuut "storage_type" kan op dit moment alleen de waarde "geopackage" bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.
+
+* Het attribuut "datatype" kan de volgende waarden bevatten:
+
+    * SQLITETEXT: geeft aan dat het veld tekstuele waarden bevat
+    * SQLITEINT: geeft aan dat het veld gehele getallen bevat
+    * SQLITEREAL: geeft aan dat het veld getallen met decimalen bevat
+
+
+
+
+
+

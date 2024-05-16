@@ -1,65 +1,46 @@
 [
   {
-    "objectID": "Voorbewerkingen/sobek.html",
-    "href": "Voorbewerkingen/sobek.html",
-    "title": "SOBEK-modeluitkomsten",
+    "objectID": "voorbewerkingen/sobek.html",
+    "href": "voorbewerkingen/sobek.html",
+    "title": "SOBEK-modeluitkomsten exporteren",
     "section": "",
     "text": "De klimaatatlas kan worden gevoed met rekenresultaten (waterkwaliteit) uit SOBEK. Over het algemeen zal een SOBEK-modelschematisatie echter een stuk grover zijn dan de watervlakkenkaart die we in de klimaatatlas opbouwen.\nHet exporteren van SOBEK waterkwaliteitsresultaat naar de watervlakken vergt een aantal stappen met het programma HydroToolbox (Hydroconsult). De community-editie van HydroToolbox kan hiervoor kosteloos gebruikt worden. De installatiebestanden zijn hier te vinden.\n\n\n\n\n\nPak het .zip-bestand met de installatiebestanden uit\nVoer het bestand HydroToolboxSetup-[versienummer]-x64.exe uit en volg de instructies\nAls de installatie compleet is vindt u het programma in het startmenu onder Hydroconsult\n\n\n\n\n\nOpstartscherm van HydroToolbox\n\n\n\n\n\n\n\n\n\n\n\n  \n\nSOBEK-cases selecteren voor export naar de klimaatatlas (klik voor grote weergave).\n\n\n\nKlik op de button ‘Sobek’’\nKlik op de gele button achter ‘ProjeCct dir (.lit)’\nBlader naar de projectmap (*.lit) van het sobek-project\nKlik op de &lt;+&gt;-button om een rij toe te voegen en selecteer de gewenste case in de eerste kolom.\nGeef de case een korte naam. Let op: de naam mag niet met een getal beginnen!\n\nMaak een database aan. Ga hiervoor naar het menu ‘Database’-‘Create New’. Deze database zal de weegfactoren voor ruimtelijke interpolatie van het SOBEK-resultaat bevatten.\nAls dat nog niet gebeurd is, selecteer de database door op de gele button achter ‘Database’ te klikken.\n\n\n\n\n\n\n\n\n\nKies uit het menu de optie ‘Postprocessing’ - ‘Export’ - ‘WQ Results’\nHet formulier ‘Export water quality results’ verschijnt\nKies de optie ‘Spatially interpolate statistics to Geopackage’\nBlader naar het Geopackage-bestand (.gpkg) wat de watervlakken van het studiegebied bevat\nKies in de selectielijst de laag (layer) die de watervlakken bevat\nKies in de selectielijst het veld (ID Field) wat het ID van ieder watervlak bevat. Let op: ieder watervlak moet een uniek ID hebben!\nEr kan een popup verschijnen met de melding dat er geen of onvoldoende wegingsfactoren beschikbaar zijn om de SOBEK-resultaten te interpoleren naar de watervlakken. In dat geval kunnen de weegfactoren opnieuw worden berekend. Zie hiervoor het volgende blok.\n\n\n\n\n\nSOBEK-resultaten ruimtelijk laten interpoleren naar een geopackage.\n\n\n\n\n\nWaarschuwing dat de database nog geen wegingsfactoren heeft om SOBEK-resultaten naar de watervlakken te interpoleren.\n\n\n\n\n\n\n\nAls de database geen wegingsfactoren bevat, moeten die eerst worden vastgesteld. Voor ieder watervlak moet worden berekend:\n\n\nWelke Delwaq-segmenten uit SOBEK doen mee bij het vaststellen van het resultaat voor dit watervlak?\n\n\nWelke weegfactor geldt voor elk van die segmenten?\n\n\nDeze informatie kan automatisch worden vastgesteld en weggeschreven naar de database:\n\n\n  \n\nWeegfactoren laten berekenen voor interpolatie van Delwaq-segmenten naar de watervlakken (klik voor grote weergave).\n\n\n\nVink de optie ‘compute’ onder Interpolation Weights aan\nVink de optie ‘only interpolate inside polygons aan’. Dit zorgt ervoor dat niet onterecht waterkwaliteitsresultaten van het ene waterlichaam op het andere terechtkomen; bijvoorbeeld polderwaarden op een boezem of andersom\nKies een polygonenbestand (shapefile) wat deze waterlichamen vertegenwoordigt\nOptioneel: wijs een puntenbestand (shapefile) aan wat de representatieve xy-coördinaten van de Delwaq-segmenten bevat en selecteer het veld wat het Delwaq segmentnummer bevat.\n\n\n\n\n\n\nOnder ‘substances, filters and rules’ is het mogelijk om aan te vinken welke kwaliteitsparameters moeten worden geëxporteerd naar de watervlakken.\n\n\n\nvink in de lijst de gewenste kwaliteitsparameters aan\nde overige opties zijn niet van belang voor de export naar de watervlakkenkaart\n\n\n\n\n\nSelecteren van kwaliteitsparameters voor export naar de watervlakkenkaart.\n\n\n\n\n\n\n\n\n\n\n\n\nSelecteren van kwaliteitsparameters voor export naar de watervlakkenkaart.\n\n\n\nOnder ‘Statistics’ moet nu worden geselecteerd welke percentielwaarden van de gekozen kwaliteitsparameters te exporteren. Ter illustratie: bij selectie van de waarde 0.5 wordt de mediaan van het tijdsverloop van iedere parameter weggeschreven naar de database en ruimtelijk geïnterpoleerd naar de watervlakken.\n\nvink in de lijst de gewenste percentielwaarden aan.\n\n\n\n\n\n\nMet de button ‘Export’ wordt het proces gestart. HydroToolbox zal nu voor de geselecteerde kwaliteitesparameters de gevraagde percentielwaarden uit SOBEK opvragen. Daarna zal het programma deze percentielwaarden ruimtelijk interpoleren naar de watervlakkenkaart, gebruikmakend van de wegingsfactoren die per watervlak zijn vastgelegd in de database. Het resultaat voor iedere combinatie van:\n\nmodelcase\nkwaliteitsparameter\npercentielwaarde\n\nwordt weggeschreven naar een nieuwe kolom in de watervlakkenkaart (.gpkg). Als dit proces is voltooid kan het SOBEK-resultaat worden meegenomen als input voor de Klimaatatlas!",
     "crumbs": [
       "Klimaatatlas",
-      "Voorbewerkingen",
+      "voorbewerkingen",
       "SOBEK exporteren"
     ]
   },
   {
-    "objectID": "Voorbewerkingen/sobek.html#installeren-hydrotoolbox",
-    "href": "Voorbewerkingen/sobek.html#installeren-hydrotoolbox",
-    "title": "SOBEK-modeluitkomsten",
+    "objectID": "voorbewerkingen/sobek.html#inleiding",
+    "href": "voorbewerkingen/sobek.html#inleiding",
+    "title": "SOBEK-modeluitkomsten exporteren",
     "section": "",
-    "text": "Pak het .zip-bestand met de installatiebestanden uit\nVoer het bestand HydroToolboxSetup-[versienummer]-x64.exe uit en volg de instructies\nAls de installatie compleet is vindt u het programma in het startmenu onder Hydroconsult\n\n\n\n\n\nOpstartscherm van HydroToolbox",
+    "text": "De klimaatatlas kan worden gevoed met rekenresultaten (waterkwaliteit) uit SOBEK. Over het algemeen zal een SOBEK-modelschematisatie echter een stuk grover zijn dan de watervlakkenkaart die we in de klimaatatlas opbouwen.\nHet exporteren van SOBEK waterkwaliteitsresultaat naar de watervlakken vergt een aantal stappen met het programma HydroToolbox (Hydroconsult). De community-editie van HydroToolbox kan hiervoor kosteloos gebruikt worden. De installatiebestanden zijn hier te vinden.\n\n\n\n\n\nPak het .zip-bestand met de installatiebestanden uit\nVoer het bestand HydroToolboxSetup-[versienummer]-x64.exe uit en volg de instructies\nAls de installatie compleet is vindt u het programma in het startmenu onder Hydroconsult\n\n\n\n\n\nOpstartscherm van HydroToolbox\n\n\n\n\n\n\n\n\n\n\n\n  \n\nSOBEK-cases selecteren voor export naar de klimaatatlas (klik voor grote weergave).\n\n\n\nKlik op de button ‘Sobek’’\nKlik op de gele button achter ‘ProjeCct dir (.lit)’\nBlader naar de projectmap (*.lit) van het sobek-project\nKlik op de &lt;+&gt;-button om een rij toe te voegen en selecteer de gewenste case in de eerste kolom.\nGeef de case een korte naam. Let op: de naam mag niet met een getal beginnen!\n\nMaak een database aan. Ga hiervoor naar het menu ‘Database’-‘Create New’. Deze database zal de weegfactoren voor ruimtelijke interpolatie van het SOBEK-resultaat bevatten.\nAls dat nog niet gebeurd is, selecteer de database door op de gele button achter ‘Database’ te klikken.\n\n\n\n\n\n\n\n\n\nKies uit het menu de optie ‘Postprocessing’ - ‘Export’ - ‘WQ Results’\nHet formulier ‘Export water quality results’ verschijnt\nKies de optie ‘Spatially interpolate statistics to Geopackage’\nBlader naar het Geopackage-bestand (.gpkg) wat de watervlakken van het studiegebied bevat\nKies in de selectielijst de laag (layer) die de watervlakken bevat\nKies in de selectielijst het veld (ID Field) wat het ID van ieder watervlak bevat. Let op: ieder watervlak moet een uniek ID hebben!\nEr kan een popup verschijnen met de melding dat er geen of onvoldoende wegingsfactoren beschikbaar zijn om de SOBEK-resultaten te interpoleren naar de watervlakken. In dat geval kunnen de weegfactoren opnieuw worden berekend. Zie hiervoor het volgende blok.\n\n\n\n\n\nSOBEK-resultaten ruimtelijk laten interpoleren naar een geopackage.\n\n\n\n\n\nWaarschuwing dat de database nog geen wegingsfactoren heeft om SOBEK-resultaten naar de watervlakken te interpoleren.\n\n\n\n\n\n\n\nAls de database geen wegingsfactoren bevat, moeten die eerst worden vastgesteld. Voor ieder watervlak moet worden berekend:\n\n\nWelke Delwaq-segmenten uit SOBEK doen mee bij het vaststellen van het resultaat voor dit watervlak?\n\n\nWelke weegfactor geldt voor elk van die segmenten?\n\n\nDeze informatie kan automatisch worden vastgesteld en weggeschreven naar de database:\n\n\n  \n\nWeegfactoren laten berekenen voor interpolatie van Delwaq-segmenten naar de watervlakken (klik voor grote weergave).\n\n\n\nVink de optie ‘compute’ onder Interpolation Weights aan\nVink de optie ‘only interpolate inside polygons aan’. Dit zorgt ervoor dat niet onterecht waterkwaliteitsresultaten van het ene waterlichaam op het andere terechtkomen; bijvoorbeeld polderwaarden op een boezem of andersom\nKies een polygonenbestand (shapefile) wat deze waterlichamen vertegenwoordigt\nOptioneel: wijs een puntenbestand (shapefile) aan wat de representatieve xy-coördinaten van de Delwaq-segmenten bevat en selecteer het veld wat het Delwaq segmentnummer bevat.\n\n\n\n\n\n\nOnder ‘substances, filters and rules’ is het mogelijk om aan te vinken welke kwaliteitsparameters moeten worden geëxporteerd naar de watervlakken.\n\n\n\nvink in de lijst de gewenste kwaliteitsparameters aan\nde overige opties zijn niet van belang voor de export naar de watervlakkenkaart\n\n\n\n\n\nSelecteren van kwaliteitsparameters voor export naar de watervlakkenkaart.\n\n\n\n\n\n\n\n\n\n\n\n\nSelecteren van kwaliteitsparameters voor export naar de watervlakkenkaart.\n\n\n\nOnder ‘Statistics’ moet nu worden geselecteerd welke percentielwaarden van de gekozen kwaliteitsparameters te exporteren. Ter illustratie: bij selectie van de waarde 0.5 wordt de mediaan van het tijdsverloop van iedere parameter weggeschreven naar de database en ruimtelijk geïnterpoleerd naar de watervlakken.\n\nvink in de lijst de gewenste percentielwaarden aan.\n\n\n\n\n\n\nMet de button ‘Export’ wordt het proces gestart. HydroToolbox zal nu voor de geselecteerde kwaliteitesparameters de gevraagde percentielwaarden uit SOBEK opvragen. Daarna zal het programma deze percentielwaarden ruimtelijk interpoleren naar de watervlakkenkaart, gebruikmakend van de wegingsfactoren die per watervlak zijn vastgelegd in de database. Het resultaat voor iedere combinatie van:\n\nmodelcase\nkwaliteitsparameter\npercentielwaarde\n\nwordt weggeschreven naar een nieuwe kolom in de watervlakkenkaart (.gpkg). Als dit proces is voltooid kan het SOBEK-resultaat worden meegenomen als input voor de Klimaatatlas!",
     "crumbs": [
       "Klimaatatlas",
-      "Voorbewerkingen",
+      "voorbewerkingen",
       "SOBEK exporteren"
     ]
   },
   {
-    "objectID": "Voorbewerkingen/sobek.html#exporteren-sobek-resultaten",
-    "href": "Voorbewerkingen/sobek.html#exporteren-sobek-resultaten",
-    "title": "SOBEK-modeluitkomsten",
+    "objectID": "nabewerkingen/arcgis_online.html",
+    "href": "nabewerkingen/arcgis_online.html",
+    "title": "Publiceren in ArcGIS online",
     "section": "",
-    "text": "SOBEK-cases selecteren voor export naar de klimaatatlas (klik voor grote weergave).\n\n\n\nKlik op de button ‘Sobek’’\nKlik op de gele button achter ‘ProjeCct dir (.lit)’\nBlader naar de projectmap (*.lit) van het sobek-project\nKlik op de &lt;+&gt;-button om een rij toe te voegen en selecteer de gewenste case in de eerste kolom.\nGeef de case een korte naam. Let op: de naam mag niet met een getal beginnen!\n\nMaak een database aan. Ga hiervoor naar het menu ‘Database’-‘Create New’. Deze database zal de weegfactoren voor ruimtelijke interpolatie van het SOBEK-resultaat bevatten.\nAls dat nog niet gebeurd is, selecteer de database door op de gele button achter ‘Database’ te klikken.\n\n\n\n\n\n\n\n\n\nKies uit het menu de optie ‘Postprocessing’ - ‘Export’ - ‘WQ Results’\nHet formulier ‘Export water quality results’ verschijnt\nKies de optie ‘Spatially interpolate statistics to Geopackage’\nBlader naar het Geopackage-bestand (.gpkg) wat de watervlakken van het studiegebied bevat\nKies in de selectielijst de laag (layer) die de watervlakken bevat\nKies in de selectielijst het veld (ID Field) wat het ID van ieder watervlak bevat. Let op: ieder watervlak moet een uniek ID hebben!\nEr kan een popup verschijnen met de melding dat er geen of onvoldoende wegingsfactoren beschikbaar zijn om de SOBEK-resultaten te interpoleren naar de watervlakken. In dat geval kunnen de weegfactoren opnieuw worden berekend. Zie hiervoor het volgende blok.\n\n\n\n\n\nSOBEK-resultaten ruimtelijk laten interpoleren naar een geopackage.\n\n\n\n\n\nWaarschuwing dat de database nog geen wegingsfactoren heeft om SOBEK-resultaten naar de watervlakken te interpoleren.\n\n\n\n\n\n\n\nAls de database geen wegingsfactoren bevat, moeten die eerst worden vastgesteld. Voor ieder watervlak moet worden berekend:\n\n\nWelke Delwaq-segmenten uit SOBEK doen mee bij het vaststellen van het resultaat voor dit watervlak?\n\n\nWelke weegfactor geldt voor elk van die segmenten?\n\n\nDeze informatie kan automatisch worden vastgesteld en weggeschreven naar de database:\n\n\n  \n\nWeegfactoren laten berekenen voor interpolatie van Delwaq-segmenten naar de watervlakken (klik voor grote weergave).\n\n\n\nVink de optie ‘compute’ onder Interpolation Weights aan\nVink de optie ‘only interpolate inside polygons aan’. Dit zorgt ervoor dat niet onterecht waterkwaliteitsresultaten van het ene waterlichaam op het andere terechtkomen; bijvoorbeeld polderwaarden op een boezem of andersom\nKies een polygonenbestand (shapefile) wat deze waterlichamen vertegenwoordigt\nOptioneel: wijs een puntenbestand (shapefile) aan wat de representatieve xy-coördinaten van de Delwaq-segmenten bevat en selecteer het veld wat het Delwaq segmentnummer bevat.\n\n\n\n\n\n\nOnder ‘substances, filters and rules’ is het mogelijk om aan te vinken welke kwaliteitsparameters moeten worden geëxporteerd naar de watervlakken.\n\n\n\nvink in de lijst de gewenste kwaliteitsparameters aan\nde overige opties zijn niet van belang voor de export naar de watervlakkenkaart\n\n\n\n\n\nSelecteren van kwaliteitsparameters voor export naar de watervlakkenkaart.\n\n\n\n\n\n\n\n\n\n\n\n\nSelecteren van kwaliteitsparameters voor export naar de watervlakkenkaart.\n\n\n\nOnder ‘Statistics’ moet nu worden geselecteerd welke percentielwaarden van de gekozen kwaliteitsparameters te exporteren. Ter illustratie: bij selectie van de waarde 0.5 wordt de mediaan van het tijdsverloop van iedere parameter weggeschreven naar de database en ruimtelijk geïnterpoleerd naar de watervlakken.\n\nvink in de lijst de gewenste percentielwaarden aan.\n\n\n\n\n\n\nMet de button ‘Export’ wordt het proces gestart. HydroToolbox zal nu voor de geselecteerde kwaliteitesparameters de gevraagde percentielwaarden uit SOBEK opvragen. Daarna zal het programma deze percentielwaarden ruimtelijk interpoleren naar de watervlakkenkaart, gebruikmakend van de wegingsfactoren die per watervlak zijn vastgelegd in de database. Het resultaat voor iedere combinatie van:\n\nmodelcase\nkwaliteitsparameter\npercentielwaarde\n\nwordt weggeschreven naar een nieuwe kolom in de watervlakkenkaart (.gpkg). Als dit proces is voltooid kan het SOBEK-resultaat worden meegenomen als input voor de Klimaatatlas!",
+    "text": "Publiceren in ArcGIS online\nHet resultaat van de klimaatatlas kan worden gepubliceerd met ArcGIS online. In dit hoofdstuk zetten we uiteen hoe dit te doen.",
     "crumbs": [
       "Klimaatatlas",
-      "Voorbewerkingen",
-      "SOBEK exporteren"
+      "Nabewerkingen",
+      "ArcGIS online"
     ]
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Klimaatatlas",
-    "section": "",
-    "text": "Inleiding\nDe klimaatatlas werd ontwikkeld in opdracht van het Hoogheemraadschap van Rijnland. Het programma is ontworpen om te identificeren welke regio’s en locaties in het beheergebied gevoelig zijn voor slechte waterkwaliteit.\nDenk hierbij aan het risico op:\n\ndrijflagen\nalgen\nzuurstofloosheid\nbotulisme\neutrofiëring\n\n\n\nToepassing\nDit instrument kan worden gebruikt om in te schatten wat de impact is van klimaatverandering op de waterkwaliteit, maar ook om bij ingrepen in het watersysteem, bijvoorbeeld door nieuwbouwprojecten, te bepalen of aanvullende maatregelen nodig zijn om een goede waterkwaliteit te kunnen (blijven) garanderen. Hiermee sluit het Hoogheemraadschap van Rijnland aan op De Nieuwe Omgevingswet, die op 1 januari 2024 is ingegaan.\n\n\nWerkwijze\nInvoer is een watervlakkenkaart in Geopackage-formaat.\nIn een JSON-bestand definieert de gebruiker vervolgens zogeheten ‘maatlatten’ waarvan het resultaat altijd tussen 0 (geen risico) en 1 (maximaal risico) ligt. Voorbeeld voor een maatlat is de invloed van de watertemperatuur op algengroei. Onder 15 graden celcius is algengroei nihil (waarde 0), bij 27 graden is algengroei maximaal (waarde 1) en boven 27 graden loopt de algengroei weer terug. Bij 35 graden is het risico weer terug op 0.\nEnkele voorbeelden van maatlatten voor algengroei:\n\nwaterdiepte: geringe waterdiepte = hoog risico; grote waterdiepte = klein risico\ndoodlopendheid watergang: doodlopend = hoog risico; vrij doorstromend = klein risico\nfractie riooloverstort: groot aandeel overstortwater = hoog risico; klein aandeel = klein risico\n\nVoor elke waterkwaliteitsgrootheid kan de gebruiker één of meerdere maatlatten combineren. Iedere maatlat krijgt daarbij zijn eigen weegfactor mee. Bijvoorbeeld: watertemperatuur weegfactor 3; doodlopendheid watergang weegfactor 1.\nHet Geopackage-bestand wordt samen met het json-bestand ingevoerd in de desktopapplicatie ‘Klimaatatlas’. Het resultaat van de berekening wordt weer weggeschreven naar de geopackage en bestaat voor ieder watervlak en grootheid uit een risicowaarde die altijd tussen 0 en 1 ligt. Dit risico kan op een kaart worden getoond en de totstandkoming van het risicogetal kan altijd worden herleid naar de bijdrage van de individuele maatlatten.\n\n\nArchitectuur\nDe software bestaat uit een verzameling aan tools en scripts. In deze handleiding leggen we de werking ervan uit en werken we een aantal workflows uit waarmee het risico op slechte waterkwaliteit in kaart kan worden gebracht.\n\nKlimaatatlas: dit is de desktopapplicatie die voor ieder watervlak en waterkwaliteitsgrootheid het risicogetal berekent en wegschrijft\nHydroToolbox: een externe desktopapplicatie van Hydroconsult waarmee waterkwaliteitsresultaten uit SOEK kunnen worden vertaald naar input voor de klimaatatlas.\nGeopackage: een GIS-bestand met watervlakken\n.json-bestand: een tekstbestand waarin de gebruiker de maatlatten definieert. Samen met de geopackage vormt dit bestand de input voor het programma ‘Klimaatatlas’.\n\nHet rekenresultaat wordt weer weggeschreven naar de geopackage. Dit bestand kan verder worden gebruikt voor visualisatie, presentatie en analyse."
-  },
-  {
-    "objectID": "Gebruikershandleiding/basisgebruik.html",
-    "href": "Gebruikershandleiding/basisgebruik.html",
-    "title": "Basisgebruik",
-    "section": "",
-    "text": "Basisgebruik\nIn dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit betreft het inladen van een SQLite database-bestand en een JSON-bestand (.json) met rekenregels.\nHet resultaat van de analyse en berekeningen wordt door Klimaatatlas weggeschreven naar de Geopackage file. Per risicofactor:\n\nhet risicogetal: een getal tussen 0 (geen risico) en 1 (maximaal risico)\nvoor elke maatlat die bijdroeg aan het risicogetal het percentuele aandeel in dat risico.\n\n\n\n\nStart Klimaatatlas op\nHet opstartscherm verschijnt\n\n\n\n\n\nStartscherm van Klimaatatlas.\n\n\n\n\n\n\n\nIndien u nog geen SQLite database heeft, maak er eentje aan via het menu\n\n\n\n\n\nBladeren naar het database-bestand.\n\n\n\n\n\n\n\nKlik op de button achter ‘database file’\nBlader naar de SQLite database (.db)\n\n\n\n\n\nBladeren naar het database-bestand.\n\n\n\n\n\n\n\nKlik op de button achter ‘Config file’\nBlader naar het JSON-bestand (.json)\n\n\n\n\n\nBladeren naar het configuratiebestand met de rekenregels.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
-    "crumbs": [
-      "Klimaatatlas",
-      "Gebruikershandleiding",
-      "Basisgebruik"
-    ]
-  },
-  {
-    "objectID": "Gebruikershandleiding/installatie.html",
-    "href": "Gebruikershandleiding/installatie.html",
+    "objectID": "gebruikershandleiding/installatie.html",
+    "href": "gebruikershandleiding/installatie.html",
     "title": "Klimaatatlas installeren",
     "section": "",
-    "text": "Klimaatatlas installeren\nHet installatiebestand van Klimaatatlas versie 1.10 vindt u hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
+    "text": "Het installatiebestand van Klimaatatlas versie 1.1.1 vindt u &lt;a href=“https://www.dropbox.com/s/t3k8o8cscxz6dso/KlimaatatlasSetup-v1.1.1-x64.zip?dl=0&gt;hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
     "crumbs": [
       "Klimaatatlas",
       "Gebruikershandleiding",
@@ -67,9 +48,128 @@
     ]
   },
   {
-    "objectID": "Technische_documentatie/configuratiebestand.html",
-    "href": "Technische_documentatie/configuratiebestand.html",
-    "title": "Configuratiebestand rekenregels",
+    "objectID": "gebruikershandleiding/installatie.html#stappenplan",
+    "href": "gebruikershandleiding/installatie.html#stappenplan",
+    "title": "Klimaatatlas installeren",
+    "section": "",
+    "text": "Het installatiebestand van Klimaatatlas versie 1.1.1 vindt u &lt;a href=“https://www.dropbox.com/s/t3k8o8cscxz6dso/KlimaatatlasSetup-v1.1.1-x64.zip?dl=0&gt;hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Klimaatatlas installeren"
+    ]
+  },
+  {
+    "objectID": "gebruikershandleiding/basisgebruik.html",
+    "href": "gebruikershandleiding/basisgebruik.html",
+    "title": "Basisgebruik",
+    "section": "",
+    "text": "In dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit behelst het inladen van een SQLite database-bestand, een JSON-bestand (.json) met rekenregels en het laten doorrekenen van die regels.\nHet resultaat van de analyse en berekeningen wordt door Klimaatatlas automatisch weggeschreven naar de Geopackage file.\nPer risicofactor is dit:\n\nhet risicogetal: een getal tussen 0 (geen risico) en 1 (maximaal risico)\nvoor elke maatlat die bijdroeg aan het risicogetal het percentuele aandeel in dat risico.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Basisgebruik"
+    ]
+  },
+  {
+    "objectID": "gebruikershandleiding/basisgebruik.html#inleiding",
+    "href": "gebruikershandleiding/basisgebruik.html#inleiding",
+    "title": "Basisgebruik",
+    "section": "",
+    "text": "In dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit behelst het inladen van een SQLite database-bestand, een JSON-bestand (.json) met rekenregels en het laten doorrekenen van die regels.\nHet resultaat van de analyse en berekeningen wordt door Klimaatatlas automatisch weggeschreven naar de Geopackage file.\nPer risicofactor is dit:\n\nhet risicogetal: een getal tussen 0 (geen risico) en 1 (maximaal risico)\nvoor elke maatlat die bijdroeg aan het risicogetal het percentuele aandeel in dat risico.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Basisgebruik"
+    ]
+  },
+  {
+    "objectID": "gebruikershandleiding/basisgebruik.html#klimaatatlas-opstarten",
+    "href": "gebruikershandleiding/basisgebruik.html#klimaatatlas-opstarten",
+    "title": "Basisgebruik",
+    "section": "Klimaatatlas opstarten",
+    "text": "Klimaatatlas opstarten\nNa installatie kan het programma gevonden worden via het start-menu, onder de naam ‘Klimaatatlas’.\n\n\n\nStart Klimaatatlas op\nHet opstartscherm verschijnt\n\n\n\n\n\nStartscherm van Klimaatatlas.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Basisgebruik"
+    ]
+  },
+  {
+    "objectID": "gebruikershandleiding/basisgebruik.html#een-sqlite-database-aanmaken",
+    "href": "gebruikershandleiding/basisgebruik.html#een-sqlite-database-aanmaken",
+    "title": "Basisgebruik",
+    "section": "Een SQLite-database aanmaken",
+    "text": "Een SQLite-database aanmaken\n\n\n\nIndien u nog geen SQLite database heeft, maak er eentje aan via het menu\n\n\n\n\n\nBladeren naar het database-bestand.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Basisgebruik"
+    ]
+  },
+  {
+    "objectID": "gebruikershandleiding/basisgebruik.html#de-sqlite-database-selecteren",
+    "href": "gebruikershandleiding/basisgebruik.html#de-sqlite-database-selecteren",
+    "title": "Basisgebruik",
+    "section": "De SQLite-database selecteren",
+    "text": "De SQLite-database selecteren\n\n\n\nKlik op de button achter ‘database file’\nBlader naar de SQLite database (.db)\n\n\n\n\n\nBladeren naar het database-bestand.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Basisgebruik"
+    ]
+  },
+  {
+    "objectID": "gebruikershandleiding/basisgebruik.html#het-configuratiebestand-inlezen",
+    "href": "gebruikershandleiding/basisgebruik.html#het-configuratiebestand-inlezen",
+    "title": "Basisgebruik",
+    "section": "Het configuratiebestand inlezen",
+    "text": "Het configuratiebestand inlezen\n\n\n\nKlik op de button achter ‘Config file’\nBlader naar het JSON-bestand (.json)\n\n\n\n\n\nBladeren naar het configuratiebestand met de rekenregels.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Basisgebruik"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Klimaatatlas",
+    "section": "",
+    "text": "De klimaatatlas werd ontwikkeld in opdracht van het Hoogheemraadschap van Rijnland. Het programma is ontworpen om te identificeren welke regio’s en locaties in het beheergebied gevoelig zijn voor slechte waterkwaliteit.\nDenk hierbij aan het risico op:\n\ndrijflagen\nalgen\nzuurstofloosheid\nbotulisme\neutrofiëring"
+  },
+  {
+    "objectID": "index.html#inleiding",
+    "href": "index.html#inleiding",
+    "title": "Klimaatatlas",
+    "section": "",
+    "text": "De klimaatatlas werd ontwikkeld in opdracht van het Hoogheemraadschap van Rijnland. Het programma is ontworpen om te identificeren welke regio’s en locaties in het beheergebied gevoelig zijn voor slechte waterkwaliteit.\nDenk hierbij aan het risico op:\n\ndrijflagen\nalgen\nzuurstofloosheid\nbotulisme\neutrofiëring"
+  },
+  {
+    "objectID": "index.html#toepassing",
+    "href": "index.html#toepassing",
+    "title": "Klimaatatlas",
+    "section": "Toepassing",
+    "text": "Toepassing\nDit instrument kan worden gebruikt om in te schatten wat de impact is van klimaatverandering op de waterkwaliteit, maar ook om bij ingrepen in het watersysteem, bijvoorbeeld door nieuwbouwprojecten, te bepalen of aanvullende maatregelen nodig zijn om een goede waterkwaliteit te kunnen (blijven) garanderen. Hiermee sluit het Hoogheemraadschap van Rijnland aan op De Nieuwe Omgevingswet, die op 1 januari 2024 is ingegaan."
+  },
+  {
+    "objectID": "index.html#werkwijze",
+    "href": "index.html#werkwijze",
+    "title": "Klimaatatlas",
+    "section": "Werkwijze",
+    "text": "Werkwijze\nInvoer is een watervlakkenkaart in Geopackage-formaat.\nIn een JSON-bestand definieert de gebruiker vervolgens zogeheten ‘maatlatten’ waarvan het resultaat altijd tussen 0 (geen risico) en 1 (maximaal risico) ligt. Voorbeeld voor een maatlat is de invloed van de watertemperatuur op algengroei. Onder 15 graden celcius is algengroei nihil (waarde 0), bij 27 graden is algengroei maximaal (waarde 1) en boven 27 graden loopt de algengroei weer terug. Bij 35 graden is het risico weer terug op 0.\nEnkele voorbeelden van maatlatten voor algengroei:\n\nwaterdiepte: geringe waterdiepte = hoog risico; grote waterdiepte = klein risico\ndoodlopendheid watergang: doodlopend = hoog risico; vrij doorstromend = klein risico\nfractie riooloverstort: groot aandeel overstortwater = hoog risico; klein aandeel = klein risico\n\nVoor elke waterkwaliteitsgrootheid kan de gebruiker één of meerdere maatlatten combineren. Iedere maatlat krijgt daarbij zijn eigen weegfactor mee. Bijvoorbeeld: watertemperatuur weegfactor 3; doodlopendheid watergang weegfactor 1.\nHet Geopackage-bestand wordt samen met het json-bestand ingevoerd in de desktopapplicatie ‘Klimaatatlas’. Het resultaat van de berekening wordt weer weggeschreven naar de geopackage en bestaat voor ieder watervlak en grootheid uit een risicowaarde die altijd tussen 0 en 1 ligt. Dit risico kan op een kaart worden getoond en de totstandkoming van het risicogetal kan altijd worden herleid naar de bijdrage van de individuele maatlatten."
+  },
+  {
+    "objectID": "index.html#architectuur",
+    "href": "index.html#architectuur",
+    "title": "Klimaatatlas",
+    "section": "Architectuur",
+    "text": "Architectuur\nDe software bestaat uit een verzameling aan tools en scripts. In deze handleiding leggen we de werking ervan uit en werken we een aantal workflows uit waarmee het risico op slechte waterkwaliteit in kaart kan worden gebracht.\n\nKlimaatatlas: dit is de desktopapplicatie die voor ieder watervlak en waterkwaliteitsgrootheid het risicogetal berekent en wegschrijft\nHydroToolbox: een externe desktopapplicatie van Hydroconsult waarmee waterkwaliteitsresultaten uit SOEK kunnen worden vertaald naar input voor de klimaatatlas.\nGeopackage: een GIS-bestand met watervlakken\n.json-bestand: een tekstbestand waarin de gebruiker de maatlatten definieert. Samen met de geopackage vormt dit bestand de input voor het programma ‘Klimaatatlas’.\n\nHet rekenresultaat wordt weer weggeschreven naar de geopackage. Dit bestand kan verder worden gebruikt voor visualisatie, presentatie en analyse."
+  },
+  {
+    "objectID": "technische_documentatie/configuratiebestand.html",
+    "href": "technische_documentatie/configuratiebestand.html",
+    "title": "Klimaatatlas",
     "section": "",
     "text": "Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. Hierin ligt vast welke risicoparameters voor waterkwaliteit worden berekend, van welke maatlatten die gebruik maken en welke weegfactoren gelden voor elke maatlat.\nIn dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.\nOm te beginnen bestaat het JSON-bestand uit een tekstbestand waarbij alle inhoud tussen twee accolades staat. De accolades markeren het begin en eind van een JSON-object. Een JSON-object kan op zijn beurt weer JSON-objecten bevatten:\n{\n    \"titel\": \"dit is een attribuut binnen het hoofd-json-object\",\n    \"array\":[\"een\", \"array\", \"is\", \"een\", \"lijst\", \"met\", \"waarden\"],\n    \"item1\": {\n        \"titel\": \"dit is een json-object in een json-object\",\n        \"opmerking\": \"json-objecten kunnen dus genest worden\"\n    },\n    \"item2\": {\n        \"titel\": \"dit is het tweede object binnen het hoofdobject\",\n        \"opmerking\": \"merk op dat een object altijd eindigt met een komma als daarna nog een object volgt\"\n    }\n}\nHieronder bespreken we welke zaken in het JSON-bestand kunnen staan.\n\n\nHet bestand begint met een array waarin vastligt welke scenario’s moeten worden doorgerekend. We merken op dat de namen van scenario’s niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.\n\"scenarios\": [\"K2023\", \"K2050\", \"K2100\"],\n\n\n\nCruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.\n\"features_dataset\": {\n    \"_comment\": \"this attribute describes the water area polygons\",\n    \"id\": \"watervlakken\",\n    \"data_type\": \"polygons\",\n    \"storage_type\": \"geopackage\",\n    \"path\": \"c:\\\\GITHUB\\\\klimaatatlas\\\\GIS\\\\Watervlakken_Plus7.gpkg\",\n    \"tablename\":\"Watervlakken_Plus7\",\n    \"fields\": [\n        {\"fieldtype\": \"id\", \"datatype\":\"SQLITETEXT\", \"fieldname\": \"CODE\"},\n        {\"fieldtype\": \"featureidx\", \"datatype\":\"SQLITEINT\", \"fieldname\": \"FEATUREIDX\"},\n        {\"fieldtype\": \"depth\", \"datatype\":\"SQLITEREAL\", \"fieldname\": \"WATERDIEPT\"}\n    ]\n},\n\nIn JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash  een eigen andere toepassing heeft.\nHet attribuut “data_type” kan op dit moment alleen de waarde “polygons” bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.\nHet attribuut “storage_type” kan op dit moment alleen de waarde “geopackage” bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.\nHet attribuut “datatype” kan de volgende waarden bevatten:\n\nSQLITETEXT: geeft aan dat het veld tekstuele waarden bevat\nSQLITEINT: geeft aan dat het veld gehele getallen bevat\nSQLITEREAL: geeft aan dat het veld getallen met decimalen bevat",
     "crumbs": [
@@ -79,23 +179,11 @@
     ]
   },
   {
-    "objectID": "Technische_documentatie/configuratiebestand.html#scenarios",
-    "href": "Technische_documentatie/configuratiebestand.html#scenarios",
-    "title": "Configuratiebestand rekenregels",
+    "objectID": "technische_documentatie/configuratiebestand.html#configuratiebestand-rekenregels",
+    "href": "technische_documentatie/configuratiebestand.html#configuratiebestand-rekenregels",
+    "title": "Klimaatatlas",
     "section": "",
-    "text": "Het bestand begint met een array waarin vastligt welke scenario’s moeten worden doorgerekend. We merken op dat de namen van scenario’s niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.\n\"scenarios\": [\"K2023\", \"K2050\", \"K2100\"],",
-    "crumbs": [
-      "Klimaatatlas",
-      "Technische documentatie",
-      "Configuratiebestand"
-    ]
-  },
-  {
-    "objectID": "Technische_documentatie/configuratiebestand.html#features-dataset",
-    "href": "Technische_documentatie/configuratiebestand.html#features-dataset",
-    "title": "Configuratiebestand rekenregels",
-    "section": "",
-    "text": "Cruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.\n\"features_dataset\": {\n    \"_comment\": \"this attribute describes the water area polygons\",\n    \"id\": \"watervlakken\",\n    \"data_type\": \"polygons\",\n    \"storage_type\": \"geopackage\",\n    \"path\": \"c:\\\\GITHUB\\\\klimaatatlas\\\\GIS\\\\Watervlakken_Plus7.gpkg\",\n    \"tablename\":\"Watervlakken_Plus7\",\n    \"fields\": [\n        {\"fieldtype\": \"id\", \"datatype\":\"SQLITETEXT\", \"fieldname\": \"CODE\"},\n        {\"fieldtype\": \"featureidx\", \"datatype\":\"SQLITEINT\", \"fieldname\": \"FEATUREIDX\"},\n        {\"fieldtype\": \"depth\", \"datatype\":\"SQLITEREAL\", \"fieldname\": \"WATERDIEPT\"}\n    ]\n},\n\nIn JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash  een eigen andere toepassing heeft.\nHet attribuut “data_type” kan op dit moment alleen de waarde “polygons” bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.\nHet attribuut “storage_type” kan op dit moment alleen de waarde “geopackage” bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.\nHet attribuut “datatype” kan de volgende waarden bevatten:\n\nSQLITETEXT: geeft aan dat het veld tekstuele waarden bevat\nSQLITEINT: geeft aan dat het veld gehele getallen bevat\nSQLITEREAL: geeft aan dat het veld getallen met decimalen bevat",
+    "text": "Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. Hierin ligt vast welke risicoparameters voor waterkwaliteit worden berekend, van welke maatlatten die gebruik maken en welke weegfactoren gelden voor elke maatlat.\nIn dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.\nOm te beginnen bestaat het JSON-bestand uit een tekstbestand waarbij alle inhoud tussen twee accolades staat. De accolades markeren het begin en eind van een JSON-object. Een JSON-object kan op zijn beurt weer JSON-objecten bevatten:\n{\n    \"titel\": \"dit is een attribuut binnen het hoofd-json-object\",\n    \"array\":[\"een\", \"array\", \"is\", \"een\", \"lijst\", \"met\", \"waarden\"],\n    \"item1\": {\n        \"titel\": \"dit is een json-object in een json-object\",\n        \"opmerking\": \"json-objecten kunnen dus genest worden\"\n    },\n    \"item2\": {\n        \"titel\": \"dit is het tweede object binnen het hoofdobject\",\n        \"opmerking\": \"merk op dat een object altijd eindigt met een komma als daarna nog een object volgt\"\n    }\n}\nHieronder bespreken we welke zaken in het JSON-bestand kunnen staan.\n\n\nHet bestand begint met een array waarin vastligt welke scenario’s moeten worden doorgerekend. We merken op dat de namen van scenario’s niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.\n\"scenarios\": [\"K2023\", \"K2050\", \"K2100\"],\n\n\n\nCruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.\n\"features_dataset\": {\n    \"_comment\": \"this attribute describes the water area polygons\",\n    \"id\": \"watervlakken\",\n    \"data_type\": \"polygons\",\n    \"storage_type\": \"geopackage\",\n    \"path\": \"c:\\\\GITHUB\\\\klimaatatlas\\\\GIS\\\\Watervlakken_Plus7.gpkg\",\n    \"tablename\":\"Watervlakken_Plus7\",\n    \"fields\": [\n        {\"fieldtype\": \"id\", \"datatype\":\"SQLITETEXT\", \"fieldname\": \"CODE\"},\n        {\"fieldtype\": \"featureidx\", \"datatype\":\"SQLITEINT\", \"fieldname\": \"FEATUREIDX\"},\n        {\"fieldtype\": \"depth\", \"datatype\":\"SQLITEREAL\", \"fieldname\": \"WATERDIEPT\"}\n    ]\n},\n\nIn JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash  een eigen andere toepassing heeft.\nHet attribuut “data_type” kan op dit moment alleen de waarde “polygons” bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.\nHet attribuut “storage_type” kan op dit moment alleen de waarde “geopackage” bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.\nHet attribuut “datatype” kan de volgende waarden bevatten:\n\nSQLITETEXT: geeft aan dat het veld tekstuele waarden bevat\nSQLITEINT: geeft aan dat het veld gehele getallen bevat\nSQLITEREAL: geeft aan dat het veld getallen met decimalen bevat",
     "crumbs": [
       "Klimaatatlas",
       "Technische documentatie",

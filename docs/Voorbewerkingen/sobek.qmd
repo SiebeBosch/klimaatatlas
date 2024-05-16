@@ -1,0 +1,135 @@
+---
+title: "SOBEK-modeluitkomsten"
+author: "Siebe Bosch"
+date: "`r Sys.Date()`"  # This will print the current date
+format: html
+---
+
+# Voorbewerking van SOBEK-modeluitkomsten
+
+De klimaatatlas kan worden gevoed met rekenresultaten (waterkwaliteit) uit SOBEK. 
+Over het algemeen zal een SOBEK-modelschematisatie echter een stuk grover zijn dan de watervlakkenkaart die we in de klimaatatlas opbouwen.
+
+Het exporteren van SOBEK waterkwaliteitsresultaat naar de watervlakken vergt een aantal stappen met het programma HydroToolbox (Hydroconsult). De community-editie van HydroToolbox kan hiervoor kosteloos gebruikt worden. De installatiebestanden zijn [hier](https://www.dropbox.com/scl/fi/qwtxbp9ljbjrnwl0qqp63/HydroToolboxSetup-v2.9.9.7-x64.zip?rlkey=hrp5a9w4nbfjgsrm3zy8uqa3z&dl=0) te vinden. 
+
+## Installeren HydroToolbox:
+
+
+::: {.columns}
+::: {.column width="50%"}
+* Pak het .zip-bestand met de installatiebestanden uit
+* Voer het bestand HydroToolboxSetup-[versienummer]-x64.exe uit en volg de instructies
+* Als de installatie compleet is vindt u het programma in het startmenu onder Hydroconsult
+
+:::
+::: {.column width="50%"}
+![Opstartscherm van HydroToolbox](img/frm_hydrotoolbox.png)
+:::
+:::
+
+## Exporteren SOBEK-resultaten:
+
+### Modelschematisaties inladen
+::: {.columns}
+::: {.column width="50%"}
+<a href="img/frm_sobek_cases.png" target="_blank" style="display: block; text-align: center;">
+  <img src="img/frm_sobek_cases.png" alt="SOBEK-cases selecteren voor export naar de klimaatatlas" style="max-width: 100%; height: auto;">
+</a>
+<figcaption>SOBEK-cases selecteren voor export naar de klimaatatlas (klik voor grote weergave).</figcaption>
+:::
+::: {.column width="50%"}
+* Klik op de button 'Sobek''
+* Klik op de gele button achter 'ProjeCct dir (.lit)'
+* Blader naar de projectmap (*.lit) van het sobek-project
+* Klik op de <+>-button om een rij toe te voegen en selecteer de gewenste case in de eerste kolom.
+* Geef de case een <u>korte</u> naam. Let op: de naam mag <u>niet</u> met een getal beginnen!  
+* Maak een database aan. Ga hiervoor naar het menu 'Database'-'Create New'. Deze database zal de weegfactoren voor ruimtelijke interpolatie van het SOBEK-resultaat bevatten.
+* Als dat nog niet gebeurd is, selecteer de database door op de gele button achter 'Database' te klikken.
+:::
+:::
+
+
+### Watervlakkenkaart instellen
+::: {.columns}
+::: {.column width="50%"}
+* Kies uit het menu de optie 'Postprocessing' - 'Export' - 'WQ Results'
+* Het formulier 'Export water quality results' verschijnt
+* Kies de optie 'Spatially interpolate statistics to Geopackage'
+* Blader naar het Geopackage-bestand (.gpkg) wat de watervlakken van het studiegebied bevat
+* Kies in de selectielijst de laag (layer) die de watervlakken bevat
+* Kies in de selectielijst het veld (ID Field) wat het ID van ieder watervlak bevat. Let op: ieder watervlak moet een uniek ID hebben!
+* Er kan een popup verschijnen met de melding dat er geen of onvoldoende wegingsfactoren beschikbaar zijn om de SOBEK-resultaten te interpoleren naar de watervlakken. In dat geval kunnen de weegfactoren opnieuw worden berekend. Zie hiervoor het volgende blok.
+:::
+::: {.column width="50%"}
+![SOBEK-resultaten ruimtelijk laten interpoleren naar een geopackage.](img/frm_geopackage.png)
+
+![Waarschuwing dat de database nog geen wegingsfactoren heeft om SOBEK-resultaten naar de watervlakken te interpoleren.](img/msg_insufficient_weights.png)
+:::
+:::
+
+
+### Wegingsfactoren vaststellen
+
+Als de database geen wegingsfactoren bevat, moeten die eerst worden vastgesteld. Voor ieder watervlak moet worden berekend:
+
+<ol type="a">
+  <li>Welke Delwaq-segmenten uit SOBEK doen mee bij het vaststellen van het resultaat voor dit watervlak?</li>
+  <li>Welke weegfactor geldt voor elk van die segmenten?</li>
+</ol>
+
+Deze informatie kan automatisch worden vastgesteld en weggeschreven naar de database:
+
+::: {.columns}
+::: {.column width="50%"}
+<a href="img/frm_interpolation.png" target="_blank" style="display: block; text-align: center;">
+  <img src="img/frm_interpolation.png" alt="Weegfactoren laten berekenen voor interpolatie van Delwaq-segmenten naar de watervlakken" style="max-width: 100%; height: auto;">
+</a>
+<figcaption>Weegfactoren laten berekenen voor interpolatie van Delwaq-segmenten naar de watervlakken (klik voor grote weergave).</figcaption>
+:::
+::: {.column width="50%"}
+* Vink de optie 'compute' onder Interpolation Weights aan
+* Vink de optie 'only interpolate inside polygons aan'. Dit zorgt ervoor dat niet onterecht waterkwaliteitsresultaten van het ene waterlichaam op het andere terechtkomen; bijvoorbeeld polderwaarden op een boezem of andersom
+* Kies een polygonenbestand (shapefile) wat deze waterlichamen vertegenwoordigt
+* Optioneel: wijs een puntenbestand (shapefile) aan wat de representatieve xy-coördinaten van de Delwaq-segmenten bevat en selecteer het veld wat het Delwaq segmentnummer bevat.
+:::
+:::
+
+
+### Waterkwaliteitsparameters selecteren
+
+Onder 'substances, filters and rules' is het mogelijk om aan te vinken welke kwaliteitsparameters moeten worden geëxporteerd naar de watervlakken.
+
+::: {.columns}
+::: {.column width="50%"}
+* vink in de lijst de gewenste kwaliteitsparameters aan
+* de overige opties zijn niet van belang voor de export naar de watervlakkenkaart
+:::
+::: {.column width="50%"}
+![Selecteren van kwaliteitsparameters voor export naar de watervlakkenkaart.](img/frm_substances.png)
+:::
+:::
+
+### Percentielwaarden selecteren
+
+::: {.columns}
+::: {.column width="50%"}
+![Selecteren van kwaliteitsparameters voor export naar de watervlakkenkaart.](img/frm_percentiles.png)
+:::
+::: {.column width="50%"}
+Onder 'Statistics' moet nu worden geselecteerd welke percentielwaarden van de gekozen kwaliteitsparameters te exporteren. Ter illustratie: bij selectie van de waarde 0.5 wordt de mediaan van het tijdsverloop van iedere parameter weggeschreven naar de database en ruimtelijk geïnterpoleerd naar de watervlakken. 
+
+* vink in de lijst de gewenste percentielwaarden aan.
+:::
+:::
+
+### De resultaten exporteren
+
+Met de button 'Export' wordt het proces gestart. HydroToolbox zal nu voor de geselecteerde kwaliteitesparameters de gevraagde percentielwaarden uit SOBEK opvragen. Daarna zal het programma deze percentielwaarden ruimtelijk interpoleren naar de watervlakkenkaart, gebruikmakend van de wegingsfactoren die per watervlak zijn vastgelegd in de database. Het resultaat voor iedere combinatie van:
+
+* modelcase
+* kwaliteitsparameter
+* percentielwaarde
+
+wordt weggeschreven naar een nieuwe kolom in de watervlakkenkaart (.gpkg).
+Als dit proces is voltooid kan het SOBEK-resultaat worden meegenomen als input voor de Klimaatatlas!
+

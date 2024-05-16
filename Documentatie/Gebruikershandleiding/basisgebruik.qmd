@@ -1,11 +1,24 @@
-# Basisgebruik
+---
+title: "Basisgebruik"
+author: "Siebe Bosch"
+date: "`r Sys.Date()`"  # This will print the current date
+format: html
+---
 
-In dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit betreft het inladen van een SQLite database-bestand en een JSON-bestand (.json) met rekenregels.
+## Inleiding
 
-Het resultaat van de analyse en berekeningen wordt door Klimaatatlas weggeschreven naar de Geopackage file. Per risicofactor:
+In dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit behelst het inladen van een SQLite database-bestand, een JSON-bestand (.json) met rekenregels en het laten doorrekenen van die regels.
+
+Het resultaat van de analyse en berekeningen wordt door Klimaatatlas automatisch weggeschreven naar de Geopackage file. 
+
+Per risicofactor is dit:
 
 * het risicogetal: een getal tussen 0 (geen risico) en 1 (maximaal risico)
 * voor elke maatlat die bijdroeg aan het risicogetal het percentuele aandeel in dat risico.
+
+## Klimaatatlas opstarten
+
+Na installatie kan het programma gevonden worden via het start-menu, onder de naam 'Klimaatatlas'.
 
 ::: {.columns}
 ::: {.column width="50%"}
@@ -17,6 +30,8 @@ Het resultaat van de analyse en berekeningen wordt door Klimaatatlas weggeschrev
 :::
 :::
 
+## Een SQLite-database aanmaken
+
 ::: {.columns}
 ::: {.column width="50%"}
 * Indien u nog geen SQLite database heeft, maak er eentje aan via het menu 
@@ -25,6 +40,8 @@ Het resultaat van de analyse en berekeningen wordt door Klimaatatlas weggeschrev
 ![Bladeren naar het database-bestand.](img/dlg_database.png)
 :::
 :::
+
+## De SQLite-database selecteren
 
 ::: {.columns}
 ::: {.column width="50%"}
@@ -36,6 +53,8 @@ Het resultaat van de analyse en berekeningen wordt door Klimaatatlas weggeschrev
 :::
 :::
 
+## Het configuratiebestand inlezen
+
 ::: {.columns}
 ::: {.column width="50%"}
 * Klik op de button achter 'Config file'
@@ -45,30 +64,6 @@ Het resultaat van de analyse en berekeningen wordt door Klimaatatlas weggeschrev
 ![Bladeren naar het configuratiebestand met de rekenregels.](img/dlg_configfile.png)
 :::
 :::
-
-::: {.columns}
-::: {.column width="50%"}
-* neem kennis van de locatie waar het programma wordt geïnstalleerd en klik op 'installeren'
-:::
-::: {.column width="50%"}
-![Kennis nemen van de installatielocatie.](img/frm_installatiemap.png)
-:::
-:::
-
-
-::: {.columns}
-::: {.column width="50%"}
-* als de installatie compleet is hebt u de optie om het programma automatisch te starten.
-:::
-::: {.column width="50%"}
-![De installatie is compleet.](img/frm_installatie_compleet.png)
-:::
-:::
-
-Na installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar 'Klimaatatlas'. Onderstaand tonen we het opstartscherm.
-
-![het opstartscherm van Klimaatatlas.](img/frm_klimaatatlas.png)
-
 
 
 
