@@ -10,8 +10,9 @@ data/*
 # C extensions
 *.so
 
-# 
-./Frontend/7.0/Klimaatatlas/InnoSetup/*.exe
+
+# Ignore all executables in the specified directory
+Frontend/7.0/Klimaatatlas/InnoSetup/*.exe
 
 # Distribution / packaging
 .Python
