@@ -1,4 +1,4 @@
-DIAGNOSTICS FILE, CREATED ON: 12-4-2024 17:24:59
+DIAGNOSTICS FILE, CREATED ON: 16-5-2024 17:54:12
 Reading configuration file.
 Error In Function PopulateScenarios Of Class clsKlimaatatlas:  An item with the same key has already been added. Key: K2023
 Configuration file read.

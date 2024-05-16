@@ -15,7 +15,10 @@ website:
         contents:
       - section: "Gebruikershandleiding"
         contents:
-          - Gebruikershandleiding/installatie.qmd
+          - href: Gebruikershandleiding/installatie.qmd
+            text: "Klimaatatlas installeren"
+          - href: Gebruikershandleiding/basisgebruik.qmd
+            text: "Basisgebruik"
       - section: "Technische documentatie"
         contents:
       - section: "Voorbewerkingen"

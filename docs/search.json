@@ -38,13 +38,13 @@
   {
     "objectID": "Gebruikershandleiding/installatie.html",
     "href": "Gebruikershandleiding/installatie.html",
-    "title": "Installatie klimaatatlas",
+    "title": "Klimaatatlas installeren",
     "section": "",
-    "text": "Installeren van Klimaatatlas\nHet installatiebestand van Klimaatatlas versie 1.10 vindt u hier.",
+    "text": "Klimaatatlas installeren\nHet installatiebestand van Klimaatatlas versie 1.10 vindt u hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
     "crumbs": [
       "Klimaatatlas",
       "Gebruikershandleiding",
-      "Installatie klimaatatlas"
+      "Klimaatatlas installeren"
     ]
   },
   {
@@ -53,5 +53,17 @@
     "title": "Klimaatatlas",
     "section": "",
     "text": "Inleiding\nDe klimaatatlas werd ontwikkeld in opdracht van het Hoogheemraadschap van Rijnland. Het programma is ontworpen om te identificeren welke regio’s en locaties in het beheergebied gevoelig zijn voor slechte waterkwaliteit.\nDenk hierbij aan het risico op:\n\ndrijflagen\nalgen\nzuurstofloosheid\nbotulisme\neutrofiëring\n\n\n\nToepassing\nDit instrument kan worden gebruikt om in te schatten wat de impact is van klimaatverandering op de waterkwaliteit, maar ook om bij ingrepen in het watersysteem, bijvoorbeeld door nieuwbouwprojecten, te bepalen of aanvullende maatregelen nodig zijn om een goede waterkwaliteit te kunnen (blijven) garanderen. Hiermee sluit het Hoogheemraadschap van Rijnland aan op De Nieuwe Omgevingswet, die op 1 januari 2024 is ingegaan.\n\n\nWerkwijze\nInvoer is een watervlakkenkaart in Geopackage-formaat.\nIn een JSON-bestand definieert de gebruiker vervolgens zogeheten ‘maatlatten’ waarvan het resultaat altijd tussen 0 (geen risico) en 1 (maximaal risico) ligt. Voorbeeld voor een maatlat is de invloed van de watertemperatuur op algengroei. Onder 15 graden celcius is algengroei nihil (waarde 0), bij 27 graden is algengroei maximaal (waarde 1) en boven 27 graden loopt de algengroei weer terug. Bij 35 graden is het risico weer terug op 0.\nEnkele voorbeelden van maatlatten voor algengroei:\n\nwaterdiepte: geringe waterdiepte = hoog risico; grote waterdiepte = klein risico\ndoodlopendheid watergang: doodlopend = hoog risico; vrij doorstromend = klein risico\nfractie riooloverstort: groot aandeel overstortwater = hoog risico; klein aandeel = klein risico\n\nVoor elke waterkwaliteitsgrootheid kan de gebruiker één of meerdere maatlatten combineren. Iedere maatlat krijgt daarbij zijn eigen weegfactor mee. Bijvoorbeeld: watertemperatuur weegfactor 3; doodlopendheid watergang weegfactor 1.\nHet Geopackage-bestand wordt samen met het json-bestand ingevoerd in de desktopapplicatie ‘Klimaatatlas’. Het resultaat van de berekening wordt weer weggeschreven naar de geopackage en bestaat voor ieder watervlak en grootheid uit een risicowaarde die altijd tussen 0 en 1 ligt. Dit risico kan op een kaart worden getoond en de totstandkoming van het risicogetal kan altijd worden herleid naar de bijdrage van de individuele maatlatten.\n\n\nArchitectuur\nDe software bestaat uit een verzameling aan tools en scripts. In deze handleiding leggen we de werking ervan uit en werken we een aantal workflows uit waarmee het risico op slechte waterkwaliteit in kaart kan worden gebracht.\n\nKlimaatatlas: dit is de desktopapplicatie die voor ieder watervlak en waterkwaliteitsgrootheid het risicogetal berekent en wegschrijft\nHydroToolbox: een externe desktopapplicatie van Hydroconsult waarmee waterkwaliteitsresultaten uit SOEK kunnen worden vertaald naar input voor de klimaatatlas.\nGeopackage: een GIS-bestand met watervlakken\n.json-bestand: een tekstbestand waarin de gebruiker de maatlatten definieert. Samen met de geopackage vormt dit bestand de input voor het programma ‘Klimaatatlas’.\n\nHet rekenresultaat wordt weer weggeschreven naar de geopackage. Dit bestand kan verder worden gebruikt voor visualisatie, presentatie en analyse."
+  },
+  {
+    "objectID": "Gebruikershandleiding/basisgebruik.html",
+    "href": "Gebruikershandleiding/basisgebruik.html",
+    "title": "Basisgebruik",
+    "section": "",
+    "text": "Basisgebruik\nIn dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit betreft het inladen van een SQLite database-bestand en een JSON-bestand (.json) met rekenregels.\nHet resultaat van de analyse en berekeningen wordt door Klimaatatlas weggeschreven naar de Geopackage file. Per risicofactor:\n\nhet risicogetal: een getal tussen 0 (geen risico) en 1 (maximaal risico)\nvoor elke maatlat die bijdroeg aan het risicogetal het percentuele aandeel in dat risico.\n\n\n\n\nStart Klimaatatlas op\nHet opstartscherm verschijnt\n\n\n\n\n\nStartscherm van Klimaatatlas.\n\n\n\n\n\n\n\nIndien u nog geen SQLite database heeft, maak er eentje aan via het menu\n\n\n\n\n\nBladeren naar het database-bestand.\n\n\n\n\n\n\n\nKlik op de button achter ‘database file’\nBlader naar de SQLite database (.db)\n\n\n\n\n\nBladeren naar het database-bestand.\n\n\n\n\n\n\n\nKlik op de button achter ‘Config file’\nBlader naar het JSON-bestand (.json)\n\n\n\n\n\nBladeren naar het configuratiebestand met de rekenregels.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Basisgebruik"
+    ]
   }
 ]

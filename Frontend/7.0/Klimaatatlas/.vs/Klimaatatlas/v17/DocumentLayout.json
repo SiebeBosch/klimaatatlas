@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|c:\\github\\klimaatatlas\\frontend\\7.0\\klimaatatlas\\classes\\clsklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
-      "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:classes\\clsklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+      "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|c:\\github\\klimaatatlas\\frontend\\7.0\\klimaatatlas\\classes\\clsgeneralfunctions.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:classes\\clsgeneralfunctions.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\classes\\clsrule.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
       "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:classes\\clsrule.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|c:\\github\\klimaatatlas\\frontend\\7.0\\klimaatatlas\\classes\\clsklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|solutionrelative:classes\\clsklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{BDD3060D-F46C-4C0F-ACEB-97DD8C8947E4}|Klimaatatlas.vbproj|C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\frmklimaatatlas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
@@ -34,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -50,7 +54,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
+              "Title": "clsGeneralFunctions.vb",
+              "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsGeneralFunctions.vb",
+              "RelativeDocumentMoniker": "Classes\\clsGeneralFunctions.vb",
+              "ToolTip": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsGeneralFunctions.vb",
+              "RelativeToolTip": "Classes\\clsGeneralFunctions.vb",
+              "ViewState": "AQIAAGcCAAAAAAAAAAApwHECAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2024-05-16T14:48:56.942Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "Klimaatatlas",
               "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Klimaatatlas.vbproj",
               "RelativeDocumentMoniker": "Klimaatatlas.vbproj",
@@ -61,7 +78,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Klimaatatlas.vbproj",
               "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Klimaatatlas.vbproj",
               "RelativeDocumentMoniker": "Klimaatatlas.vbproj",
@@ -73,7 +90,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "clsBenchmark.vb",
               "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsBenchmark.vb",
               "RelativeDocumentMoniker": "Classes\\clsBenchmark.vb",
@@ -91,26 +108,27 @@
               "RelativeDocumentMoniker": "Classes\\clsRule.vb",
               "ToolTip": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsRule.vb",
               "RelativeToolTip": "Classes\\clsRule.vb",
-              "ViewState": "AQIAAJkAAAAAAAAAAAAlwBQAAAAbAAAA",
+              "ViewState": "AQIAAGcAAAAAAAAAAAApwHgAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2024-03-15T16:14:32.399Z"
+              "WhenOpened": "2024-03-15T16:14:32.399Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "clsKlimaatatlas.vb",
               "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsKlimaatatlas.vb",
               "RelativeDocumentMoniker": "Classes\\clsKlimaatatlas.vb",
               "ToolTip": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\Classes\\clsKlimaatatlas.vb",
               "RelativeToolTip": "Classes\\clsKlimaatatlas.vb",
-              "ViewState": "AQIAACICAAAAAAAAAAAlwCgCAAALAAAA",
+              "ViewState": "AQIAACICAAAAAAAAAAAlwC4CAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
               "WhenOpened": "2024-03-15T16:08:33.095Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "frmKlimaatatlas.vb",
               "DocumentMoniker": "C:\\GITHUB\\klimaatatlas\\Frontend\\7.0\\Klimaatatlas\\frmKlimaatatlas.vb",
               "RelativeDocumentMoniker": "frmKlimaatatlas.vb",

@@ -595,6 +595,52 @@ Public Class clsGeneralFunctions
         Return True
     End Function
 
+    Function EvaluateExpression(expression As String, xValue As Double, ByRef yValue As Double) As Boolean
+        Try
+            ' Remove spaces and convert to lower case for easier parsing
+            expression = expression.ToLower().Replace(" ", "")
+
+            ' Regular expression to extract a, b, and c coefficients for second-degree polynomials
+            Dim polyPattern As String = "^([+-]?\d*\.?\d*)x\^2([+-]\d*\.?\d*)x([+-]\d*\.?\d+)$"
+            Dim polyRegex As New Text.RegularExpressions.Regex(polyPattern)
+            Dim polyMatch As Text.RegularExpressions.Match = polyRegex.Match(expression)
+
+            If polyMatch.Success Then
+                ' Extract a, b, and c values
+                Dim a As Double = If(String.IsNullOrEmpty(polyMatch.Groups(1).Value), 1, Convert.ToDouble(polyMatch.Groups(1).Value))
+                Dim b As Double = Convert.ToDouble(polyMatch.Groups(2).Value)
+                Dim c As Double = Convert.ToDouble(polyMatch.Groups(3).Value)
+
+                ' Evaluate the polynomial expression ax^2 + bx + c
+                yValue = a * xValue * xValue + b * xValue + c
+                Return True
+            End If
+
+            ' Regular expression to extract coefficients for exponential expressions
+            Dim expPattern As String = "^([+-]?\d*\.?\d*)\*exp\(([+-]?\d*\.?\d*)\*x\)$"
+            Dim expRegex As New Text.RegularExpressions.Regex(expPattern)
+            Dim expMatch As Text.RegularExpressions.Match = expRegex.Match(expression)
+
+            If expMatch.Success Then
+                ' Extract coefficients for exponential expression
+                Dim a As Double = If(String.IsNullOrEmpty(expMatch.Groups(1).Value), 1, Convert.ToDouble(expMatch.Groups(1).Value))
+                Dim b As Double = Convert.ToDouble(expMatch.Groups(2).Value)
+
+                ' Evaluate the exponential expression a * EXP(b * x)
+                yValue = a * Math.Exp(b * xValue)
+                Return True
+            End If
+
+            ' If no matching pattern was found, throw an exception
+            Throw New ArgumentException("Invalid expression format.")
+        Catch ex As Exception
+            ' Log the error and return false
+            Me.Setup.Log.AddError("Unable to evaluate mathematical expression: " & expression & ". Error: " & ex.Message)
+            yValue = Double.NaN
+            Return False
+        End Try
+    End Function
+
 
     Function EvaluateSecondDegreePolynomeExpression(expression As String, xValue As Double, ByRef yValue As Double) As Boolean
         Try

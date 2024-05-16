@@ -59,10 +59,9 @@
 			"name": "max_biomassa",
 			"comment":"maximale biomassa als functie van de diepte van het waterlichaam.",
 			"fieldname":[
-				{"scenario":"K2023", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"},
-				{"scenario":"K2050", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"},
-				{"scenario":"K2100", "field":"waterdiept", "transformation":"52.185x^2 - 524.98x + 1422.2"},				
-				{"scenario":"Test", "field":"waterdiept", "transformation":"1683.6*EXP(-0.578*x)"}			
+				{"scenario":"K2023", "field":"waterdiept", "transformation":"1683.6*EXP(-0.578*x)"},
+				{"scenario":"K2050", "field":"waterdiept", "transformation":"1683.6*EXP(-0.578*x)"},
+				{"scenario":"K2100", "field":"waterdiept", "transformation":"1683.6*EXP(-0.578*x)"}			
 			],
 			"classification": "continuous",
 			"valuesRange": [{"value":0,"verdict":0},{"value":1400,"verdict":1}],

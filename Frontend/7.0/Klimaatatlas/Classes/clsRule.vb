@@ -80,15 +80,15 @@ Public Class clsRule
                         Dim fid As Integer = Convert.ToInt32(row("fid"))
                         Dim totalWeight As Double = 0
                         Dim ResultSum As Double = 0
-                        Dim result As Double
 
                         For Each Component As clsEquationComponent In EquationComponents
                             Dim FieldName As String = Component.Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper)
                             Dim Transformation As String = Component.Benchmark.TransformationPerScenario.Item(Scenario.Name.Trim.ToUpper)
                             Dim value As Object = row(FieldName)
                             If Transformation <> "" Then
-                                If Not Setup.Generalfunctions.EvaluateSecondDegreePolynomeExpression(Transformation, value, value) Then
-                                    Throw New Exception($"Error evaluating mathematical expression {Transformation}. Please check if your equation obeys the a * x^2 + b * x + c format convention.")
+                                'replaced the EvaluateSecondDegreePolynomeExpression function by a more generic one, also supporting exponential functions
+                                If Not Setup.Generalfunctions.EvaluateExpression(Transformation, value, value) Then
+                                    Throw New Exception($"Error evaluating mathematical expression {Transformation}. Please check if your equation obeys the a * x^2 + b * x + c or a * EXP(b * x) format convention.")
                                 End If
                             End If
 
