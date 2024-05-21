@@ -45,9 +45,13 @@ Public Class clsRule
                     Dim Fields As List(Of String) = getFieldNamesForScenario(Scenario)
                     Setup.Log.WriteToDiagnosticsFile("Field names collected for scenario " & Scenario.Name)
 
-                    'Ensure necessary columns exist before calculations and add them to the list
+                    'drop the column. Below we will add it again but so we make sure all results are recalculated AND all columns nicely align to the right of the attributes table
+                    RemoveColumnIfExists(Setup.GpkgTable, $"{Scenario.Name}_{Name}")
+                    Setup.Log.WriteToDiagnosticsFile("Old results column removed: " & $"{Scenario.Name}_{Name}")
+
+                    'Recreate the results column
                     EnsureColumnExists(Setup.GpkgTable, $"{Scenario.Name}_{Name}", "REAL")
-                    Setup.Log.WriteToDiagnosticsFile($"Made sure column {Scenario.Name}_{Name} exists")
+                    Setup.Log.WriteToDiagnosticsFile($"Recreated column {Scenario.Name}_{Name}")
 
                     Fields.Add($"{Scenario.Name}_{Name}")
                     columnsToUpdate.Add($"{Scenario.Name}_{Name}")
@@ -84,19 +88,23 @@ Public Class clsRule
                         For Each Component As clsEquationComponent In EquationComponents
                             Dim FieldName As String = Component.Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper)
                             Dim Transformation As String = Component.Benchmark.TransformationPerScenario.Item(Scenario.Name.Trim.ToUpper)
-                            Dim value As Object = row(FieldName)
+                            Dim yValue As Double = Double.NaN
                             If Transformation <> "" Then
                                 'replaced the EvaluateSecondDegreePolynomeExpression function by a more generic one, also supporting exponential functions
-                                If Not Setup.Generalfunctions.EvaluateExpression(Transformation, value, value) Then
+                                Dim Result As (Boolean, Double)
+                                Result = Setup.Generalfunctions.EvaluateExpression(Transformation, row(FieldName))
+                                If Result.Item1 = False Then
                                     Throw New Exception($"Error evaluating mathematical expression {Transformation}. Please check if your equation obeys the a * x^2 + b * x + c or a * EXP(b * x) format convention.")
+                                Else
+                                    yValue = Result.Item2
                                 End If
                             End If
 
                             totalWeight += Component.Weight
-                            Dim myResult As (Boolean, Double) = Component.Benchmark.getResult(value)
+                            Dim myResult As (Boolean, Double) = Component.Benchmark.getResult(yValue)
                             If Not myResult.Item1 Then
                                 RowSuccessfull = False
-                                Me.Setup.Log.AddError("Error calculating result for row " & iRow & " and field " & FieldName & " and value " & value.ToString & " for benchmark " & Component.Benchmark.Name & ".")
+                                Me.Setup.Log.AddError("Error calculating result for row " & iRow & " and field " & FieldName & " and value " & row(FieldName).ToString & " for benchmark " & Component.Benchmark.Name & ".")
                                 Exit For
                             Else
                                 Component.Result = myResult.Item2 * Component.Weight
@@ -191,6 +199,29 @@ Public Class clsRule
             End Using
         End If
     End Sub
+
+    Public Function RemoveColumnIfExists(tableName As String, columnName As String) As Boolean
+        Try
+            Using cmd As New SQLiteCommand($"PRAGMA table_info({tableName});", Setup.GpkgCon)
+                Using reader As SQLiteDataReader = cmd.ExecuteReader()
+                    While reader.Read()
+                        If String.Equals(reader("name").ToString(), columnName, StringComparison.OrdinalIgnoreCase) Then
+                            'column exists, remove it
+                            Using cmdRemove As New SQLiteCommand($"ALTER TABLE {tableName} DROP COLUMN {columnName};", Setup.GpkgCon)
+                                cmdRemove.ExecuteNonQuery()
+                                Exit While
+                            End Using
+                        End If
+                    End While
+                End Using
+            End Using
+            Me.Setup.Log.AddMessage("Successfully removed column " & columnName & " from table " & tableName & ".")
+            Return True
+        Catch ex As Exception
+            Me.Setup.Log.AddError("Error removing column " & columnName & " from table " & tableName & ": " & ex.Message)
+            Return False
+        End Try
+    End Function
 
     Public Function getFieldNamesForScenario(Scenario As clsScenario) As List(Of String)
         'returns the field names that are needed for this rule and scenario

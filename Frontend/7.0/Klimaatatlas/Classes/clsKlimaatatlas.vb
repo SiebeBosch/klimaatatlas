@@ -2,14 +2,8 @@
 Imports System.IO
 Imports Newtonsoft.Json.Linq
 Imports System.Text.RegularExpressions
-Imports NCalc
-Imports MathNet.Symbolics
 Imports MapWinGIS
-Imports System.Globalization
 Imports Klimaatatlas.clsGeneralFunctions
-Imports System.Data.Entity.ModelConfiguration.Conventions
-Imports FParsec
-Imports Klimaatatlas.clsBenchmark
 
 Public Class clsKlimaatatlas
     Private _connString As String

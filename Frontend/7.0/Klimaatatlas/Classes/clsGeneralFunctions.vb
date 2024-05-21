@@ -595,10 +595,11 @@ Public Class clsGeneralFunctions
         Return True
     End Function
 
-    Function EvaluateExpression(expression As String, xValue As Double, ByRef yValue As Double) As Boolean
+    Function EvaluateExpression(expression As String, xValue As Double) As (Boolean, Double)
         Try
             ' Remove spaces and convert to lower case for easier parsing
             expression = expression.ToLower().Replace(" ", "")
+            Dim yValue As Double = Double.NaN
 
             ' Regular expression to extract a, b, and c coefficients for second-degree polynomials
             Dim polyPattern As String = "^([+-]?\d*\.?\d*)x\^2([+-]\d*\.?\d*)x([+-]\d*\.?\d+)$"
@@ -613,7 +614,7 @@ Public Class clsGeneralFunctions
 
                 ' Evaluate the polynomial expression ax^2 + bx + c
                 yValue = a * xValue * xValue + b * xValue + c
-                Return True
+                Return (True, yValue)
             End If
 
             ' Regular expression to extract coefficients for exponential expressions
@@ -628,7 +629,7 @@ Public Class clsGeneralFunctions
 
                 ' Evaluate the exponential expression a * EXP(b * x)
                 yValue = a * Math.Exp(b * xValue)
-                Return True
+                Return (True, yValue)
             End If
 
             ' If no matching pattern was found, throw an exception
@@ -636,8 +637,7 @@ Public Class clsGeneralFunctions
         Catch ex As Exception
             ' Log the error and return false
             Me.Setup.Log.AddError("Unable to evaluate mathematical expression: " & expression & ". Error: " & ex.Message)
-            yValue = Double.NaN
-            Return False
+            Return (False, Double.NaN)
         End Try
     End Function
 

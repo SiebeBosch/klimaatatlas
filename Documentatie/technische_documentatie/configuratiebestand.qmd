@@ -59,7 +59,9 @@ Cruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoo
     * SQLITEREAL: geeft aan dat het veld getallen met decimalen bevat
 
 
+### Rekenregels
 
-
+Rekenregels is een array (lijst) van JSON-objecten waarvan elk element een unieke rekenregel beschrijft. 
+Onderstaand tonen we een voorbeeld
 
 
