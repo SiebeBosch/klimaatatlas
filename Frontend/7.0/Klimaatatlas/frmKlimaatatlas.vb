@@ -2,6 +2,7 @@
 Imports Newtonsoft.Json.Linq
 Imports System.Windows.Forms
 Imports MapWinGIS
+Imports System.Data.SQLite
 
 Public Class frmKlimaatatlas
     Public Klimaatatlas As clsKlimaatatlas
@@ -10,12 +11,12 @@ Public Class frmKlimaatatlas
         Klimaatatlas = New clsKlimaatatlas()
         Klimaatatlas.SetProgressBar(prProgress, lblProgress)
 
-        txtDatabase.Text = My.Settings.Database
+        'txtDatabase.Text = My.Settings.Database
         txtConfigFile.Text = My.Settings.Configfile
 
-        Initialize()
+        'Initialize()
 
-        If System.IO.File.Exists(txtDatabase.Text) AndAlso System.IO.File.Exists(txtConfigFile.Text) Then
+        If System.IO.File.Exists(txtConfigFile.Text) Then
             ReadConfiguration()
         End If
 
@@ -63,14 +64,14 @@ Public Class frmKlimaatatlas
         End If
     End Sub
 
-    Private Sub Initialize()
-        'set the database connection, read the configuration file and start processing each rule
-        Klimaatatlas.SetProgressBar(prProgress, lblProgress)
-        If System.IO.File.Exists(txtDatabase.Text) Then
-            Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
-            Klimaatatlas.UpgradeDatabase()
-        End If
-    End Sub
+    'Private Sub Initialize()
+    '    'set the database connection, read the configuration file and start processing each rule
+    '    Klimaatatlas.SetProgressBar(prProgress, lblProgress)
+    '    If System.IO.File.Exists(txtDatabase.Text) Then
+    '        Klimaatatlas.SetDatabaseConnection(txtDatabase.Text)
+    '        Klimaatatlas.UpgradeDatabase()
+    '    End If
+    'End Sub
 
     Private Sub ReadConfiguration()
         Me.Klimaatatlas.Generalfunctions.UpdateProgressBar("Reading configuration...", 0, 10, True)
@@ -84,11 +85,11 @@ Public Class frmKlimaatatlas
 
     Private Sub btnExecute_Click(sender As Object, e As EventArgs) Handles btnExecute.Click
 
+        Klimaatatlas.initialize()
         Klimaatatlas.SetProgressBar(prProgress, lblProgress)
         Klimaatatlas.Log = New clsLog
 
         'store our paths for the next time
-        My.Settings.Database = txtDatabase.Text
         My.Settings.Configfile = txtConfigFile.Text
         My.Settings.Save()
 
@@ -117,17 +118,6 @@ Public Class frmKlimaatatlas
 
 
     End Sub
-
-    Private Sub btnDatabase_Click(sender As Object, e As EventArgs) Handles btnDatabase.Click
-        dlgOpenFile.Filter = "SQLite|*.db"
-        Dim res As DialogResult = dlgOpenFile.ShowDialog
-        If res = DialogResult.OK Then
-            txtDatabase.Text = dlgOpenFile.FileName
-            Klimaatatlas.SetDatabaseConnection(dlgOpenFile.FileName) ' As New clsKlimaatatlas(jsonPath, connectionString, configContent)
-            Klimaatatlas.UpgradeDatabase()
-        End If
-    End Sub
-
     Private Sub btnConfigFile_Click(sender As Object, e As EventArgs) Handles btnConfigFile.Click
         dlgOpenFile.Filter = "JSON|*.json"
         Dim res As DialogResult = dlgOpenFile.ShowDialog
@@ -173,8 +163,31 @@ Public Class frmKlimaatatlas
         myForm.ShowDialog()
     End Sub
 
-    Private Sub SpatialInterpolationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpatialInterpolationToolStripMenuItem.Click
-        Dim myForm As New frmSpatialInterpolation(Me.Klimaatatlas)
-        myForm.Show()
+    'Private Sub SpatialInterpolationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SpatialInterpolationToolStripMenuItem.Click
+    '    Dim myForm As New frmSpatialInterpolation(Me.Klimaatatlas)
+    '    myForm.Show()
+    'End Sub
+
+
+    Private Sub NieuwCreërenToolStripMenuItem_Click(sender As Object, e As EventArgs)
+        Dim res As DialogResult
+        dlgSaveFile.Filter = "SQLite|*.db"
+        res = dlgSaveFile.ShowDialog
+        If res = DialogResult.OK Then
+            Dim databasePath = dlgSaveFile.FileName
+            Try
+                ' Check if the file already exists
+                If File.Exists(databasePath) Then
+                    File.Delete(databasePath)
+                End If
+
+                ' Create the new SQLite database file
+                SQLiteConnection.CreateFile(databasePath)
+
+                MessageBox.Show("Database created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Catch ex As Exception
+                MessageBox.Show($"An error occurred while creating the database: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
     End Sub
 End Class

@@ -24,6 +24,30 @@
     ]
   },
   {
+    "objectID": "risicofactoren/inleiding.html",
+    "href": "risicofactoren/inleiding.html",
+    "title": "Risicofactoren",
+    "section": "",
+    "text": "In dit hoofdstuk werken we een aantal risicofactoren uit, samen met de maatlatten en hun wegingsfactoren.\nDeze risicofactoren moeten worden gezien als een vertrekpunt voor toepassingen in andere gebieden dan Rijnland; niet als een volwaardige implementatie die ongewijzigd overgenomen kan worden. Ieder gebied heeft zijn eigen karakteristieken en mogelijk andere factoren die belangrijk zijn bij het ontstaan van slechte waterkwaliteit.\nBij het werken met de klimaatatlas is het de kunst om de juiste factoren te identificeren en hun onderlinge weegfactoren af te stemmen en daar kennis van het gebied en notoire knelpunten in mee te nemen.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Risicofactoren",
+      "Inleiding"
+    ]
+  },
+  {
+    "objectID": "risicofactoren/inleiding.html#inleiding",
+    "href": "risicofactoren/inleiding.html#inleiding",
+    "title": "Risicofactoren",
+    "section": "",
+    "text": "In dit hoofdstuk werken we een aantal risicofactoren uit, samen met de maatlatten en hun wegingsfactoren.\nDeze risicofactoren moeten worden gezien als een vertrekpunt voor toepassingen in andere gebieden dan Rijnland; niet als een volwaardige implementatie die ongewijzigd overgenomen kan worden. Ieder gebied heeft zijn eigen karakteristieken en mogelijk andere factoren die belangrijk zijn bij het ontstaan van slechte waterkwaliteit.\nBij het werken met de klimaatatlas is het de kunst om de juiste factoren te identificeren en hun onderlinge weegfactoren af te stemmen en daar kennis van het gebied en notoire knelpunten in mee te nemen.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Risicofactoren",
+      "Inleiding"
+    ]
+  },
+  {
     "objectID": "nabewerkingen/arcgis_online.html",
     "href": "nabewerkingen/arcgis_online.html",
     "title": "Publiceren in ArcGIS online",
@@ -40,7 +64,7 @@
     "href": "gebruikershandleiding/installatie.html",
     "title": "Klimaatatlas installeren",
     "section": "",
-    "text": "Het installatiebestand van Klimaatatlas versie 1.1.1 vindt u &lt;a href=“https://www.dropbox.com/s/t3k8o8cscxz6dso/KlimaatatlasSetup-v1.1.1-x64.zip?dl=0&gt;hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
+    "text": "Het installatiebestand van Klimaatatlas versie 1.2.0, inclusief voorbeeldbestanden, vindt u &lt;a href=“https://www.dropbox.com/scl/fi/96cz0e10j3xoodfcyyzif/KlimaatatlasSetup-v1.2.0-x64.zip?rlkey=4dvc8u8ws2c3rhb1qm4dgj2wu&dl=0&gt;hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
     "crumbs": [
       "Klimaatatlas",
       "Gebruikershandleiding",
@@ -52,7 +76,7 @@
     "href": "gebruikershandleiding/installatie.html#stappenplan",
     "title": "Klimaatatlas installeren",
     "section": "",
-    "text": "Het installatiebestand van Klimaatatlas versie 1.1.1 vindt u &lt;a href=“https://www.dropbox.com/s/t3k8o8cscxz6dso/KlimaatatlasSetup-v1.1.1-x64.zip?dl=0&gt;hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
+    "text": "Het installatiebestand van Klimaatatlas versie 1.2.0, inclusief voorbeeldbestanden, vindt u &lt;a href=“https://www.dropbox.com/scl/fi/96cz0e10j3xoodfcyyzif/KlimaatatlasSetup-v1.2.0-x64.zip?rlkey=4dvc8u8ws2c3rhb1qm4dgj2wu&dl=0&gt;hier.\nU installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.\nvolg de instructies:\n\n\n\nstel de installatietaal in en klik op ‘ok’\n\n\n\n\n\nInstallatietaal instellen.\n\n\n\n\n\n\n\nneem kennis van de release notes en klik op ‘volgende’\n\n\n\n\n\nKennis nemen van de release notes.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nneem kennis van de locatie waar het programma wordt geïnstalleerd en klik op ‘installeren’\n\n\n\n\n\nKennis nemen van de installatielocatie.\n\n\n\n\n\n\n\nals de installatie compleet is hebt u de optie om het programma automatisch te starten.\n\n\n\n\n\nDe installatie is compleet.\n\n\n\n\nNa installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar ‘Klimaatatlas’. Onderstaand tonen we het opstartscherm.\n\n\n\nhet opstartscherm van Klimaatatlas.",
     "crumbs": [
       "Klimaatatlas",
       "Gebruikershandleiding",
@@ -64,7 +88,7 @@
     "href": "gebruikershandleiding/basisgebruik.html",
     "title": "Basisgebruik",
     "section": "",
-    "text": "In dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit behelst het inladen van een SQLite database-bestand, een JSON-bestand (.json) met rekenregels en het laten doorrekenen van die regels.\nHet resultaat van de analyse en berekeningen wordt door Klimaatatlas automatisch weggeschreven naar de Geopackage file.\nPer risicofactor is dit:\n\nhet risicogetal: een getal tussen 0 (geen risico) en 1 (maximaal risico)\nvoor elke maatlat die bijdroeg aan het risicogetal het percentuele aandeel in dat risico.",
+    "text": "In dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit behelst het inladen van een configuratiebestand (.json). Na het inladen van de configuratie kunnen de regels worden doorgerekend.\nHet JSON-bestand bevat in essentie de volgende zaken:\n\nEen specificatie van (klimaat)scenario’s\nEen verwijzing naar een Geopackage-bestand (.gpkg) wat de watervlakken van het gebied vertegenwoordigt\nDefinities van risicofactoren voor slechte waterkwaliteit en de onderliggende maatlatten en hun wegingsfactoren.\n\nHet resultaat van de analyse en berekeningen wordt door Klimaatatlas automatisch weggeschreven naar de Geopackage file.\nVoor risicofactor bestaat het rekenresultaat uit:\n\nhet risicogetal: een getal tussen 0 (geen risico) en 1 (maximaal risico)\nen voor elke maatlat die bijdroeg aan het risicogetal het percentuele aandeel in dat risico.",
     "crumbs": [
       "Klimaatatlas",
       "Gebruikershandleiding",
@@ -76,7 +100,7 @@
     "href": "gebruikershandleiding/basisgebruik.html#inleiding",
     "title": "Basisgebruik",
     "section": "",
-    "text": "In dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit behelst het inladen van een SQLite database-bestand, een JSON-bestand (.json) met rekenregels en het laten doorrekenen van die regels.\nHet resultaat van de analyse en berekeningen wordt door Klimaatatlas automatisch weggeschreven naar de Geopackage file.\nPer risicofactor is dit:\n\nhet risicogetal: een getal tussen 0 (geen risico) en 1 (maximaal risico)\nvoor elke maatlat die bijdroeg aan het risicogetal het percentuele aandeel in dat risico.",
+    "text": "In dit hoofdstuk beschrijven we de meest basale vorm waarin Klimaatatlas kan worden gebruikt. Dit behelst het inladen van een configuratiebestand (.json). Na het inladen van de configuratie kunnen de regels worden doorgerekend.\nHet JSON-bestand bevat in essentie de volgende zaken:\n\nEen specificatie van (klimaat)scenario’s\nEen verwijzing naar een Geopackage-bestand (.gpkg) wat de watervlakken van het gebied vertegenwoordigt\nDefinities van risicofactoren voor slechte waterkwaliteit en de onderliggende maatlatten en hun wegingsfactoren.\n\nHet resultaat van de analyse en berekeningen wordt door Klimaatatlas automatisch weggeschreven naar de Geopackage file.\nVoor risicofactor bestaat het rekenresultaat uit:\n\nhet risicogetal: een getal tussen 0 (geen risico) en 1 (maximaal risico)\nen voor elke maatlat die bijdroeg aan het risicogetal het percentuele aandeel in dat risico.",
     "crumbs": [
       "Klimaatatlas",
       "Gebruikershandleiding",
@@ -96,35 +120,35 @@
     ]
   },
   {
-    "objectID": "gebruikershandleiding/basisgebruik.html#een-sqlite-database-aanmaken",
-    "href": "gebruikershandleiding/basisgebruik.html#een-sqlite-database-aanmaken",
-    "title": "Basisgebruik",
-    "section": "Een SQLite-database aanmaken",
-    "text": "Een SQLite-database aanmaken\n\n\n\nIndien u nog geen SQLite database heeft, maak er eentje aan via het menu\n\n\n\n\n\nBladeren naar het database-bestand.",
-    "crumbs": [
-      "Klimaatatlas",
-      "Gebruikershandleiding",
-      "Basisgebruik"
-    ]
-  },
-  {
-    "objectID": "gebruikershandleiding/basisgebruik.html#de-sqlite-database-selecteren",
-    "href": "gebruikershandleiding/basisgebruik.html#de-sqlite-database-selecteren",
-    "title": "Basisgebruik",
-    "section": "De SQLite-database selecteren",
-    "text": "De SQLite-database selecteren\n\n\n\nKlik op de button achter ‘database file’\nBlader naar de SQLite database (.db)\n\n\n\n\n\nBladeren naar het database-bestand.",
-    "crumbs": [
-      "Klimaatatlas",
-      "Gebruikershandleiding",
-      "Basisgebruik"
-    ]
-  },
-  {
     "objectID": "gebruikershandleiding/basisgebruik.html#het-configuratiebestand-inlezen",
     "href": "gebruikershandleiding/basisgebruik.html#het-configuratiebestand-inlezen",
     "title": "Basisgebruik",
     "section": "Het configuratiebestand inlezen",
     "text": "Het configuratiebestand inlezen\n\n\n\nKlik op de button achter ‘Config file’\nBlader naar het JSON-bestand (.json)\n\n\n\n\n\nBladeren naar het configuratiebestand met de rekenregels.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Basisgebruik"
+    ]
+  },
+  {
+    "objectID": "gebruikershandleiding/basisgebruik.html#berekening-starten",
+    "href": "gebruikershandleiding/basisgebruik.html#berekening-starten",
+    "title": "Basisgebruik",
+    "section": "Berekening starten",
+    "text": "Berekening starten\nDoor op de button ‘Uitvoeren’ te drukken wordt de berekening gestart. Voor ieder scenario zoals gespecificeerd in het JSON-bestand worden alle risicofactoren doorlopen en berekend. Iedere risicofactor is opgebouwd uit verschillende maatlatten met elk een wegingsfactor.\nDe rekenresultaten worden weggeschreven naar het Geopackage (.gpkg) bestand. iedere risicofactor krijgt daarin een eigen kolom met het risicogetal (tussen 0 en 1) en iedere maatlat krijgt een eigen kolom met daarin de percentuele bijdrage (tussen 0 en 1) van die maatlat aan het berekende risicogetal.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Gebruikershandleiding",
+      "Basisgebruik"
+    ]
+  },
+  {
+    "objectID": "gebruikershandleiding/basisgebruik.html#resultaten-nabewerken",
+    "href": "gebruikershandleiding/basisgebruik.html#resultaten-nabewerken",
+    "title": "Basisgebruik",
+    "section": "Resultaten nabewerken",
+    "text": "Resultaten nabewerken\nHet aangepaste Geopackage-bestand kan worden ingeladen in de meeste GIS-programma’s.\n\nQGis biedt volledige ondersteuning\nArcGIS biedt ondersteuning mits de kolomnamen niet te lang zijn.\n\nIn GIS kunnen voor iedere resultaatkolom de watervlakken worden ingekleurd met een kleur als functie van de risicowaarde. Binnen het ontwikkelproject heeft Rijnland echter ook een eigen workflow ontwikkeld om de uitkomsten te kunnen publiceren in ArcGIS Online. ‘link invoegen’.",
     "crumbs": [
       "Klimaatatlas",
       "Gebruikershandleiding",
@@ -167,11 +191,59 @@
     "text": "Architectuur\nDe software bestaat uit een verzameling aan tools en scripts. In deze handleiding leggen we de werking ervan uit en werken we een aantal workflows uit waarmee het risico op slechte waterkwaliteit in kaart kan worden gebracht.\n\nKlimaatatlas: dit is de desktopapplicatie die voor ieder watervlak en waterkwaliteitsgrootheid het risicogetal berekent en wegschrijft\nHydroToolbox: een externe desktopapplicatie van Hydroconsult waarmee waterkwaliteitsresultaten uit SOEK kunnen worden vertaald naar input voor de klimaatatlas.\nGeopackage: een GIS-bestand met watervlakken\n.json-bestand: een tekstbestand waarin de gebruiker de maatlatten definieert. Samen met de geopackage vormt dit bestand de input voor het programma ‘Klimaatatlas’.\n\nHet rekenresultaat wordt weer weggeschreven naar de geopackage. Dit bestand kan verder worden gebruikt voor visualisatie, presentatie en analyse."
   },
   {
+    "objectID": "risicofactoren/biomassa.html",
+    "href": "risicofactoren/biomassa.html",
+    "title": "Risicofactor biomassa",
+    "section": "",
+    "text": "De risicofactor ‘biomassa’ gaat onder meer over de hoeveelheid algen die de waterkwaliteit kan verslechteren. Deze hoeveelheid biomassa hangt af van allerlei factoren zoals: watertemperatuur en de aanwezigheid van vermestende stoffen. In dit hoofdstuk werken we deze risicofactor uit.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Risicofactoren",
+      "Biomassa"
+    ]
+  },
+  {
+    "objectID": "risicofactoren/biomassa.html#inleiding",
+    "href": "risicofactoren/biomassa.html#inleiding",
+    "title": "Risicofactor biomassa",
+    "section": "",
+    "text": "De risicofactor ‘biomassa’ gaat onder meer over de hoeveelheid algen die de waterkwaliteit kan verslechteren. Deze hoeveelheid biomassa hangt af van allerlei factoren zoals: watertemperatuur en de aanwezigheid van vermestende stoffen. In dit hoofdstuk werken we deze risicofactor uit.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Risicofactoren",
+      "Biomassa"
+    ]
+  },
+  {
+    "objectID": "risicofactoren/biomassa.html#maatlatten",
+    "href": "risicofactoren/biomassa.html#maatlatten",
+    "title": "Risicofactor biomassa",
+    "section": "Maatlatten",
+    "text": "Maatlatten\nVoor ‘biomassa’ hebben we de volgende maatlatten onderscheiden:\n\nOverschrijdingstemperatuur\nDe gedachte achter overschrijdingstemperatuur als maatlat is dat er een temperatuur is waarbij algen maximaal groeien. Deze temperatuur ligt rond de 30 graden celcius. Bij 15 graden of lager is de algengroei minimaal, en ook boven de 45 graden komt hij tot stilstand.\nAls parameter nemen we de ‘de watertemperatuur die gemiddeld één week per jaar wordt overschreden’. Deze temperatuur verschilt per waterlichaam. Voor dieper water zal de waarde lager liggen dan voor ondiepe sloten. In de voorbewerking hebben we voor ieder waterlichaam deze overschijdingstemperatuur Tex bepaald, als functie van de waterdiepte.\nHet risicogetal van deze maatlat wordt berekend op basis van lineaire interpolatie tussen de volgende drie getalsparen:\n\n15 graden: risicogetal 0\n30 graden: risicogetal 1\n45 graden: risicogetal 0\n\nAls wegingsfactor voor de maatlat ‘Overschrijdingstemperatuur’ hanteren we de waarde 1.\n\n\nVermesting stikstof\nDe aanwezigheid van nutriënten in de waterkolom vormen de drijvende kracht achter de groei van algen. Daarom hebben we ook de vermesting met stikstof meegenomen als maatlat. Als invoerparameter voor deze maatlat nemen we de 50-percentielwaarde van de stikstofconcentratie Nt uit het SOBEK-model van het hoogheemraadschap. Middels een uitgebreide voorbewerking hebben we deze concentraties weten te vertalen naar waarden in de watervlakkenkaart.\nHet risicogetal van deze maatlat wordt berekend op basis van lineaire interpolatie tussen de volgende twee getalsparen:\n\n0 mg/l: risicogetal 0\n15 mg/l: risicogetal 1\n\nAls wegingsfactor voor de maatlat ‘Vermesting met stikstof’ hanteren we de waarde 0.5 omdat er ook nog vermesting met fosfor bij komt.\n\n\nVermesting fosfor\nOok de aanwezigheid van fosfor in de waterkolom veroorzaakt groei van algen. Net als bij stikstof nemen we vermesting met fosfor mee als maatlat. Invoerparameter is de 50-percentielwaarde van de fosforconcentratie Pt uit het SOBEK-model. Ook hier hebben we in de voorbewerkingen gezorgd dat de concentraties uit SOBEK naar de watervlakkenkaart konden worden geïnterpoleerd.\nHet risicogetal van deze maatlat wordt berekend op basis van lineaire interpolatie tussen de volgende twee getalsparen:\n\n0 mg/l: risicogetal 0\n1.5 mg/l: risicogetal 1\n\nNet als bij stikstof hanteren we als wegingsfactor voor deze maatlat de waarde 0.5.\n\n\nMaximale hoeveelheid biomassa\nDe hoeveelheid biomassa die een waterlichaam kan opnemen is een functie van de waterdiepte. Daarom passen we voor deze maatlat een transformatiefunctie toe op de waterdiepte van het waterlichaam. De formule voor deze transformatie luidt:\nmaximale biomassa = 1683.6EXP(-0.578watediepte)\nVervolgens berekenen we het risicogetal middels lineaire interpolatie tussen de volgende twee getalsparen:\n\n0: risicogetal 0\n1400: risicogetal 1\n\nAls wegingsfactor nemen we 1.",
+    "crumbs": [
+      "Klimaatatlas",
+      "Risicofactoren",
+      "Biomassa"
+    ]
+  },
+  {
+    "objectID": "risicofactoren/biomassa.html#weging",
+    "href": "risicofactoren/biomassa.html#weging",
+    "title": "Risicofactor biomassa",
+    "section": "Weging",
+    "text": "Weging\nSamenvattend berekenen we de risicofactor ‘biomassa’ op basis van de volgende maatlatten en hun wegingsfactoren:\n\nOverschrijdingstemperatuur: wegingsfactor 1\nVermesting stikstof: wegingsfactor 0.5\nVermesting fosfor: wegingsfactor 0.5\nMaximale biomassa: wegingsfactor 1",
+    "crumbs": [
+      "Klimaatatlas",
+      "Risicofactoren",
+      "Biomassa"
+    ]
+  },
+  {
     "objectID": "technische_documentatie/configuratiebestand.html",
     "href": "technische_documentatie/configuratiebestand.html",
     "title": "Klimaatatlas",
     "section": "",
-    "text": "Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. Hierin ligt vast welke risicoparameters voor waterkwaliteit worden berekend, van welke maatlatten die gebruik maken en welke weegfactoren gelden voor elke maatlat.\nIn dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.\nOm te beginnen bestaat het JSON-bestand uit een tekstbestand waarbij alle inhoud tussen twee accolades staat. De accolades markeren het begin en eind van een JSON-object. Een JSON-object kan op zijn beurt weer JSON-objecten bevatten:\n{\n    \"titel\": \"dit is een attribuut binnen het hoofd-json-object\",\n    \"array\":[\"een\", \"array\", \"is\", \"een\", \"lijst\", \"met\", \"waarden\"],\n    \"item1\": {\n        \"titel\": \"dit is een json-object in een json-object\",\n        \"opmerking\": \"json-objecten kunnen dus genest worden\"\n    },\n    \"item2\": {\n        \"titel\": \"dit is het tweede object binnen het hoofdobject\",\n        \"opmerking\": \"merk op dat een object altijd eindigt met een komma als daarna nog een object volgt\"\n    }\n}\nHieronder bespreken we welke zaken in het JSON-bestand kunnen staan.\n\n\nHet bestand begint met een array waarin vastligt welke scenario’s moeten worden doorgerekend. We merken op dat de namen van scenario’s niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.\n\"scenarios\": [\"K2023\", \"K2050\", \"K2100\"],\n\n\n\nCruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.\n\"features_dataset\": {\n    \"_comment\": \"this attribute describes the water area polygons\",\n    \"id\": \"watervlakken\",\n    \"data_type\": \"polygons\",\n    \"storage_type\": \"geopackage\",\n    \"path\": \"c:\\\\GITHUB\\\\klimaatatlas\\\\GIS\\\\Watervlakken_Plus7.gpkg\",\n    \"tablename\":\"Watervlakken_Plus7\",\n    \"fields\": [\n        {\"fieldtype\": \"id\", \"datatype\":\"SQLITETEXT\", \"fieldname\": \"CODE\"},\n        {\"fieldtype\": \"featureidx\", \"datatype\":\"SQLITEINT\", \"fieldname\": \"FEATUREIDX\"},\n        {\"fieldtype\": \"depth\", \"datatype\":\"SQLITEREAL\", \"fieldname\": \"WATERDIEPT\"}\n    ]\n},\n\nIn JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash  een eigen andere toepassing heeft.\nHet attribuut “data_type” kan op dit moment alleen de waarde “polygons” bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.\nHet attribuut “storage_type” kan op dit moment alleen de waarde “geopackage” bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.\nHet attribuut “datatype” kan de volgende waarden bevatten:\n\nSQLITETEXT: geeft aan dat het veld tekstuele waarden bevat\nSQLITEINT: geeft aan dat het veld gehele getallen bevat\nSQLITEREAL: geeft aan dat het veld getallen met decimalen bevat\n\n\n\n\n\nRekenregels is een array (lijst) van JSON-objecten waarvan elk element een unieke rekenregel beschrijft. Onderstaand tonen we een voorbeeld",
+    "text": "Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. In dit bestand ligt vast:\n\nwelke risicoparameters voor waterkwaliteit worden berekend\nvan welke maatlatten die gebruik maken en\nwelke weegfactoren gelden voor elke maatlat.\n\nIn dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.\nOm te beginnen bestaat het JSON-bestand uit een tekstbestand waarbij alle inhoud tussen twee accolades staat. De accolades markeren het begin en eind van een JSON-object. Een JSON-object kan op zijn beurt weer JSON-objecten bevatten:\n{\n    \"titel\": \"dit is een attribuut binnen het hoofd-json-object\",\n    \"array\":[\"een\", \"array\", \"is\", \"een\", \"lijst\", \"met\", \"waarden\"],\n    \"item1\": {\n        \"titel\": \"dit is een json-object in een json-object\",\n        \"opmerking\": \"json-objecten kunnen dus genest worden\"\n    },\n    \"item2\": {\n        \"titel\": \"dit is het tweede object binnen het hoofdobject\",\n        \"opmerking\": \"merk op dat een object altijd eindigt met een komma als daarna nog een object volgt\"\n    }\n}\nHieronder bespreken we welke zaken in het JSON-bestand kunnen staan.\n\n\nHet bestand begint met een array waarin vastligt welke scenario’s moeten worden doorgerekend. We merken op dat de namen van scenario’s niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.\n\"scenarios\": [\"K2023\", \"K2050\", \"K2100\"],\n\n\n\nCruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.\n\"features_dataset\": {\n    \"_comment\": \"this attribute describes the water area polygons\",\n    \"id\": \"watervlakken\",\n    \"data_type\": \"polygons\",\n    \"storage_type\": \"geopackage\",\n    \"path\": \"c:\\\\GITHUB\\\\klimaatatlas\\\\GIS\\\\Watervlakken_Plus7.gpkg\",\n    \"tablename\":\"Watervlakken_Plus7\",\n    \"fields\": [\n        {\"fieldtype\": \"id\", \"datatype\":\"SQLITETEXT\", \"fieldname\": \"CODE\"},\n        {\"fieldtype\": \"featureidx\", \"datatype\":\"SQLITEINT\", \"fieldname\": \"FEATUREIDX\"},\n        {\"fieldtype\": \"depth\", \"datatype\":\"SQLITEREAL\", \"fieldname\": \"WATERDIEPT\"}\n    ]\n},\n\nIn JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash  een eigen andere toepassing heeft.\nHet attribuut “data_type” kan op dit moment alleen de waarde “polygons” bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.\nHet attribuut “storage_type” kan op dit moment alleen de waarde “geopackage” bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.\nHet attribuut “datatype” kan de volgende waarden bevatten:\n\nSQLITETEXT: geeft aan dat het veld tekstuele waarden bevat\nSQLITEINT: geeft aan dat het veld gehele getallen bevat\nSQLITEREAL: geeft aan dat het veld getallen met decimalen bevat\n\n\n\n\n\nRekenregels is een array (lijst) van JSON-objecten waarvan elk element een unieke rekenregel beschrijft. Onderstaand tonen we een voorbeeld-rekenregel voor het risico op kroos.\n{\n  \"name\": \"kroos\",\n  \"benchmarks\":[\n    {\n        \"name\": \"doodlopend\",\n        \"comment\":\"of het waterlichaam doodlopend is.\",\n        \"fieldname\":[\n            {\"scenario\":\"K2023\", \"field\":\"doodlopend\"},\n            {\"scenario\":\"K2050\", \"field\":\"doodlopend\"},\n            {\"scenario\":\"K2100\", \"field\":\"doodlopend\"}\n        ],\n        \"classification\": \"discrete\",\n        \"classes\": [\n            {\"name\": \"nee\", \"value\": 0}, \n            {\"name\": \"Null\", \"value\": 0}, \n            {\"name\": \"ja\", \"value\": 1}              \n        ]\n    },\n    {\n        \"name\": \"diepte\",\n        \"comment\":\"diepte van het waterlichaam.\",\n        \"fieldname\":[\n            {\"scenario\":\"K2023\", \"field\":\"waterdiept\"},\n            {\"scenario\":\"K2050\", \"field\":\"waterdiept\"},\n            {\"scenario\":\"K2100\", \"field\":\"waterdiept\"}          \n        ],\n        \"classification\": \"continuous\",\n        \"valuesRange\": [{\"value\":0,\"verdict\":1},{\"value\":1.5,\"verdict\":0}],\n    },\n  ],\n  \"resultsfield\": \"kroos\",\n  \"components\": [\n    {\"benchmark\": \"doodlopend\", \"weight\": 1, \"resultsfield\": \"kroos_doodl\", \"comment\": \"kroos, aandeel doodlopendheid watergang\"},\n    {\"benchmark\": \"diepte\", \"weight\": 1, \"resultsfield\": \"kroos_diep\", \"comment\": \"kroos, aandeel diepte watergang\"}\n  ]\n},\nIn deze rekenregel is de naam van de risicofactor ‘kroos’. In het voorbeeld wordt het risico op kroos bepaald door twee maatlatten:\n\ndoodlopendheid\nDoodlopendheid is een discrete factor. De waarde “ja” wordt geïnterpreteerd als ‘hoog risico’ (waarde 1) en de waarde “nee” of een leeg veld als ‘geen risico’ (waarde 0).\nwaterdiepte\nWaterdiepte is een traploze factor. Er wordt lineair geïnterpoleerd tussen de waterdieptes 0 en 1.5 m. Dit levert een risicowaarde tussen 0 en 1 op.\n\nHet resultaat van de berekening wordt weggeschreven naar een kolom: scenario +‘’ + name, bijvoorbeeld: K2023_kroos.Ook de bijdragen van de individuele componenten worden weggeschreven naar de Geopackage. De naamgeving van de kolommen wordt: scenario + ’’ + resultsfield.\nTot slot ligt vast naar welke dataset het resultaat moet worden weggeschreven:\n\"results\": {\n    \"dataset\": \"watervlakken\"\n}",
     "crumbs": [
       "Klimaatatlas",
       "Technische documentatie",
@@ -183,7 +255,7 @@
     "href": "technische_documentatie/configuratiebestand.html#configuratiebestand-rekenregels",
     "title": "Klimaatatlas",
     "section": "",
-    "text": "Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. Hierin ligt vast welke risicoparameters voor waterkwaliteit worden berekend, van welke maatlatten die gebruik maken en welke weegfactoren gelden voor elke maatlat.\nIn dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.\nOm te beginnen bestaat het JSON-bestand uit een tekstbestand waarbij alle inhoud tussen twee accolades staat. De accolades markeren het begin en eind van een JSON-object. Een JSON-object kan op zijn beurt weer JSON-objecten bevatten:\n{\n    \"titel\": \"dit is een attribuut binnen het hoofd-json-object\",\n    \"array\":[\"een\", \"array\", \"is\", \"een\", \"lijst\", \"met\", \"waarden\"],\n    \"item1\": {\n        \"titel\": \"dit is een json-object in een json-object\",\n        \"opmerking\": \"json-objecten kunnen dus genest worden\"\n    },\n    \"item2\": {\n        \"titel\": \"dit is het tweede object binnen het hoofdobject\",\n        \"opmerking\": \"merk op dat een object altijd eindigt met een komma als daarna nog een object volgt\"\n    }\n}\nHieronder bespreken we welke zaken in het JSON-bestand kunnen staan.\n\n\nHet bestand begint met een array waarin vastligt welke scenario’s moeten worden doorgerekend. We merken op dat de namen van scenario’s niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.\n\"scenarios\": [\"K2023\", \"K2050\", \"K2100\"],\n\n\n\nCruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.\n\"features_dataset\": {\n    \"_comment\": \"this attribute describes the water area polygons\",\n    \"id\": \"watervlakken\",\n    \"data_type\": \"polygons\",\n    \"storage_type\": \"geopackage\",\n    \"path\": \"c:\\\\GITHUB\\\\klimaatatlas\\\\GIS\\\\Watervlakken_Plus7.gpkg\",\n    \"tablename\":\"Watervlakken_Plus7\",\n    \"fields\": [\n        {\"fieldtype\": \"id\", \"datatype\":\"SQLITETEXT\", \"fieldname\": \"CODE\"},\n        {\"fieldtype\": \"featureidx\", \"datatype\":\"SQLITEINT\", \"fieldname\": \"FEATUREIDX\"},\n        {\"fieldtype\": \"depth\", \"datatype\":\"SQLITEREAL\", \"fieldname\": \"WATERDIEPT\"}\n    ]\n},\n\nIn JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash  een eigen andere toepassing heeft.\nHet attribuut “data_type” kan op dit moment alleen de waarde “polygons” bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.\nHet attribuut “storage_type” kan op dit moment alleen de waarde “geopackage” bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.\nHet attribuut “datatype” kan de volgende waarden bevatten:\n\nSQLITETEXT: geeft aan dat het veld tekstuele waarden bevat\nSQLITEINT: geeft aan dat het veld gehele getallen bevat\nSQLITEREAL: geeft aan dat het veld getallen met decimalen bevat\n\n\n\n\n\nRekenregels is een array (lijst) van JSON-objecten waarvan elk element een unieke rekenregel beschrijft. Onderstaand tonen we een voorbeeld",
+    "text": "Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. In dit bestand ligt vast:\n\nwelke risicoparameters voor waterkwaliteit worden berekend\nvan welke maatlatten die gebruik maken en\nwelke weegfactoren gelden voor elke maatlat.\n\nIn dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.\nOm te beginnen bestaat het JSON-bestand uit een tekstbestand waarbij alle inhoud tussen twee accolades staat. De accolades markeren het begin en eind van een JSON-object. Een JSON-object kan op zijn beurt weer JSON-objecten bevatten:\n{\n    \"titel\": \"dit is een attribuut binnen het hoofd-json-object\",\n    \"array\":[\"een\", \"array\", \"is\", \"een\", \"lijst\", \"met\", \"waarden\"],\n    \"item1\": {\n        \"titel\": \"dit is een json-object in een json-object\",\n        \"opmerking\": \"json-objecten kunnen dus genest worden\"\n    },\n    \"item2\": {\n        \"titel\": \"dit is het tweede object binnen het hoofdobject\",\n        \"opmerking\": \"merk op dat een object altijd eindigt met een komma als daarna nog een object volgt\"\n    }\n}\nHieronder bespreken we welke zaken in het JSON-bestand kunnen staan.\n\n\nHet bestand begint met een array waarin vastligt welke scenario’s moeten worden doorgerekend. We merken op dat de namen van scenario’s niet met een numerieke waarde mogen beginnen omdat het geopackage-bestandformaat dit niet accepteert voor de kolomnamen.\n\"scenarios\": [\"K2023\", \"K2050\", \"K2100\"],\n\n\n\nCruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoor we het risico op slechte waterkwaliteit willen uitrekenen. Dit leggen we vast in een JSON-object waarin het pad naar de Geopackage (.gpkg) is vastgelegd, maar ook de laag (tablename), het soort gegevens en de gegevensvelden die we verderop in het proces gaan gebruiken.\n\"features_dataset\": {\n    \"_comment\": \"this attribute describes the water area polygons\",\n    \"id\": \"watervlakken\",\n    \"data_type\": \"polygons\",\n    \"storage_type\": \"geopackage\",\n    \"path\": \"c:\\\\GITHUB\\\\klimaatatlas\\\\GIS\\\\Watervlakken_Plus7.gpkg\",\n    \"tablename\":\"Watervlakken_Plus7\",\n    \"fields\": [\n        {\"fieldtype\": \"id\", \"datatype\":\"SQLITETEXT\", \"fieldname\": \"CODE\"},\n        {\"fieldtype\": \"featureidx\", \"datatype\":\"SQLITEINT\", \"fieldname\": \"FEATUREIDX\"},\n        {\"fieldtype\": \"depth\", \"datatype\":\"SQLITEREAL\", \"fieldname\": \"WATERDIEPT\"}\n    ]\n},\n\nIn JSON moeten paden worden genoteerd met dubbele backslash \\\\ tussen de mappen. Dit is nodig omdat in JSON de backslash  een eigen andere toepassing heeft.\nHet attribuut “data_type” kan op dit moment alleen de waarde “polygons” bevatten. Dit betekent dat alleen watervlakken worden ondersteund; geen lijnvormige of waterlichamen.\nHet attribuut “storage_type” kan op dit moment alleen de waarde “geopackage” bevatten. Dit betekent dat alleen bronbestanden van het type geopackage worden ondersteund (.gpkg). Mogelijk breiden we dit later uit.\nHet attribuut “datatype” kan de volgende waarden bevatten:\n\nSQLITETEXT: geeft aan dat het veld tekstuele waarden bevat\nSQLITEINT: geeft aan dat het veld gehele getallen bevat\nSQLITEREAL: geeft aan dat het veld getallen met decimalen bevat\n\n\n\n\n\nRekenregels is een array (lijst) van JSON-objecten waarvan elk element een unieke rekenregel beschrijft. Onderstaand tonen we een voorbeeld-rekenregel voor het risico op kroos.\n{\n  \"name\": \"kroos\",\n  \"benchmarks\":[\n    {\n        \"name\": \"doodlopend\",\n        \"comment\":\"of het waterlichaam doodlopend is.\",\n        \"fieldname\":[\n            {\"scenario\":\"K2023\", \"field\":\"doodlopend\"},\n            {\"scenario\":\"K2050\", \"field\":\"doodlopend\"},\n            {\"scenario\":\"K2100\", \"field\":\"doodlopend\"}\n        ],\n        \"classification\": \"discrete\",\n        \"classes\": [\n            {\"name\": \"nee\", \"value\": 0}, \n            {\"name\": \"Null\", \"value\": 0}, \n            {\"name\": \"ja\", \"value\": 1}              \n        ]\n    },\n    {\n        \"name\": \"diepte\",\n        \"comment\":\"diepte van het waterlichaam.\",\n        \"fieldname\":[\n            {\"scenario\":\"K2023\", \"field\":\"waterdiept\"},\n            {\"scenario\":\"K2050\", \"field\":\"waterdiept\"},\n            {\"scenario\":\"K2100\", \"field\":\"waterdiept\"}          \n        ],\n        \"classification\": \"continuous\",\n        \"valuesRange\": [{\"value\":0,\"verdict\":1},{\"value\":1.5,\"verdict\":0}],\n    },\n  ],\n  \"resultsfield\": \"kroos\",\n  \"components\": [\n    {\"benchmark\": \"doodlopend\", \"weight\": 1, \"resultsfield\": \"kroos_doodl\", \"comment\": \"kroos, aandeel doodlopendheid watergang\"},\n    {\"benchmark\": \"diepte\", \"weight\": 1, \"resultsfield\": \"kroos_diep\", \"comment\": \"kroos, aandeel diepte watergang\"}\n  ]\n},\nIn deze rekenregel is de naam van de risicofactor ‘kroos’. In het voorbeeld wordt het risico op kroos bepaald door twee maatlatten:\n\ndoodlopendheid\nDoodlopendheid is een discrete factor. De waarde “ja” wordt geïnterpreteerd als ‘hoog risico’ (waarde 1) en de waarde “nee” of een leeg veld als ‘geen risico’ (waarde 0).\nwaterdiepte\nWaterdiepte is een traploze factor. Er wordt lineair geïnterpoleerd tussen de waterdieptes 0 en 1.5 m. Dit levert een risicowaarde tussen 0 en 1 op.\n\nHet resultaat van de berekening wordt weggeschreven naar een kolom: scenario +‘’ + name, bijvoorbeeld: K2023_kroos.Ook de bijdragen van de individuele componenten worden weggeschreven naar de Geopackage. De naamgeving van de kolommen wordt: scenario + ’’ + resultsfield.\nTot slot ligt vast naar welke dataset het resultaat moet worden weggeschreven:\n\"results\": {\n    \"dataset\": \"watervlakken\"\n}",
     "crumbs": [
       "Klimaatatlas",
       "Technische documentatie",

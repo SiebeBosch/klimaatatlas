@@ -1,6 +1,10 @@
 ## Configuratiebestand rekenregels
 
-Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. Hierin ligt vast welke risicoparameters voor waterkwaliteit worden berekend, van welke maatlatten die gebruik maken en welke weegfactoren gelden voor elke maatlat.
+Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. In dit bestand ligt vast:
+
+* welke risicoparameters voor waterkwaliteit worden berekend
+* van welke maatlatten die gebruik maken en
+* welke weegfactoren gelden voor elke maatlat.
 
 In dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.
 
@@ -62,6 +66,62 @@ Cruciaal is het bestand met watervlakken. Dit zijn immers de watergangen waarvoo
 ### Rekenregels
 
 Rekenregels is een array (lijst) van JSON-objecten waarvan elk element een unieke rekenregel beschrijft. 
-Onderstaand tonen we een voorbeeld
+Onderstaand tonen we een voorbeeld-rekenregel voor het risico op kroos.
+
+    {
+      "name": "kroos",
+	  "benchmarks":[
+		{
+			"name": "doodlopend",
+			"comment":"of het waterlichaam doodlopend is.",
+			"fieldname":[
+				{"scenario":"K2023", "field":"doodlopend"},
+				{"scenario":"K2050", "field":"doodlopend"},
+				{"scenario":"K2100", "field":"doodlopend"}
+			],
+			"classification": "discrete",
+			"classes": [
+				{"name": "nee", "value": 0}, 
+				{"name": "Null", "value": 0}, 
+				{"name": "ja", "value": 1}				
+			]
+		},
+		{
+			"name": "diepte",
+			"comment":"diepte van het waterlichaam.",
+			"fieldname":[
+				{"scenario":"K2023", "field":"waterdiept"},
+				{"scenario":"K2050", "field":"waterdiept"},
+				{"scenario":"K2100", "field":"waterdiept"}			
+			],
+			"classification": "continuous",
+			"valuesRange": [{"value":0,"verdict":1},{"value":1.5,"verdict":0}],
+		},
+	  ],
+      "resultsfield": "kroos",
+      "components": [
+        {"benchmark": "doodlopend", "weight": 1, "resultsfield": "kroos_doodl", "comment": "kroos, aandeel doodlopendheid watergang"},
+        {"benchmark": "diepte", "weight": 1, "resultsfield": "kroos_diep", "comment": "kroos, aandeel diepte watergang"}
+      ]
+    },
+
+In deze rekenregel is de naam van de risicofactor 'kroos'. In het voorbeeld wordt het risico op kroos bepaald door twee maatlatten:
+
+* doodlopendheid
+
+    Doodlopendheid is een discrete factor. De waarde "ja" wordt geïnterpreteerd als 'hoog risico' (waarde 1) en de waarde "nee" of een leeg veld als 'geen risico' (waarde 0).
+
+* waterdiepte
+
+    Waterdiepte is een traploze factor. Er wordt lineair geïnterpoleerd tussen de waterdieptes 0 en 1.5 m. Dit levert een risicowaarde tussen 0 en 1 op. 
+
+Het resultaat van de berekening wordt weggeschreven naar een kolom: scenario +'_' + _name_, bijvoorbeeld: K2023_kroos.Ook de bijdragen van de individuele componenten worden weggeschreven naar de Geopackage. De naamgeving van de kolommen wordt: scenario + '_' + _resultsfield_.
+
+Tot slot ligt vast naar welke dataset het resultaat moet worden weggeschreven:
+
+    "results": {
+        "dataset": "watervlakken"
+    }
+
 
 

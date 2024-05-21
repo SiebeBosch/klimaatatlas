@@ -7,9 +7,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
     <Platforms>AnyCPU;x64</Platforms>
-    <AssemblyVersion>1.1.2</AssemblyVersion>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
     <Title>Klimaatatlas</Title>
-    <FileVersion>1.1.2</FileVersion>
+    <FileVersion>1.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

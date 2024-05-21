@@ -8,8 +8,5 @@
     <Compile Update="frmKlimaatatlas.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="frmSpatialInterpolation.vb">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
 </Project>

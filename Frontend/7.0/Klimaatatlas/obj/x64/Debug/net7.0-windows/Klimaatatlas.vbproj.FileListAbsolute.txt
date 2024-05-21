@@ -120,7 +120,6 @@ C:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\obj\x64\Debug\net7.0-windows\In
 C:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\obj\x64\Debug\net7.0-windows\Klimaatatlas.vbproj.ResolveComReference.cache
 C:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\obj\x64\Debug\net7.0-windows\Klimaatatlas.frmAbout.resources
 C:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\obj\x64\Debug\net7.0-windows\Klimaatatlas.frmKlimaatatlas.resources
-C:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\obj\x64\Debug\net7.0-windows\Klimaatatlas.frmSpatialInterpolation.resources
 C:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\obj\x64\Debug\net7.0-windows\Klimaatatlas.vbproj.GenerateResource.cache
 C:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\obj\x64\Debug\net7.0-windows\Klimaatatlas.GeneratedMSBuildEditorConfig.editorconfig
 C:\GITHUB\klimaatatlas\Frontend\7.0\Klimaatatlas\obj\x64\Debug\net7.0-windows\Klimaatatlas.AssemblyInfoInputs.cache

@@ -249,32 +249,32 @@ Public Class clsDataset
 
                     SF.Close()
 
-                Case enmStorageType.sqlite
+                    'Case enmStorageType.sqlite
 
-                    'Features = New Dictionary(Of Integer, clsSpatialFeature) 'key = feature index                  'features not necessary since we have the featureidx and can look up the feature from the featuresdataset
-                    Dim connectionString As String = String.Format("Data Source={0};Version=3;", path)
-                    Setup.SQLiteCon = New SQLite.SQLiteConnection(connectionString)
-                    Setup.SQLiteCon.Open()
+                    '    'Features = New Dictionary(Of Integer, clsSpatialFeature) 'key = feature index                  'features not necessary since we have the featureidx and can look up the feature from the featuresdataset
+                    '    Dim connectionString As String = String.Format("Data Source={0};Version=3;", path)
+                    '    Setup.SQLiteCon = New SQLite.SQLiteConnection(connectionString)
+                    '    Setup.SQLiteCon.Open()
 
-                    Dim query As String = "SELECT " & Fields.Values(0).FieldName
-                    For i = 1 To Fields.Count - 1
-                        query &= ", " & Fields.Values(i).FieldName
-                    Next
-                    query &= " FROM " & tablename & ";"
+                    '    Dim query As String = "SELECT " & Fields.Values(0).FieldName
+                    '    For i = 1 To Fields.Count - 1
+                    '        query &= ", " & Fields.Values(i).FieldName
+                    '    Next
+                    '    query &= " FROM " & tablename & ";"
 
-                    'read all data from the SQLite table
-                    Dim dt As New DataTable
-                    Setup.Generalfunctions.SQLiteQuery(Setup.SQLiteCon, query, dt, True)
+                    '    'read all data from the SQLite table
+                    '    Dim dt As New DataTable
+                    '    Setup.Generalfunctions.SQLiteQuery(Setup.SQLiteCon, query, dt, True)
 
-                    'transfer the data from our datatable to our internal data structure
-                    ReDim Values(Fields.Count - 1, dt.Rows.Count - 1)
-                    For i = 0 To dt.Rows.Count - 1
-                        For j = 0 To Fields.Count - 1
-                            Values(Fields.Values(j).fieldIdx, i) = dt.Rows(i)(j)
-                        Next
-                    Next
+                    '    'transfer the data from our datatable to our internal data structure
+                    '    ReDim Values(Fields.Count - 1, dt.Rows.Count - 1)
+                    '    For i = 0 To dt.Rows.Count - 1
+                    '        For j = 0 To Fields.Count - 1
+                    '            Values(Fields.Values(j).fieldIdx, i) = dt.Rows(i)(j)
+                    '        Next
+                    '    Next
 
-                    Setup.SQLiteCon.Close()
+                    '    Setup.SQLiteCon.Close()
                 Case Else
                     Throw New Exception("Error: storage type of dataset not yet supported for reading to internal dictionary: " & ID)
             End Select

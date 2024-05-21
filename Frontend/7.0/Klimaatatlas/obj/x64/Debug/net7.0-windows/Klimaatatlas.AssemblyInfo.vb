@@ -15,11 +15,11 @@ Imports System
 Imports System.Reflection
 <Assembly: System.Reflection.AssemblyCompanyAttribute("Klimaatatlas"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Debug"),  _
- Assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.2"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+552e3ae95afe103c37a3bdc2e22304457c103c43"),  _
+ Assembly: System.Reflection.AssemblyFileVersionAttribute("1.2.0"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7123fe207029f6a56a104d9c890cded5d21ff65"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("Klimaatatlas"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("Klimaatatlas"),  _
- Assembly: System.Reflection.AssemblyVersionAttribute("1.1.2"),  _
+ Assembly: System.Reflection.AssemblyVersionAttribute("1.2.0"),  _
  Assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0"),  _
  Assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")> 
 

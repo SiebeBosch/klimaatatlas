@@ -21,6 +21,12 @@ website:
             text: "Klimaatatlas installeren"
           - href: gebruikershandleiding/basisgebruik.qmd
             text: "Basisgebruik"
+      - section: "Risicofactoren"
+        contents:
+          - href: risicofactoren/inleiding.qmd
+            text: "Inleiding"
+          - href: risicofactoren/biomassa.qmd
+            text: "Biomassa"
       - section: "Technische documentatie"
         contents:
           - href: technische_documentatie/configuratiebestand.qmd

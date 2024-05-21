@@ -1,13 +1,13 @@
 ---
 title: "Klimaatatlas installeren"
 author: "Siebe Bosch"
-date: "`r Sys.Date()`"  # This will print the current date
+date: "`r format(Sys.Date(), '%B %d, %Y')`"  # This will print the current date in a more readable format
 format: html
 ---
 
 ## Stappenplan
 
-Het installatiebestand van Klimaatatlas versie 1.1.1 vindt u <a href="https://www.dropbox.com/s/t3k8o8cscxz6dso/KlimaatatlasSetup-v1.1.1-x64.zip?dl=0>hier</a>.
+Het installatiebestand van Klimaatatlas versie 1.2.0, inclusief voorbeeldbestanden, vindt u <a href="https://www.dropbox.com/scl/fi/96cz0e10j3xoodfcyyzif/KlimaatatlasSetup-v1.2.0-x64.zip?rlkey=4dvc8u8ws2c3rhb1qm4dgj2wu&dl=0>hier</a>.
 
 U installeert het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.
 

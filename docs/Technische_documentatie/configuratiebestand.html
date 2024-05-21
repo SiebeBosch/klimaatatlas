@@ -164,12 +164,35 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
- <span class="menu-text">Technische documentatie</span></a>
+ <span class="menu-text">Risicofactoren</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../risicofactoren/inleiding.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inleiding</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../risicofactoren/biomassa.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Biomassa</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Technische documentatie</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../technische_documentatie/configuratiebestand.html" class="sidebar-item-text sidebar-link active">
@@ -180,13 +203,13 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
  <span class="menu-text">voorbewerkingen</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../voorbewerkingen/sobek.html" class="sidebar-item-text sidebar-link">
@@ -197,13 +220,13 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
  <span class="menu-text">Nabewerkingen</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../nabewerkingen/arcgis_online.html" class="sidebar-item-text sidebar-link">
@@ -239,7 +262,12 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="configuratiebestand-rekenregels" class="level2">
 <h2 class="anchored" data-anchor-id="configuratiebestand-rekenregels">Configuratiebestand rekenregels</h2>
-<p>Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. Hierin ligt vast welke risicoparameters voor waterkwaliteit worden berekend, van welke maatlatten die gebruik maken en welke weegfactoren gelden voor elke maatlat.</p>
+<p>Het configuratiebestand met de rekenregels (.json) vormt het hart van de applicatie. In dit bestand ligt vast:</p>
+<ul>
+<li>welke risicoparameters voor waterkwaliteit worden berekend</li>
+<li>van welke maatlatten die gebruik maken en</li>
+<li>welke weegfactoren gelden voor elke maatlat.</li>
+</ul>
 <p>In dit hoofdstuk beschrijven we welke elementen het bestand bevat en aan welke voorwaarden die moeten voldoen.</p>
 <p>Om te beginnen bestaat het JSON-bestand uit een tekstbestand waarbij alle inhoud tussen twee accolades staat. De accolades markeren het begin en eind van een JSON-object. Een JSON-object kan op zijn beurt weer JSON-objecten bevatten:</p>
 <pre><code>{
@@ -290,7 +318,55 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="rekenregels" class="level3">
 <h3 class="anchored" data-anchor-id="rekenregels">Rekenregels</h3>
-<p>Rekenregels is een array (lijst) van JSON-objecten waarvan elk element een unieke rekenregel beschrijft. Onderstaand tonen we een voorbeeld</p>
+<p>Rekenregels is een array (lijst) van JSON-objecten waarvan elk element een unieke rekenregel beschrijft. Onderstaand tonen we een voorbeeld-rekenregel voor het risico op kroos.</p>
+<pre><code>{
+  "name": "kroos",
+  "benchmarks":[
+    {
+        "name": "doodlopend",
+        "comment":"of het waterlichaam doodlopend is.",
+        "fieldname":[
+            {"scenario":"K2023", "field":"doodlopend"},
+            {"scenario":"K2050", "field":"doodlopend"},
+            {"scenario":"K2100", "field":"doodlopend"}
+        ],
+        "classification": "discrete",
+        "classes": [
+            {"name": "nee", "value": 0}, 
+            {"name": "Null", "value": 0}, 
+            {"name": "ja", "value": 1}              
+        ]
+    },
+    {
+        "name": "diepte",
+        "comment":"diepte van het waterlichaam.",
+        "fieldname":[
+            {"scenario":"K2023", "field":"waterdiept"},
+            {"scenario":"K2050", "field":"waterdiept"},
+            {"scenario":"K2100", "field":"waterdiept"}          
+        ],
+        "classification": "continuous",
+        "valuesRange": [{"value":0,"verdict":1},{"value":1.5,"verdict":0}],
+    },
+  ],
+  "resultsfield": "kroos",
+  "components": [
+    {"benchmark": "doodlopend", "weight": 1, "resultsfield": "kroos_doodl", "comment": "kroos, aandeel doodlopendheid watergang"},
+    {"benchmark": "diepte", "weight": 1, "resultsfield": "kroos_diep", "comment": "kroos, aandeel diepte watergang"}
+  ]
+},</code></pre>
+<p>In deze rekenregel is de naam van de risicofactor ‘kroos’. In het voorbeeld wordt het risico op kroos bepaald door twee maatlatten:</p>
+<ul>
+<li><p>doodlopendheid</p>
+<p>Doodlopendheid is een discrete factor. De waarde “ja” wordt geïnterpreteerd als ‘hoog risico’ (waarde 1) en de waarde “nee” of een leeg veld als ‘geen risico’ (waarde 0).</p></li>
+<li><p>waterdiepte</p>
+<p>Waterdiepte is een traploze factor. Er wordt lineair geïnterpoleerd tussen de waterdieptes 0 en 1.5 m. Dit levert een risicowaarde tussen 0 en 1 op.</p></li>
+</ul>
+<p>Het resultaat van de berekening wordt weggeschreven naar een kolom: scenario +‘<em>’ + <em>name</em>, bijvoorbeeld: K2023_kroos.Ook de bijdragen van de individuele componenten worden weggeschreven naar de Geopackage. De naamgeving van de kolommen wordt: scenario + ’</em>’ + <em>resultsfield</em>.</p>
+<p>Tot slot ligt vast naar welke dataset het resultaat moet worden weggeschreven:</p>
+<pre><code>"results": {
+    "dataset": "watervlakken"
+}</code></pre>
 
 
 </section>

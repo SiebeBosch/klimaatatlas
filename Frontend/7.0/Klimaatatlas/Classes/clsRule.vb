@@ -51,14 +51,21 @@ Public Class clsRule
 
                     'Recreate the results column
                     EnsureColumnExists(Setup.GpkgTable, $"{Scenario.Name}_{Name}", "REAL")
-                    Setup.Log.WriteToDiagnosticsFile($"Recreated column {Scenario.Name}_{Name}")
+                    Setup.Log.WriteToDiagnosticsFile($"(Re)created column {Scenario.Name}_{Name}")
 
                     Fields.Add($"{Scenario.Name}_{Name}")
                     columnsToUpdate.Add($"{Scenario.Name}_{Name}")
 
                     For Each Component As clsEquationComponent In EquationComponents
-                        Setup.Log.WriteToDiagnosticsFile("Creating field for component " & Component.ResultsFieldName)
+
+                        'drop the old component field, if it exists
+                        RemoveColumnIfExists(Setup.GpkgTable, $"{Scenario.Name}_{Component.ResultsFieldName}")
+                        Setup.Log.WriteToDiagnosticsFile("Old component field removed: " & $"{Scenario.Name}_{Component.ResultsFieldName}")
+
+                        '(re)create the component field
                         EnsureColumnExists(Setup.GpkgTable, $"{Scenario.Name}_{Component.ResultsFieldName}", "REAL")
+                        Setup.Log.WriteToDiagnosticsFile("(Re)created field for component " & Component.ResultsFieldName)
+
                         Fields.Add($"{Scenario.Name}_{Component.ResultsFieldName}")
                         columnsToUpdate.Add($"{Scenario.Name}_{Component.ResultsFieldName}")
                         Setup.Log.WriteToDiagnosticsFile("Field for component " & Component.ResultsFieldName & " created.")
@@ -88,7 +95,7 @@ Public Class clsRule
                         For Each Component As clsEquationComponent In EquationComponents
                             Dim FieldName As String = Component.Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper)
                             Dim Transformation As String = Component.Benchmark.TransformationPerScenario.Item(Scenario.Name.Trim.ToUpper)
-                            Dim yValue As Double = Double.NaN
+                            Dim yValue As Object = row(FieldName) 'initialize the value of yValue to the value as encountered in our geopackage. When a transformation applies this can still change
                             If Transformation <> "" Then
                                 'replaced the EvaluateSecondDegreePolynomeExpression function by a more generic one, also supporting exponential functions
                                 Dim Result As (Boolean, Double)

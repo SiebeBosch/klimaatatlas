@@ -10,7 +10,7 @@ Public Class clsKlimaatatlas
     Private _config As JObject
 
     Public Log As clsLog
-    Public SQLiteCon As SQLiteConnection
+    'Public SQLiteCon As SQLiteConnection
     Public Generalfunctions As New clsGeneralFunctions(Me)
 
     'the connection to the geopackage
@@ -40,96 +40,103 @@ Public Class clsKlimaatatlas
         Log = New clsLog
     End Sub
 
+    Public Sub Initialize()
+        Scenarios = New Dictionary(Of String, clsScenario)
+        Datasets = New Dictionary(Of String, clsDataset)
+        Classifications = New Dictionary(Of String, clsClassification)
+        Lookuptables = New Dictionary(Of String, clsLookupTable)
+        Rules = New SortedDictionary(Of String, clsRule)
+    End Sub
     Public Sub SetProgressBar(ByRef pr As ProgressBar, ByRef lb As System.Windows.Forms.Label)
         ProgressBar = pr
         ProgressLabel = lb
     End Sub
 
-    Public Function GetTablesFromDatabase() As List(Of String)
-        Dim tables As New List(Of String)
-        Dim cmd As New SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;", SQLiteCon)
-        Dim dt As New DataTable()
+    'Public Function GetTablesFromDatabase() As List(Of String)
+    '    Dim tables As New List(Of String)
+    '    Dim cmd As New SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;", SQLiteCon)
+    '    Dim dt As New DataTable()
 
-        Using da As New SQLiteDataAdapter(cmd)
-            da.Fill(dt)
-        End Using
+    '    Using da As New SQLiteDataAdapter(cmd)
+    '        da.Fill(dt)
+    '    End Using
 
-        For Each row As DataRow In dt.Rows
-            tables.Add(row("name"))
-        Next
+    '    For Each row As DataRow In dt.Rows
+    '        tables.Add(row("name"))
+    '    Next
 
-        Return tables
-    End Function
+    '    Return tables
+    'End Function
 
     Public Sub ReadConfigurationFile(jsonPath As String)
         Dim configContent As String = File.ReadAllText(jsonPath)
         _config = JObject.Parse(configContent)
     End Sub
 
-    Public Sub SetDatabaseConnection(path As String)
-        _connString = Strings.Replace("Data Source=@;Version=3;", "@", path)
-        SQLiteCon = New SQLite.SQLiteConnection(_connString)
-    End Sub
+    'Public Sub SetDatabaseConnection(path As String)
+    '    _connString = Strings.Replace("Data Source=@;Version=3;", "@", path)
+    '    SQLiteCon = New SQLite.SQLiteConnection(_connString)
+    'End Sub
 
-    Public Function UpgradeDatabase()
-        UpgradeWQTIMESERIESTable(10)
-        UpgradeWQNonEquidistantTimeseriesTable(20)
-        UpgradeWQDERIVEDSERIESTable(50)
-        UpgradeWQINDICATORSTable(90)
-        UpgradeMappingTable(95)
-        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Database successfully upgraded.", 0, 100, True)
-    End Function
+    'Public Function UpgradeDatabase()
+    '    UpgradeWQTIMESERIESTable(10)
+    '    UpgradeWQNonEquidistantTimeseriesTable(20)
+    '    UpgradeWQDERIVEDSERIESTable(50)
+    '    UpgradeWQINDICATORSTable(90)
+    '    UpgradeMappingTable(95)
+    '    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Database successfully upgraded.", 0, 100, True)
+    'End Function
 
-    Public Sub UpgradeWQTIMESERIESTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQTIMESERIES table...", ProgressPercentage, 100, True)
-        Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("DATASOURCE", New clsSQLiteField("DATASOURCE", enmFieldType.origin, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", enmFieldType.datetime, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
-        CreateOrUpdateSQLiteTable(SQLiteCon, "WQTIMESERIES", Fields)
-    End Sub
+    'Public Sub UpgradeWQTIMESERIESTable(ProgressPercentage As Integer)
+    '    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQTIMESERIES table...", ProgressPercentage, 100, True)
+    '    Dim Fields As New Dictionary(Of String, clsSQLiteField)
+    '    Fields.Add("DATASOURCE", New clsSQLiteField("DATASOURCE", enmFieldType.origin, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", enmFieldType.datetime, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
+    '    CreateOrUpdateSQLiteTable(SQLiteCon, "WQTIMESERIES", Fields)
+    'End Sub
 
-    Public Sub UpgradeWQDERIVEDSERIESTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQDERIVEDSERIES table...", ProgressPercentage, 100, True)
-        Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", enmFieldType.datetime, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
-        CreateOrUpdateSQLiteTable(SQLiteCon, "WQDERIVEDSERIES", Fields)
-    End Sub
+    'Public Sub UpgradeWQDERIVEDSERIESTable(ProgressPercentage As Integer)
+    '    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQDERIVEDSERIES table...", ProgressPercentage, 100, True)
+    '    Dim Fields As New Dictionary(Of String, clsSQLiteField)
+    '    Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", enmFieldType.datetime, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
+    '    CreateOrUpdateSQLiteTable(SQLiteCon, "WQDERIVEDSERIES", Fields)
+    'End Sub
 
-    Public Sub UpgradeWQNonEquidistantTimeseriesTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQNONEQUIDISTANTSERIES table...", ProgressPercentage, 100, True)
-        Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", enmFieldType.datetime, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
-        CreateOrUpdateSQLiteTable(SQLiteCon, "WQNONEQUIDISTANTSERIES", Fields)
-    End Sub
+    'Public Sub UpgradeWQNonEquidistantTimeseriesTable(ProgressPercentage As Integer)
+    '    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading WQNONEQUIDISTANTSERIES table...", ProgressPercentage, 100, True)
+    '    Dim Fields As New Dictionary(Of String, clsSQLiteField)
+    '    Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("SUBSTANCE", New clsSQLiteField("SUBSTANCE", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("DATEANDTIME", New clsSQLiteField("DATEANDTIME", enmFieldType.datetime, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
+    '    CreateOrUpdateSQLiteTable(SQLiteCon, "WQNONEQUIDISTANTSERIES", Fields)
+    'End Sub
 
-    Public Sub UpgradeWQINDICATORSTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading INDICATORS table...", ProgressPercentage, 100, True)
-        Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("INDICATOR", New clsSQLiteField("INDICATOR", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
-        CreateOrUpdateSQLiteTable(SQLiteCon, "INDICATORS", Fields)
-    End Sub
-    Public Sub UpgradeMappingTable(ProgressPercentage As Integer)
-        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading Koppeltabel...", ProgressPercentage, 100, True)
-        Dim Fields As New Dictionary(Of String, clsSQLiteField)
-        Fields.Add("CODE", New clsSQLiteField("CODE", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
-        CreateOrUpdateSQLiteTable(SQLiteCon, "KOPPELTABEL", Fields)
-    End Sub
+    'Public Sub UpgradeWQINDICATORSTable(ProgressPercentage As Integer)
+    '    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading INDICATORS table...", ProgressPercentage, 100, True)
+    '    Dim Fields As New Dictionary(Of String, clsSQLiteField)
+    '    Fields.Add("SCENARIO", New clsSQLiteField("SCENARIO", enmFieldType.scenario, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("INDICATOR", New clsSQLiteField("INDICATOR", enmFieldType.parameter_name, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("DATAVALUE", New clsSQLiteField("DATAVALUE", enmFieldType.datavalue, clsSQLiteField.enmSQLiteDataType.SQLITEREAL))
+    '    CreateOrUpdateSQLiteTable(SQLiteCon, "INDICATORS", Fields)
+    'End Sub
+    'Public Sub UpgradeMappingTable(ProgressPercentage As Integer)
+    '    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Upgrading Koppeltabel...", ProgressPercentage, 100, True)
+    '    Dim Fields As New Dictionary(Of String, clsSQLiteField)
+    '    Fields.Add("CODE", New clsSQLiteField("CODE", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    Fields.Add("LOCATIONID", New clsSQLiteField("LOCATIONID", enmFieldType.id, clsSQLiteField.enmSQLiteDataType.SQLITETEXT))
+    '    CreateOrUpdateSQLiteTable(SQLiteCon, "KOPPELTABEL", Fields)
+    'End Sub
 
     Public Function SetGeoPackageConnection() As Boolean
         Try
@@ -435,112 +442,112 @@ Public Class clsKlimaatatlas
     End Function
 
 
-    Public Function PopulateOldRules() As Boolean
-        Try
-            SQLiteCon.Open()
-            For Each rule As JObject In _config("rules")
+    'Public Function PopulateOldRules() As Boolean
+    '    Try
+    '        SQLiteCon.Open()
+    '        For Each rule As JObject In _config("rules")
 
-                'create a new instance of clsRule
-                Dim myRule As New clsOldRule(Me, Convert.ToInt16(rule("order").ToString))
+    '            'create a new instance of clsRule
+    '            Dim myRule As New clsOldRule(Me, Convert.ToInt16(rule("order").ToString))
 
-                'set the general properties
-                myRule.Apply = Convert.ToBoolean(rule("apply"))
-                myRule.Name = rule("name").ToString
+    '            'set the general properties
+    '            myRule.Apply = Convert.ToBoolean(rule("apply"))
+    '            myRule.Name = rule("name").ToString
 
-                myRule.InputDataset = GetDatasetObjectByID(rule("input_dataset").ToString)
+    '            myRule.InputDataset = GetDatasetObjectByID(rule("input_dataset").ToString)
 
-                'if our input dataset is NOT the feature dataset we must have a join method specified
-                If myRule.InputDataset.ID IsNot featuresDataset.ID Then
-                    If rule.ContainsKey("join_method") Then
-                        myRule.JoinMethod = CType([Enum].Parse(GetType(enmJoinMethod), rule("join_method").ToString()), enmJoinMethod)
-                    Else
-                        Log.AddError($"No data join method specified for rule {myRule.Name}")
-                        myRule.JoinMethod = enmJoinMethod.none
-                    End If
-                Else
-                    myRule.JoinMethod = enmJoinMethod.none
-                End If
+    '            'if our input dataset is NOT the feature dataset we must have a join method specified
+    '            If myRule.InputDataset.ID IsNot featuresDataset.ID Then
+    '                If rule.ContainsKey("join_method") Then
+    '                    myRule.JoinMethod = CType([Enum].Parse(GetType(enmJoinMethod), rule("join_method").ToString()), enmJoinMethod)
+    '                Else
+    '                    Log.AddError($"No data join method specified for rule {myRule.Name}")
+    '                    myRule.JoinMethod = enmJoinMethod.none
+    '                End If
+    '            Else
+    '                myRule.JoinMethod = enmJoinMethod.none
+    '            End If
 
-                'set the subset, if specified
-                myRule.Subset = New Dictionary(Of enmFieldType, List(Of String))
-                If rule.ContainsKey("subset") Then
-                    For Each subset In rule("subset")
-                        Dim fieldType As enmFieldType = CType([Enum].Parse(GetType(enmFieldType), subset("fieldtype").ToString()), enmFieldType)
+    '            'set the subset, if specified
+    '            myRule.Subset = New Dictionary(Of enmFieldType, List(Of String))
+    '            If rule.ContainsKey("subset") Then
+    '                For Each subset In rule("subset")
+    '                    Dim fieldType As enmFieldType = CType([Enum].Parse(GetType(enmFieldType), subset("fieldtype").ToString()), enmFieldType)
 
-                        ' Iterate over each value in the "values" array
-                        Dim vals As JArray = subset.Value(Of JArray)("values")
-                        Dim Values As New List(Of String)
-                        For Each value As JToken In vals
-                            ' Add the value to the list
-                            Values.Add(value.Value(Of String))
-                        Next
-                        myRule.Subset.Add(fieldType, Values)
-                    Next
-                End If
+    '                    ' Iterate over each value in the "values" array
+    '                    Dim vals As JArray = subset.Value(Of JArray)("values")
+    '                    Dim Values As New List(Of String)
+    '                    For Each value As JToken In vals
+    '                        ' Add the value to the list
+    '                        Values.Add(value.Value(Of String))
+    '                    Next
+    '                    myRule.Subset.Add(fieldType, Values)
+    '                Next
+    '            End If
 
-                'set the filter, if specified
-                myRule.Filter = New clsFilter()
-                If rule.ContainsKey("filter") Then
-                    Dim myFilter As JObject = rule("filter")
-                    myRule.Filter.fieldType = CType([Enum].Parse(GetType(enmFieldType), myFilter("field_type").ToString()), enmFieldType)
-                    myRule.Filter.evaluation = myFilter("evaluation")
-                    myRule.Filter.value = myFilter("value")
-                End If
+    '            'set the filter, if specified
+    '            myRule.Filter = New clsFilter()
+    '            If rule.ContainsKey("filter") Then
+    '                Dim myFilter As JObject = rule("filter")
+    '                myRule.Filter.fieldType = CType([Enum].Parse(GetType(enmFieldType), myFilter("field_type").ToString()), enmFieldType)
+    '                myRule.Filter.evaluation = myFilter("evaluation")
+    '                myRule.Filter.value = myFilter("value")
+    '            End If
 
-                'set the rule's execution methodology
-                myRule.Rating = New clsRating()
-                Dim myRating As JObject = rule("rating")
-                myRule.Rating.Method = CType([Enum].Parse(GetType(enmRatingMethod), myRating("method").ToString()), enmRatingMethod)
+    '            'set the rule's execution methodology
+    '            myRule.Rating = New clsRating()
+    '            Dim myRating As JObject = rule("rating")
+    '            myRule.Rating.Method = CType([Enum].Parse(GetType(enmRatingMethod), myRating("method").ToString()), enmRatingMethod)
 
-                'if this Rule involves a value transformation it is defined here
-                If myRating.ContainsKey("transformation_function") Then
-                    myRule.Rating.ApplyDataTransformation = True
-                    myRule.Rating.transformation_function = CType([Enum].Parse(GetType(enmTransformationFunction), myRating("transformation_function").ToString()), enmTransformationFunction)
-                End If
+    '            'if this Rule involves a value transformation it is defined here
+    '            If myRating.ContainsKey("transformation_function") Then
+    '                myRule.Rating.ApplyDataTransformation = True
+    '                myRule.Rating.transformation_function = CType([Enum].Parse(GetType(enmTransformationFunction), myRating("transformation_function").ToString()), enmTransformationFunction)
+    '            End If
 
-                Select Case myRule.Rating.Method
-                    Case enmRatingMethod.constant
-                        myRule.Rating.Penalty = Convert.ToDouble(myRating("penalty"))
-                        If myRating.ContainsKey("result_text") Then
-                            myRule.Rating.resultText = myRating("result_text")
-                        End If
-                    Case enmRatingMethod.classification
-                        If myRating.ContainsKey("classification_id") Then
-                            myRule.Rating.classificationId = myRating("classification_id")
-                        End If
-                    Case enmRatingMethod.lookup_table
-                        If myRating.ContainsKey("table_id") Then
-                            myRule.Rating.lookuptableId = myRating("table_id")
-                        End If
+    '            Select Case myRule.Rating.Method
+    '                Case enmRatingMethod.constant
+    '                    myRule.Rating.Penalty = Convert.ToDouble(myRating("penalty"))
+    '                    If myRating.ContainsKey("result_text") Then
+    '                        myRule.Rating.resultText = myRating("result_text")
+    '                    End If
+    '                Case enmRatingMethod.classification
+    '                    If myRating.ContainsKey("classification_id") Then
+    '                        myRule.Rating.classificationId = myRating("classification_id")
+    '                    End If
+    '                Case enmRatingMethod.lookup_table
+    '                    If myRating.ContainsKey("table_id") Then
+    '                        myRule.Rating.lookuptableId = myRating("table_id")
+    '                    End If
 
-                End Select
+    '            End Select
 
-                If myRating.ContainsKey("field_type") Then
-                    myRule.Rating.FieldType = CType([Enum].Parse(GetType(enmFieldType), myRating("field_type").ToString()), enmFieldType)
-                End If
+    '            If myRating.ContainsKey("field_type") Then
+    '                myRule.Rating.FieldType = CType([Enum].Parse(GetType(enmFieldType), myRating("field_type").ToString()), enmFieldType)
+    '            End If
 
-                'set the rule's origin
-                myRule.Origin = rule("origin")
+    '            'set the rule's origin
+    '            myRule.Origin = rule("origin")
 
-                'set the rule's scenarios
-                Dim scens As JArray = rule.Value(Of JArray)("scenarios")
-                For Each scen As JToken In scens
-                    myRule.Scenarios.Add(scen.ToString)
-                Next
+    '            'set the rule's scenarios
+    '            Dim scens As JArray = rule.Value(Of JArray)("scenarios")
+    '            For Each scen As JToken In scens
+    '                myRule.Scenarios.Add(scen.ToString)
+    '            Next
 
-                'add our rule to the list
-                If Rules.ContainsKey(myRule.Order) Then Throw New Exception("Error: two or more rules with the same order number in the JSON configuration file. Please correct this before proceedng.")
-                OldRules.Add(myRule.Order, myRule)
+    '            'add our rule to the list
+    '            If Rules.ContainsKey(myRule.Order) Then Throw New Exception("Error: two or more rules with the same order number in the JSON configuration file. Please correct this before proceedng.")
+    '            OldRules.Add(myRule.Order, myRule)
 
-            Next
-            SQLiteCon.Close()
-            Return True
-        Catch ex As Exception
-            Me.Log.AddError("Error in function ProcessRules of class clsKlimaatatlas: " & ex.Message)
-            Return False
-        End Try
+    '        Next
+    '        SQLiteCon.Close()
+    '        Return True
+    '    Catch ex As Exception
+    '        Me.Log.AddError("Error in function ProcessRules of class clsKlimaatatlas: " & ex.Message)
+    '        Return False
+    '    End Try
 
-    End Function
+    'End Function
 
     Public Function ProcessRules() As Boolean
         'this function processes all rules we have just read and computes the penalties for each feature
@@ -721,93 +728,93 @@ Public Class clsKlimaatatlas
 
 
 
-    Public Sub ProcessPolygonToPointMapping(ByVal rule As JObject)
-        Dim polygons As JObject = GetDatasetById(rule("input")("target_dataset").ToString())
-        Dim points As JObject = GetDatasetById(rule("input")("source_dataset").ToString())
-        Dim koppeltabel As JObject = GetDatasetById(rule("output")("dataset").ToString())
+    'Public Sub ProcessPolygonToPointMapping(ByVal rule As JObject)
+    '    Dim polygons As JObject = GetDatasetById(rule("input")("target_dataset").ToString())
+    '    Dim points As JObject = GetDatasetById(rule("input")("source_dataset").ToString())
+    '    Dim koppeltabel As JObject = GetDatasetById(rule("output")("dataset").ToString())
 
-        Dim polygonsPath As String = polygons("path").ToString()
+    '    Dim polygonsPath As String = polygons("path").ToString()
 
-        Dim sf As New Shapefile()
-        If Not sf.Open(polygonsPath) Then
-            Console.WriteLine("Error opening polygons shapefile: " & sf.ErrorMsg(sf.LastErrorCode))
-            Return
-        End If
+    '    Dim sf As New Shapefile()
+    '    If Not sf.Open(polygonsPath) Then
+    '        Console.WriteLine("Error opening polygons shapefile: " & sf.ErrorMsg(sf.LastErrorCode))
+    '        Return
+    '    End If
 
-        If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
+    '    If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
 
-        'update the progress bar
-        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Reading point locations from database...", 0, 10, True)
+    '    'update the progress bar
+    '    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Reading point locations from database...", 0, 10, True)
 
-        Dim idFieldName As String = GetFieldNameByType(points, "id")
-        Dim xFieldName As String = GetFieldNameByType(points, "x")
-        Dim yFieldName As String = GetFieldNameByType(points, "y")
+    '    Dim idFieldName As String = GetFieldNameByType(points, "id")
+    '    Dim xFieldName As String = GetFieldNameByType(points, "x")
+    '    Dim yFieldName As String = GetFieldNameByType(points, "y")
 
-        Dim cmd As New SQLiteCommand($"SELECT DISTINCT {idFieldName}, {xFieldName}, {yFieldName} FROM {points("tablename")}", SQLiteCon)
-        Dim dt As New DataTable()
+    '    Dim cmd As New SQLiteCommand($"SELECT DISTINCT {idFieldName}, {xFieldName}, {yFieldName} FROM {points("tablename")}", SQLiteCon)
+    '    Dim dt As New DataTable()
 
-        Using da As New SQLiteDataAdapter(cmd)
-            da.Fill(dt)
-        End Using
+    '    Using da As New SQLiteDataAdapter(cmd)
+    '        da.Fill(dt)
+    '    End Using
 
-        Dim results As New Dictionary(Of Integer, (x As Double, y As Double))
+    '    Dim results As New Dictionary(Of Integer, (x As Double, y As Double))
 
-        For Each row As DataRow In dt.Rows
-            Dim locationId As Integer = Convert.ToInt32(row(idFieldName))
-            Dim x As Double = Convert.ToDouble(row(xFieldName))
-            Dim y As Double = Convert.ToDouble(row(yFieldName))
-            results(locationId) = (x, y)
-        Next
+    '    For Each row As DataRow In dt.Rows
+    '        Dim locationId As Integer = Convert.ToInt32(row(idFieldName))
+    '        Dim x As Double = Convert.ToDouble(row(xFieldName))
+    '        Dim y As Double = Convert.ToDouble(row(yFieldName))
+    '        results(locationId) = (x, y)
+    '    Next
 
-        Using koppelCmd As New SQLiteCommand($"DELETE FROM {koppeltabel("tablename")}", SQLiteCon)
-            koppelCmd.ExecuteNonQuery()
-        End Using
+    '    Using koppelCmd As New SQLiteCommand($"DELETE FROM {koppeltabel("tablename")}", SQLiteCon)
+    '        koppelCmd.ExecuteNonQuery()
+    '    End Using
 
-        'update the progress bar
-        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Mapping delwaq segments to water surface areas...", 0, 10, True)
+    '    'update the progress bar
+    '    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Mapping delwaq segments to water surface areas...", 0, 10, True)
 
-        Using koppelTrans = SQLiteCon.BeginTransaction()
-            Using koppelCmd As New SQLiteCommand(SQLiteCon)
-                koppelCmd.Transaction = koppelTrans
-                koppelCmd.CommandText = $"INSERT INTO {koppeltabel("tablename")} ({koppeltabel("fields")(0)("fieldname")}, {koppeltabel("fields")(1)("fieldname")}) VALUES (@targetId, @sourceId)"
+    '    Using koppelTrans = SQLiteCon.BeginTransaction()
+    '        Using koppelCmd As New SQLiteCommand(SQLiteCon)
+    '            koppelCmd.Transaction = koppelTrans
+    '            koppelCmd.CommandText = $"INSERT INTO {koppeltabel("tablename")} ({koppeltabel("fields")(0)("fieldname")}, {koppeltabel("fields")(1)("fieldname")}) VALUES (@targetId, @sourceId)"
 
-                koppelCmd.Parameters.Add("@targetId", DbType.String)
-                koppelCmd.Parameters.Add("@sourceId", DbType.String)
+    '            koppelCmd.Parameters.Add("@targetId", DbType.String)
+    '            koppelCmd.Parameters.Add("@sourceId", DbType.String)
 
-                For i As Integer = 0 To sf.NumShapes - 1
+    '            For i As Integer = 0 To sf.NumShapes - 1
 
-                    'update the progress bar
-                    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, sf.NumShapes)
+    '                'update the progress bar
+    '                Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, sf.NumShapes)
 
-                    Dim shape As Shape = sf.Shape(i)
-                    Dim center As Point = shape.Center
+    '                Dim shape As Shape = sf.Shape(i)
+    '                Dim center As Point = shape.Center
 
-                    Dim nearestId As Integer = -1
-                    Dim minDist As Double = Double.MaxValue
+    '                Dim nearestId As Integer = -1
+    '                Dim minDist As Double = Double.MaxValue
 
-                    For Each kvp As KeyValuePair(Of Integer, (x As Double, y As Double)) In results
-                        Dim dist As Double = Math.Sqrt(Math.Pow(center.x - kvp.Value.x, 2) + Math.Pow(center.y - kvp.Value.y, 2))
-                        If dist < minDist Then
-                            minDist = dist
-                            nearestId = kvp.Key
-                        End If
-                    Next
+    '                For Each kvp As KeyValuePair(Of Integer, (x As Double, y As Double)) In results
+    '                    Dim dist As Double = Math.Sqrt(Math.Pow(center.x - kvp.Value.x, 2) + Math.Pow(center.y - kvp.Value.y, 2))
+    '                    If dist < minDist Then
+    '                        minDist = dist
+    '                        nearestId = kvp.Key
+    '                    End If
+    '                Next
 
-                    If nearestId <> -1 Then
-                        koppelCmd.Parameters("@targetId").Value = sf.CellValue(sf.Table.FieldIndexByName(polygons("fields")(0)("fieldname").ToString()), i)
-                        koppelCmd.Parameters("@sourceId").Value = nearestId
-                        koppelCmd.ExecuteNonQuery()
-                    End If
-                Next
-            End Using
-            koppelTrans.Commit()
-        End Using
+    '                If nearestId <> -1 Then
+    '                    koppelCmd.Parameters("@targetId").Value = sf.CellValue(sf.Table.FieldIndexByName(polygons("fields")(0)("fieldname").ToString()), i)
+    '                    koppelCmd.Parameters("@sourceId").Value = nearestId
+    '                    koppelCmd.ExecuteNonQuery()
+    '                End If
+    '            Next
+    '        End Using
+    '        koppelTrans.Commit()
+    '    End Using
 
-        'update the progress bar
-        Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Mapping complete.", 0, 10, True)
+    '    'update the progress bar
+    '    Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Mapping complete.", 0, 10, True)
 
 
-    End Sub
+    'End Sub
 
     'Private Function ProcessTimeseriesTransformation(rule As JObject) As Boolean
     '    Try
@@ -1076,65 +1083,65 @@ Public Class clsKlimaatatlas
         Next
         Return ""
     End Function
-    Private Function ProcessTimeseriesFilter_thresholdExceedance(rule As JObject) As Boolean
-        Try
-            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
+    'Private Function ProcessTimeseriesFilter_thresholdExceedance(rule As JObject) As Boolean
+    '    Try
+    '        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
 
-            If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
+    '        If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
 
-            Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
-            Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
-            Dim threshold = rule("filter")("args")(0).ToObject(Of Double)()
-            Dim valueTrue = rule("filter")("value_true").ToObject(Of Double)()
-            Dim valueFalse = rule("filter")("value_false").ToObject(Of Double)()
-            Dim inputParameterName = rule("input")("parameter_name").ToString()
-            Dim outputParameterName = rule("output")("parameter_name").ToString()
+    '        Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
+    '        Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
+    '        Dim threshold = rule("filter")("args")(0).ToObject(Of Double)()
+    '        Dim valueTrue = rule("filter")("value_true").ToObject(Of Double)()
+    '        Dim valueFalse = rule("filter")("value_false").ToObject(Of Double)()
+    '        Dim inputParameterName = rule("input")("parameter_name").ToString()
+    '        Dim outputParameterName = rule("output")("parameter_name").ToString()
 
-            ' Get all unique combinations of scenario and location ID
-            Dim UniqueSeries As List(Of Dictionary(Of String, String)) = GetScenarioLocationCombinations(inputDataset)
+    '        ' Get all unique combinations of scenario and location ID
+    '        Dim UniqueSeries As List(Of Dictionary(Of String, String)) = GetScenarioLocationCombinations(inputDataset)
 
-            ' Process each unique combination
-            For i = 0 To UniqueSeries.Count - 1
-                Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
+    '        ' Process each unique combination
+    '        For i = 0 To UniqueSeries.Count - 1
+    '            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
 
-                Dim Scenario As String = UniqueSeries(i).Values(0)
-                Dim LocationID As String = UniqueSeries(i).Values(1)
+    '            Dim Scenario As String = UniqueSeries(i).Values(0)
+    '            Dim LocationID As String = UniqueSeries(i).Values(1)
 
-                ' Remove old results for the given location ID and scenario
-                DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
+    '            ' Remove old results for the given location ID and scenario
+    '            DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
 
-                ' Get data for the input parameter
-                Dim inputDataTable As DataTable = GetInputData(inputDataset, Scenario, LocationID, inputParameterName)
+    '            ' Get data for the input parameter
+    '            Dim inputDataTable As DataTable = GetInputData(inputDataset, Scenario, LocationID, inputParameterName)
 
-                ' Process the data and create resultDataTable
-                Dim resultDataTable As DataTable = CalculateResultDataTable(inputDataTable, threshold, valueTrue, valueFalse)
+    '            ' Process the data and create resultDataTable
+    '            Dim resultDataTable As DataTable = CalculateResultDataTable(inputDataTable, threshold, valueTrue, valueFalse)
 
-                ' Save results to the output dataset
-                SaveTimeseriesToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
+    '            ' Save results to the output dataset
+    '            SaveTimeseriesToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
 
-            Next
+    '        Next
 
-            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
+    '        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
 
-            SQLiteCon.Close()
-            Return True
+    '        SQLiteCon.Close()
+    '        Return True
 
-        Catch ex As Exception
-            Me.Log.AddError("Error in function ProcessTimeseriesFilter of class clsKlimaatatlas: " & ex.Message)
-            Return False
-        End Try
-    End Function
+    '    Catch ex As Exception
+    '        Me.Log.AddError("Error in function ProcessTimeseriesFilter of class clsKlimaatatlas: " & ex.Message)
+    '        Return False
+    '    End Try
+    'End Function
 
-    Private Function GetInputData(inputDataset As JObject, Scenario As String, LocationID As String, inputParameterName As String) As DataTable
-        Dim dt As New DataTable
-        Using cmd As New SQLiteCommand(SQLiteCon)
-            cmd.CommandText = $"SELECT {GetFieldNameByType(inputDataset, "date")}, {GetFieldNameByType(inputDataset, "parameter_value")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} = '{inputParameterName}' ORDER BY {GetFieldNameByType(inputDataset, "date")};"
-            Using reader As SQLiteDataReader = cmd.ExecuteReader()
-                dt.Load(reader)
-            End Using
-        End Using
-        Return dt
-    End Function
+    'Private Function GetInputData(inputDataset As JObject, Scenario As String, LocationID As String, inputParameterName As String) As DataTable
+    '    Dim dt As New DataTable
+    '    Using cmd As New SQLiteCommand(SQLiteCon)
+    '        cmd.CommandText = $"SELECT {GetFieldNameByType(inputDataset, "date")}, {GetFieldNameByType(inputDataset, "parameter_value")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} = '{inputParameterName}' ORDER BY {GetFieldNameByType(inputDataset, "date")};"
+    '        Using reader As SQLiteDataReader = cmd.ExecuteReader()
+    '            dt.Load(reader)
+    '        End Using
+    '    End Using
+    '    Return dt
+    'End Function
 
     Private Function CalculateResultDataTable(inputDataTable As DataTable, threshold As Double, valueTrue As Double, valueFalse As Double) As DataTable
         Dim resultDataTable As New DataTable
@@ -1152,105 +1159,105 @@ Public Class clsKlimaatatlas
         Return resultDataTable
     End Function
 
-    Private Sub SaveTimeseriesToOutputDataset(outputDataset As JObject, Scenario As String, LocationID As String, outputParameterName As String, resultDataTable As DataTable)
-        ' Determine the required database fieldnames
-        Dim dateFieldName As String = GetFieldNameByType(outputDataset, "date")
-        Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
-        Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
-        Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
-        Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
+    'Private Sub SaveTimeseriesToOutputDataset(outputDataset As JObject, Scenario As String, LocationID As String, outputParameterName As String, resultDataTable As DataTable)
+    '    ' Determine the required database fieldnames
+    '    Dim dateFieldName As String = GetFieldNameByType(outputDataset, "date")
+    '    Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
+    '    Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
+    '    Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
+    '    Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
 
-        Using transaction = SQLiteCon.BeginTransaction()
-            Using cmd As New SQLiteCommand(SQLiteCon)
-                cmd.Transaction = transaction
+    '    Using transaction = SQLiteCon.BeginTransaction()
+    '        Using cmd As New SQLiteCommand(SQLiteCon)
+    '            cmd.Transaction = transaction
 
-                Dim lastVal As Double = Nothing
-                Dim insertData As Boolean
+    '            Dim lastVal As Double = Nothing
+    '            Dim insertData As Boolean
 
-                For i = 0 To resultDataTable.Rows.Count - 1
-                    Dim row As DataRow = resultDataTable.Rows(i)
-                    Dim dateValue = row("Date")
-                    Dim dataValue = row("Value")
-                    insertData = False
+    '            For i = 0 To resultDataTable.Rows.Count - 1
+    '                Dim row As DataRow = resultDataTable.Rows(i)
+    '                Dim dateValue = row("Date")
+    '                Dim dataValue = row("Value")
+    '                insertData = False
 
-                    Dim dataType As String = outputDataset("data_type").ToString()
-                    If dataType = "equidistant_timeseries" Then
-                        insertData = True
-                    ElseIf dataType = "non-equidistant_timeseries" AndAlso (i = 0 OrElse dataValue <> lastVal) Then
-                        insertData = True
-                        lastVal = dataValue
-                    End If
+    '                Dim dataType As String = outputDataset("data_type").ToString()
+    '                If dataType = "equidistant_timeseries" Then
+    '                    insertData = True
+    '                ElseIf dataType = "non-equidistant_timeseries" AndAlso (i = 0 OrElse dataValue <> lastVal) Then
+    '                    insertData = True
+    '                    lastVal = dataValue
+    '                End If
 
-                    If insertData Then
-                        cmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({dateFieldName}, {scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@dateValue, @scenario, @outputParameterName, @locationID, @dataValue);"
+    '                If insertData Then
+    '                    cmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({dateFieldName}, {scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@dateValue, @scenario, @outputParameterName, @locationID, @dataValue);"
 
-                        cmd.Parameters.Clear()
-                        cmd.Parameters.AddWithValue("@dateValue", dateValue)
-                        cmd.Parameters.AddWithValue("@scenario", Scenario)
-                        cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
-                        cmd.Parameters.AddWithValue("@locationID", LocationID)
-                        cmd.Parameters.AddWithValue("@dataValue", dataValue)
+    '                    cmd.Parameters.Clear()
+    '                    cmd.Parameters.AddWithValue("@dateValue", dateValue)
+    '                    cmd.Parameters.AddWithValue("@scenario", Scenario)
+    '                    cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
+    '                    cmd.Parameters.AddWithValue("@locationID", LocationID)
+    '                    cmd.Parameters.AddWithValue("@dataValue", dataValue)
 
-                        cmd.ExecuteNonQuery()
-                    End If
-                Next
-            End Using
+    '                    cmd.ExecuteNonQuery()
+    '                End If
+    '            Next
+    '        End Using
 
-            transaction.Commit()
-        End Using
-    End Sub
+    '        transaction.Commit()
+    '    End Using
+    'End Sub
 
-    Private Function ProcessTimeseriesFilter_hoursThresholdExceedance(rule As JObject) As Boolean
-        Try
-            'update the progress bar
-            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
+    'Private Function ProcessTimeseriesFilter_hoursThresholdExceedance(rule As JObject) As Boolean
+    '    Try
+    '        'update the progress bar
+    '        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries filter """ & rule("name").ToString() & """...", 0, 10, True)
 
-            'open the SQLite database
-            If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
+    '        'open the SQLite database
+    '        If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
 
-            'read all relevant rule aspects from our Json object
-            Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
-            Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
-            Dim duration = rule("filter")("args")(0).ToObject(Of Double)()
-            Dim threshold = rule("filter")("args")(1).ToObject(Of Double)()
-            Dim valueTrue = rule("filter")("value_true").ToObject(Of Double)()
-            Dim valueFalse = rule("filter")("value_false").ToObject(Of Double)()
-            Dim inputParameterName = rule("input")("parameter_name").ToString()
-            Dim outputParameterName = rule("output")("parameter_name").ToString()
+    '        'read all relevant rule aspects from our Json object
+    '        Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
+    '        Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
+    '        Dim duration = rule("filter")("args")(0).ToObject(Of Double)()
+    '        Dim threshold = rule("filter")("args")(1).ToObject(Of Double)()
+    '        Dim valueTrue = rule("filter")("value_true").ToObject(Of Double)()
+    '        Dim valueFalse = rule("filter")("value_false").ToObject(Of Double)()
+    '        Dim inputParameterName = rule("input")("parameter_name").ToString()
+    '        Dim outputParameterName = rule("output")("parameter_name").ToString()
 
-            ' Get all unique combinations of scenario and location ID
-            Dim UniqueSeries As List(Of Dictionary(Of String, String)) = GetScenarioLocationCombinations(inputDataset)
+    '        ' Get all unique combinations of scenario and location ID
+    '        Dim UniqueSeries As List(Of Dictionary(Of String, String)) = GetScenarioLocationCombinations(inputDataset)
 
-            ' Process each unique combination
-            For i = 0 To UniqueSeries.Count - 1
-                Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
+    '        ' Process each unique combination
+    '        For i = 0 To UniqueSeries.Count - 1
+    '            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
 
-                'retrieve the scenario and location ID for this combination
-                Dim Scenario As String = UniqueSeries(i).Values(0)
-                Dim LocationID As String = UniqueSeries(i).Values(1)
+    '            'retrieve the scenario and location ID for this combination
+    '            Dim Scenario As String = UniqueSeries(i).Values(0)
+    '            Dim LocationID As String = UniqueSeries(i).Values(1)
 
-                ' Remove old results for the given location ID and scenario
-                DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
+    '            ' Remove old results for the given location ID and scenario
+    '            DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
 
-                ' Get data for the input parameter
-                Dim inputDataTable As DataTable = GetInputData(inputDataset, Scenario, LocationID, inputParameterName)
+    '            ' Get data for the input parameter
+    '            Dim inputDataTable As DataTable = GetInputData(inputDataset, Scenario, LocationID, inputParameterName)
 
-                ' Calculate the result data table
-                Dim resultDataTable As DataTable = CalculateResultHoursDataTable(inputDataTable, threshold, duration, valueTrue, valueFalse)
+    '            ' Calculate the result data table
+    '            Dim resultDataTable As DataTable = CalculateResultHoursDataTable(inputDataTable, threshold, duration, valueTrue, valueFalse)
 
-                ' Save results to the output dataset
-                SaveResultsToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
-            Next
-            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
+    '            ' Save results to the output dataset
+    '            SaveResultsToOutputDataset(outputDataset, Scenario, LocationID, outputParameterName, resultDataTable)
+    '        Next
+    '        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New timeseries " & outputParameterName & " successfully written.", 0, 10, True)
 
-            SQLiteCon.Close()
-            Return True
+    '        SQLiteCon.Close()
+    '        Return True
 
-        Catch ex As Exception
-            Me.Log.AddError("Error in function ProcessTimeseriesFilter_hoursThresholdExceedance of class clsKlimaatatlas: " & ex.Message)
-            Return False
-        End Try
-    End Function
+    '    Catch ex As Exception
+    '        Me.Log.AddError("Error in function ProcessTimeseriesFilter_hoursThresholdExceedance of class clsKlimaatatlas: " & ex.Message)
+    '        Return False
+    '    End Try
+    'End Function
 
     Private Function CalculateResultHoursDataTable(inputDataTable As DataTable, threshold As Double, duration As Double, valueTrue As Double, valueFalse As Double) As DataTable
         Dim resultDataTable As New DataTable
@@ -1312,130 +1319,130 @@ Public Class clsKlimaatatlas
         Return resultDataTable
     End Function
 
-    Private Sub SaveResultsToOutputDataset(outputDataset As JObject, Scenario As String, LocationID As String, outputParameterName As String, resultDataTable As DataTable)
-        Using transaction = SQLiteCon.BeginTransaction()
-            For Each row As DataRow In resultDataTable.Rows
-                Dim dateValue As DateTime = row("Date")
-                Dim dataValue As Double = row("Value")
+    'Private Sub SaveResultsToOutputDataset(outputDataset As JObject, Scenario As String, LocationID As String, outputParameterName As String, resultDataTable As DataTable)
+    '    Using transaction = SQLiteCon.BeginTransaction()
+    '        For Each row As DataRow In resultDataTable.Rows
+    '            Dim dateValue As DateTime = row("Date")
+    '            Dim dataValue As Double = row("Value")
 
-                Dim dateFieldName As String = GetFieldNameByType(outputDataset, "date")
-                Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
-                Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
-                Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
-                Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
-                Using cmd As New SQLiteCommand(SQLiteCon)
-                    cmd.Transaction = transaction
-                    cmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({dateFieldName}, {scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@dateValue, @scenario, @outputParameterName, @locationID, @dataValue);"
+    '            Dim dateFieldName As String = GetFieldNameByType(outputDataset, "date")
+    '            Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
+    '            Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
+    '            Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
+    '            Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
+    '            Using cmd As New SQLiteCommand(SQLiteCon)
+    '                cmd.Transaction = transaction
+    '                cmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({dateFieldName}, {scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@dateValue, @scenario, @outputParameterName, @locationID, @dataValue);"
 
-                    cmd.Parameters.AddWithValue("@dateValue", dateValue)
-                    cmd.Parameters.AddWithValue("@scenario", Scenario)
-                    cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
-                    cmd.Parameters.AddWithValue("@locationID", LocationID)
-                    cmd.Parameters.AddWithValue("@dataValue", dataValue)
+    '                cmd.Parameters.AddWithValue("@dateValue", dateValue)
+    '                cmd.Parameters.AddWithValue("@scenario", Scenario)
+    '                cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
+    '                cmd.Parameters.AddWithValue("@locationID", LocationID)
+    '                cmd.Parameters.AddWithValue("@dataValue", dataValue)
 
-                    cmd.ExecuteNonQuery()
-                End Using
-            Next
+    '                cmd.ExecuteNonQuery()
+    '            End Using
+    '        Next
 
-            transaction.Commit()
-        End Using
-    End Sub
+    '        transaction.Commit()
+    '    End Using
+    'End Sub
 
-    Private Function processTimeseriesClassification(rule As JObject) As Boolean
-        Try
-            Dim i As Integer, j As Integer
+    'Private Function processTimeseriesClassification(rule As JObject) As Boolean
+    '    Try
+    '        Dim i As Integer, j As Integer
 
-            'update the progress bar
-            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries classification """ & rule("name").ToString() & """...", 0, 10, True)
+    '        'update the progress bar
+    '        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "Executing timeseries classification """ & rule("name").ToString() & """...", 0, 10, True)
 
-            'open the SQLite database
-            If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
+    '        'open the SQLite database
+    '        If Not SQLiteCon.State = ConnectionState.Open Then SQLiteCon.Open()
 
-            'read all relevant rule aspects from our Json object
-            Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
-            Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
-            Dim inputParameterName = rule("input")("parameter_name").ToString()
-            Dim outputParameterName = rule("output")("parameter_name").ToString()
-            'Dim filterType = rule("filter")("type").ToString()
-            Dim filter As JObject = rule("filter")
+    '        'read all relevant rule aspects from our Json object
+    '        Dim inputDataset = GetDatasetById(rule("input")("dataset").ToString())
+    '        Dim outputDataset = GetDatasetById(rule("output")("dataset").ToString())
+    '        Dim inputParameterName = rule("input")("parameter_name").ToString()
+    '        Dim outputParameterName = rule("output")("parameter_name").ToString()
+    '        'Dim filterType = rule("filter")("type").ToString()
+    '        Dim filter As JObject = rule("filter")
 
-            Select Case filter("type")
-                Case "count_hours_per_year"
+    '        Select Case filter("type")
+    '            Case "count_hours_per_year"
 
-                    Dim filterValue = Convert.ToDouble(rule("filter")("value"))      'the value we're looking for in order to classify its duration
-                    Dim classes As JArray = filter("classes")
+    '                Dim filterValue = Convert.ToDouble(rule("filter")("value"))      'the value we're looking for in order to classify its duration
+    '                Dim classes As JArray = filter("classes")
 
-                    ' Get all unique combinations of scenario and location ID
-                    Dim UniqueSeries As List(Of Dictionary(Of String, String)) = GetScenarioLocationCombinations(inputDataset)
-
-
-                    Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
-                    Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
-                    Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
-                    Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
-
-                    ' Process each unique combination and calculate the duration our criterium is met
-                    For i = 0 To UniqueSeries.Count - 1
-                        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
-
-                        'retrieve the scenario and location ID for this combination
-                        Dim Scenario As String = UniqueSeries(i).Values(0)
-                        Dim LocationID As String = UniqueSeries(i).Values(1)
-
-                        ' Remove old results for the given location ID and scenario
-                        DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
-
-                        ' Get the timeseries for the input parameter and current scenario and location
-                        Dim dt As New DataTable
-                        Using cmd As New SQLiteCommand(SQLiteCon)
-                            cmd.CommandText = $"SELECT {GetFieldNameByType(inputDataset, "date")}, {GetFieldNameByType(inputDataset, "parameter_value")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} = '{inputParameterName}' ORDER BY {GetFieldNameByType(inputDataset, "date")};"
-                            Using reader As SQLiteDataReader = cmd.ExecuteReader()
-                                dt.Load(reader)
-                            End Using
-                        End Using
-
-                        'walk through our datatable and sum up the total duration where our value equals the requested value
-                        Dim TotalHours As Double = 0
-                        Dim Span As TimeSpan
-                        If dt.Rows(0)(1) = filterValue Then
-                            Span = Convert.ToDateTime(dt.Rows(1)(0)).Subtract(dt.Rows(0)(0))
-                            TotalHours = Span.TotalHours
-                        End If
-
-                        For j = 1 To dt.Rows.Count - 1
-                            If dt.Rows(j)(1) = filterValue Then
-                                Span = Convert.ToDateTime(dt.Rows(j)(0)).Subtract(dt.Rows(j - 1)(0))
-                                TotalHours += Span.TotalHours
-                            End If
-                        Next
-
-                        'convert our number of hours to its corresponding rating
-                        Dim rating As Integer = GetRating(TotalHours, classes)
-
-                        Using outputcmd As New SQLiteCommand(SQLiteCon)
-                            outputcmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@scenario, @outputParameterName, @locationID, @dataValue);"
-                            outputcmd.Parameters.AddWithValue("@scenario", Scenario)
-                            outputcmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
-                            outputcmd.Parameters.AddWithValue("@locationID", LocationID)
-                            outputcmd.Parameters.AddWithValue("@dataValue", rating)
-                            outputcmd.ExecuteNonQuery()
-                        End Using
-
-                    Next
-
-            End Select
+    '                ' Get all unique combinations of scenario and location ID
+    '                Dim UniqueSeries As List(Of Dictionary(Of String, String)) = GetScenarioLocationCombinations(inputDataset)
 
 
-            Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New classification " & outputParameterName & " successfully written.", 0, 10, True)
+    '                Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
+    '                Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
+    '                Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
+    '                Dim parameterValueFieldName As String = GetFieldNameByType(outputDataset, "parameter_value")
 
-            SQLiteCon.Close()
-            Return True
+    '                ' Process each unique combination and calculate the duration our criterium is met
+    '                For i = 0 To UniqueSeries.Count - 1
+    '                    Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "", i + 1, UniqueSeries.Count)
 
-        Catch ex As Exception
-            Me.Log.AddError("Error in function timeseriesClassification of class clsKlimaatatlas: " & ex.Message)
-            Return False
-        End Try
-    End Function
+    '                    'retrieve the scenario and location ID for this combination
+    '                    Dim Scenario As String = UniqueSeries(i).Values(0)
+    '                    Dim LocationID As String = UniqueSeries(i).Values(1)
+
+    '                    ' Remove old results for the given location ID and scenario
+    '                    DeleteOldResults(outputDataset, Scenario, LocationID, outputParameterName)
+
+    '                    ' Get the timeseries for the input parameter and current scenario and location
+    '                    Dim dt As New DataTable
+    '                    Using cmd As New SQLiteCommand(SQLiteCon)
+    '                        cmd.CommandText = $"SELECT {GetFieldNameByType(inputDataset, "date")}, {GetFieldNameByType(inputDataset, "parameter_value")} FROM {inputDataset("tablename")} WHERE {GetFieldNameByType(inputDataset, "scenario")} = '{Scenario}' AND {GetFieldNameByType(inputDataset, "id")} = '{LocationID}' AND {GetFieldNameByType(inputDataset, "parameter_name")} = '{inputParameterName}' ORDER BY {GetFieldNameByType(inputDataset, "date")};"
+    '                        Using reader As SQLiteDataReader = cmd.ExecuteReader()
+    '                            dt.Load(reader)
+    '                        End Using
+    '                    End Using
+
+    '                    'walk through our datatable and sum up the total duration where our value equals the requested value
+    '                    Dim TotalHours As Double = 0
+    '                    Dim Span As TimeSpan
+    '                    If dt.Rows(0)(1) = filterValue Then
+    '                        Span = Convert.ToDateTime(dt.Rows(1)(0)).Subtract(dt.Rows(0)(0))
+    '                        TotalHours = Span.TotalHours
+    '                    End If
+
+    '                    For j = 1 To dt.Rows.Count - 1
+    '                        If dt.Rows(j)(1) = filterValue Then
+    '                            Span = Convert.ToDateTime(dt.Rows(j)(0)).Subtract(dt.Rows(j - 1)(0))
+    '                            TotalHours += Span.TotalHours
+    '                        End If
+    '                    Next
+
+    '                    'convert our number of hours to its corresponding rating
+    '                    Dim rating As Integer = GetRating(TotalHours, classes)
+
+    '                    Using outputcmd As New SQLiteCommand(SQLiteCon)
+    '                        outputcmd.CommandText = $"INSERT INTO {outputDataset("tablename")} ({scenarioFieldName}, {parameterNameFieldName}, {idFieldName}, {parameterValueFieldName}) VALUES (@scenario, @outputParameterName, @locationID, @dataValue);"
+    '                        outputcmd.Parameters.AddWithValue("@scenario", Scenario)
+    '                        outputcmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
+    '                        outputcmd.Parameters.AddWithValue("@locationID", LocationID)
+    '                        outputcmd.Parameters.AddWithValue("@dataValue", rating)
+    '                        outputcmd.ExecuteNonQuery()
+    '                    End Using
+
+    '                Next
+
+    '        End Select
+
+
+    '        Me.Generalfunctions.UpdateProgressBar(ProgressBar, ProgressLabel, "New classification " & outputParameterName & " successfully written.", 0, 10, True)
+
+    '        SQLiteCon.Close()
+    '        Return True
+
+    '    Catch ex As Exception
+    '        Me.Log.AddError("Error in function timeseriesClassification of class clsKlimaatatlas: " & ex.Message)
+    '        Return False
+    '    End Try
+    'End Function
 
     Public Function GetRating(valueToClassify As Double, classes As JArray) As Integer
         Dim rating As Integer = 0
@@ -1525,58 +1532,58 @@ Public Class clsKlimaatatlas
 
         Throw New ArgumentException($"Dataset with ID '{id}' not found.")
     End Function
-    Private Sub DeleteOldResults(outputDataset As JObject, scenario As String, locationID As String, outputParameterName As String)
-        Using cmd As New SQLiteCommand(SQLiteCon)
-            Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
-            Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
-            Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
-            cmd.CommandText = $"DELETE FROM {outputDataset("tablename")} WHERE {scenarioFieldName} = @scenario AND {idFieldName} = @locationID AND {parameterNameFieldName} = @outputParameterName;"
-            cmd.Parameters.AddWithValue("@scenario", scenario)
-            cmd.Parameters.AddWithValue("@locationID", locationID)
-            cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
-            cmd.ExecuteNonQuery()
-        End Using
-    End Sub
+    'Private Sub DeleteOldResults(outputDataset As JObject, scenario As String, locationID As String, outputParameterName As String)
+    '    Using cmd As New SQLiteCommand(SQLiteCon)
+    '        Dim scenarioFieldName As String = GetFieldNameByType(outputDataset, "scenario")
+    '        Dim idFieldName As String = GetFieldNameByType(outputDataset, "id")
+    '        Dim parameterNameFieldName As String = GetFieldNameByType(outputDataset, "parameter_name")
+    '        cmd.CommandText = $"DELETE FROM {outputDataset("tablename")} WHERE {scenarioFieldName} = @scenario AND {idFieldName} = @locationID AND {parameterNameFieldName} = @outputParameterName;"
+    '        cmd.Parameters.AddWithValue("@scenario", scenario)
+    '        cmd.Parameters.AddWithValue("@locationID", locationID)
+    '        cmd.Parameters.AddWithValue("@outputParameterName", outputParameterName)
+    '        cmd.ExecuteNonQuery()
+    '    End Using
+    'End Sub
 
 
 
-    Public Function GetScenarioLocationCombinations(jsonObj As JObject) As List(Of Dictionary(Of String, String))
+    'Public Function GetScenarioLocationCombinations(jsonObj As JObject) As List(Of Dictionary(Of String, String))
 
-        'this function returns all combinations of scenario and location ID
-        'the reason we don't iterate through the parameters as well is that the parameters will be used in the equation
-        Dim tableName As String = jsonObj("tablename").ToString()
-        Dim fields As JArray = jsonObj("fields")
+    '    'this function returns all combinations of scenario and location ID
+    '    'the reason we don't iterate through the parameters as well is that the parameters will be used in the equation
+    '    Dim tableName As String = jsonObj("tablename").ToString()
+    '    Dim fields As JArray = jsonObj("fields")
 
-        Dim scenarioField, idField As JObject
+    '    Dim scenarioField, idField As JObject
 
-        For Each field As JObject In fields
-            Select Case field("fieldtype").ToString()
-                Case "scenario"
-                    scenarioField = field
-                Case "id"
-                    idField = field
-            End Select
-        Next
+    '    For Each field As JObject In fields
+    '        Select Case field("fieldtype").ToString()
+    '            Case "scenario"
+    '                scenarioField = field
+    '            Case "id"
+    '                idField = field
+    '        End Select
+    '    Next
 
-        Dim scenarios, ids As New List(Of String)
+    '    Dim scenarios, ids As New List(Of String)
 
-        scenarios = GetDistinctValues(SQLiteCon, tableName, scenarioField)
-        ids = GetDistinctValues(SQLiteCon, tableName, idField)
+    '    scenarios = GetDistinctValues(SQLiteCon, tableName, scenarioField)
+    '    ids = GetDistinctValues(SQLiteCon, tableName, idField)
 
-        Dim combinations As New List(Of Dictionary(Of String, String))
+    '    Dim combinations As New List(Of Dictionary(Of String, String))
 
-        For Each scenario In scenarios
-            For Each id In ids
-                Dim combination As New Dictionary(Of String, String) From {
-                    {"scenario", scenario},
-                    {"id", id}
-                }
-                combinations.Add(combination)
-            Next
-        Next
+    '    For Each scenario In scenarios
+    '        For Each id In ids
+    '            Dim combination As New Dictionary(Of String, String) From {
+    '                {"scenario", scenario},
+    '                {"id", id}
+    '            }
+    '            combinations.Add(combination)
+    '        Next
+    '    Next
 
-        Return combinations
-    End Function
+    '    Return combinations
+    'End Function
 
     Private Function GetDistinctValues(connection As SQLiteConnection, tableName As String, field As JObject) As List(Of String)
         Dim fieldName As String = field("fieldname").ToString()

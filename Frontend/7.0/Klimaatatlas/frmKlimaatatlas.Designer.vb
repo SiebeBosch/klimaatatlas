@@ -22,24 +22,15 @@ Partial Class frmKlimaatatlas
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As ComponentModel.ComponentResourceManager = New ComponentModel.ComponentResourceManager(GetType(frmKlimaatatlas))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmKlimaatatlas))
         btnExecute = New Button()
         prProgress = New ProgressBar()
         lblProgress = New Label()
         btnConfigFile = New Button()
         txtConfigFile = New TextBox()
         lblConfigFile = New Label()
-        btnDatabase = New Button()
-        lblDatabase = New Label()
-        txtDatabase = New TextBox()
         dlgOpenFile = New OpenFileDialog()
         MenuStrip1 = New MenuStrip()
-        ToolsToolStripMenuItem = New ToolStripMenuItem()
-        GISToolStripMenuItem = New ToolStripMenuItem()
-        SpatialJoinToolStripMenuItem = New ToolStripMenuItem()
-        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem = New ToolStripMenuItem()
-        DatabaseToolStripMenuItem = New ToolStripMenuItem()
-        SpatialInterpolationToolStripMenuItem = New ToolStripMenuItem()
         AboutToolStripMenuItem = New ToolStripMenuItem()
         dlgSaveFile = New SaveFileDialog()
         TabControl1 = New TabControl()
@@ -61,7 +52,7 @@ Partial Class frmKlimaatatlas
         btnExecute.Name = "btnExecute"
         btnExecute.Size = New Size(125, 64)
         btnExecute.TabIndex = 0
-        btnExecute.Text = "Execute"
+        btnExecute.Text = "Uitvoeren"
         btnExecute.UseVisualStyleBackColor = True
         ' 
         ' prProgress
@@ -86,7 +77,7 @@ Partial Class frmKlimaatatlas
         ' btnConfigFile
         ' 
         btnConfigFile.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnConfigFile.Location = New Point(1214, 55)
+        btnConfigFile.Location = New Point(1213, 14)
         btnConfigFile.Margin = New Padding(3, 4, 3, 4)
         btnConfigFile.Name = "btnConfigFile"
         btnConfigFile.Size = New Size(27, 32)
@@ -97,7 +88,7 @@ Partial Class frmKlimaatatlas
         ' txtConfigFile
         ' 
         txtConfigFile.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtConfigFile.Location = New Point(123, 56)
+        txtConfigFile.Location = New Point(122, 15)
         txtConfigFile.Margin = New Padding(3, 4, 3, 4)
         txtConfigFile.Name = "txtConfigFile"
         txtConfigFile.Size = New Size(1081, 27)
@@ -106,40 +97,11 @@ Partial Class frmKlimaatatlas
         ' lblConfigFile
         ' 
         lblConfigFile.AutoSize = True
-        lblConfigFile.Location = New Point(7, 60)
+        lblConfigFile.Location = New Point(6, 19)
         lblConfigFile.Name = "lblConfigFile"
         lblConfigFile.Size = New Size(81, 20)
         lblConfigFile.TabIndex = 3
         lblConfigFile.Text = "Config file:"
-        ' 
-        ' btnDatabase
-        ' 
-        btnDatabase.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnDatabase.Location = New Point(1214, 15)
-        btnDatabase.Margin = New Padding(3, 4, 3, 4)
-        btnDatabase.Name = "btnDatabase"
-        btnDatabase.Size = New Size(27, 32)
-        btnDatabase.TabIndex = 2
-        btnDatabase.Text = ".."
-        btnDatabase.UseVisualStyleBackColor = True
-        ' 
-        ' lblDatabase
-        ' 
-        lblDatabase.AutoSize = True
-        lblDatabase.Location = New Point(7, 20)
-        lblDatabase.Name = "lblDatabase"
-        lblDatabase.Size = New Size(100, 20)
-        lblDatabase.TabIndex = 1
-        lblDatabase.Text = "Database file:"
-        ' 
-        ' txtDatabase
-        ' 
-        txtDatabase.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtDatabase.Location = New Point(123, 16)
-        txtDatabase.Margin = New Padding(3, 4, 3, 4)
-        txtDatabase.Name = "txtDatabase"
-        txtDatabase.Size = New Size(1081, 27)
-        txtDatabase.TabIndex = 0
         ' 
         ' dlgOpenFile
         ' 
@@ -148,7 +110,7 @@ Partial Class frmKlimaatatlas
         ' MenuStrip1
         ' 
         MenuStrip1.ImageScalingSize = New Size(24, 24)
-        MenuStrip1.Items.AddRange(New ToolStripItem() {ToolsToolStripMenuItem, DatabaseToolStripMenuItem, AboutToolStripMenuItem})
+        MenuStrip1.Items.AddRange(New ToolStripItem() {AboutToolStripMenuItem})
         MenuStrip1.Location = New Point(0, 0)
         MenuStrip1.Name = "MenuStrip1"
         MenuStrip1.Padding = New Padding(5, 1, 0, 1)
@@ -156,50 +118,11 @@ Partial Class frmKlimaatatlas
         MenuStrip1.TabIndex = 4
         MenuStrip1.Text = "MenuStrip1"
         ' 
-        ' ToolsToolStripMenuItem
-        ' 
-        ToolsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {GISToolStripMenuItem})
-        ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        ToolsToolStripMenuItem.Size = New Size(58, 24)
-        ToolsToolStripMenuItem.Text = "Tools"
-        ' 
-        ' GISToolStripMenuItem
-        ' 
-        GISToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {SpatialJoinToolStripMenuItem, SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem})
-        GISToolStripMenuItem.Name = "GISToolStripMenuItem"
-        GISToolStripMenuItem.Size = New Size(114, 26)
-        GISToolStripMenuItem.Text = "GIS"
-        ' 
-        ' SpatialJoinToolStripMenuItem
-        ' 
-        SpatialJoinToolStripMenuItem.Name = "SpatialJoinToolStripMenuItem"
-        SpatialJoinToolStripMenuItem.Size = New Size(550, 26)
-        SpatialJoinToolStripMenuItem.Text = "Spatial Join"
-        ' 
-        ' SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem
-        ' 
-        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Name = "SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem"
-        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Size = New Size(550, 26)
-        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Text = "Spatial interpolation of point statistics from database to geopackage"
-        ' 
-        ' DatabaseToolStripMenuItem
-        ' 
-        DatabaseToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {SpatialInterpolationToolStripMenuItem})
-        DatabaseToolStripMenuItem.Name = "DatabaseToolStripMenuItem"
-        DatabaseToolStripMenuItem.Size = New Size(122, 24)
-        DatabaseToolStripMenuItem.Text = "GIS Operations"
-        ' 
-        ' SpatialInterpolationToolStripMenuItem
-        ' 
-        SpatialInterpolationToolStripMenuItem.Name = "SpatialInterpolationToolStripMenuItem"
-        SpatialInterpolationToolStripMenuItem.Size = New Size(228, 26)
-        SpatialInterpolationToolStripMenuItem.Text = "Spatial Interpolation"
-        ' 
         ' AboutToolStripMenuItem
         ' 
         AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        AboutToolStripMenuItem.Size = New Size(64, 24)
-        AboutToolStripMenuItem.Text = "About"
+        AboutToolStripMenuItem.Size = New Size(49, 24)
+        AboutToolStripMenuItem.Text = "Info"
         ' 
         ' TabControl1
         ' 
@@ -215,9 +138,6 @@ Partial Class frmKlimaatatlas
         ' 
         ' tabSettings
         ' 
-        tabSettings.Controls.Add(txtDatabase)
-        tabSettings.Controls.Add(lblDatabase)
-        tabSettings.Controls.Add(btnDatabase)
         tabSettings.Controls.Add(btnConfigFile)
         tabSettings.Controls.Add(lblConfigFile)
         tabSettings.Controls.Add(txtConfigFile)
@@ -294,14 +214,8 @@ Partial Class frmKlimaatatlas
     Friend WithEvents btnConfigFile As Button
     Friend WithEvents txtConfigFile As TextBox
     Friend WithEvents lblConfigFile As Label
-    Friend WithEvents btnDatabase As Button
-    Friend WithEvents lblDatabase As Label
-    Friend WithEvents txtDatabase As TextBox
     Friend WithEvents dlgOpenFile As OpenFileDialog
     Friend WithEvents MenuStrip1 As MenuStrip
-    Friend WithEvents ToolsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents GISToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SpatialJoinToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents dlgSaveFile As SaveFileDialog
     Friend WithEvents Flowcharts As GroupBox
     Friend WithEvents pnlFlowchart As Panel
@@ -311,8 +225,5 @@ Partial Class frmKlimaatatlas
     Friend WithEvents tabMaatlatten As TabPage
     Friend WithEvents Label2 As Label
     Friend WithEvents cmbRekenregels As ComboBox
-    Friend WithEvents DatabaseToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SpatialInterpolationToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
 End Class
