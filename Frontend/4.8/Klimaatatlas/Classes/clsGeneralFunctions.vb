@@ -65,6 +65,8 @@ Public Class clsGeneralFunctions
         bod2kleizandveen = 0                    'refers to the function bod2kleizandveen which translates bodemkaartNL values to klei/zand/veen classes
 
     End Enum
+
+
     Public Enum enmFieldType
         featureidx = 0
         id = 1

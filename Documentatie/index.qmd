@@ -1,5 +1,5 @@
 ---
-title: "Klimaatatlas"
+title: "Handleiding"
 author: "Siebe Bosch"
 date: "`r Sys.Date()`"  # This will print the current date
 format: html

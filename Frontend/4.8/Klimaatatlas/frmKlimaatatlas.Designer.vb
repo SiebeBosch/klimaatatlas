@@ -22,270 +22,276 @@ Partial Class frmKlimaatatlas
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim resources As ComponentModel.ComponentResourceManager = New ComponentModel.ComponentResourceManager(GetType(frmKlimaatatlas))
-        btnExecute = New Button()
-        prProgress = New ProgressBar()
-        lblProgress = New Label()
-        btnConfigFile = New Button()
-        txtConfigFile = New TextBox()
-        lblConfigFile = New Label()
-        btnDatabase = New Button()
-        lblDatabase = New Label()
-        txtDatabase = New TextBox()
-        dlgOpenFile = New OpenFileDialog()
-        MenuStrip1 = New MenuStrip()
-        ToolsToolStripMenuItem = New ToolStripMenuItem()
-        GISToolStripMenuItem = New ToolStripMenuItem()
-        SpatialJoinToolStripMenuItem = New ToolStripMenuItem()
-        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem = New ToolStripMenuItem()
-        DatabaseToolStripMenuItem = New ToolStripMenuItem()
-        SpatialInterpolationToolStripMenuItem = New ToolStripMenuItem()
-        AboutToolStripMenuItem = New ToolStripMenuItem()
-        dlgSaveFile = New SaveFileDialog()
-        TabControl1 = New TabControl()
-        tabSettings = New TabPage()
-        tabMaatlatten = New TabPage()
-        Label2 = New Label()
-        cmbRekenregels = New ComboBox()
-        tabRekenregels = New TabPage()
-        MenuStrip1.SuspendLayout()
-        TabControl1.SuspendLayout()
-        tabSettings.SuspendLayout()
-        tabMaatlatten.SuspendLayout()
-        SuspendLayout()
-        ' 
-        ' btnExecute
-        ' 
-        btnExecute.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        btnExecute.Location = New Point(1003, 480)
-        btnExecute.Name = "btnExecute"
-        btnExecute.Size = New Size(109, 48)
-        btnExecute.TabIndex = 0
-        btnExecute.Text = "Execute"
-        btnExecute.UseVisualStyleBackColor = True
-        ' 
-        ' prProgress
-        ' 
-        prProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        prProgress.Location = New Point(12, 505)
-        prProgress.Name = "prProgress"
-        prProgress.Size = New Size(974, 23)
-        prProgress.TabIndex = 1
-        ' 
-        ' lblProgress
-        ' 
-        lblProgress.Anchor = AnchorStyles.Bottom Or AnchorStyles.Left
-        lblProgress.AutoSize = True
-        lblProgress.Location = New Point(12, 480)
-        lblProgress.Name = "lblProgress"
-        lblProgress.Size = New Size(52, 15)
-        lblProgress.TabIndex = 2
-        lblProgress.Text = "Progress"
-        ' 
-        ' btnConfigFile
-        ' 
-        btnConfigFile.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnConfigFile.Location = New Point(1062, 41)
-        btnConfigFile.Name = "btnConfigFile"
-        btnConfigFile.Size = New Size(24, 24)
-        btnConfigFile.TabIndex = 5
-        btnConfigFile.Text = ".."
-        btnConfigFile.UseVisualStyleBackColor = True
-        ' 
-        ' txtConfigFile
-        ' 
-        txtConfigFile.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtConfigFile.Location = New Point(108, 42)
-        txtConfigFile.Name = "txtConfigFile"
-        txtConfigFile.Size = New Size(946, 23)
-        txtConfigFile.TabIndex = 4
-        ' 
-        ' lblConfigFile
-        ' 
-        lblConfigFile.AutoSize = True
-        lblConfigFile.Location = New Point(6, 45)
-        lblConfigFile.Name = "lblConfigFile"
-        lblConfigFile.Size = New Size(65, 15)
-        lblConfigFile.TabIndex = 3
-        lblConfigFile.Text = "Config file:"
-        ' 
-        ' btnDatabase
-        ' 
-        btnDatabase.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        btnDatabase.Location = New Point(1062, 11)
-        btnDatabase.Name = "btnDatabase"
-        btnDatabase.Size = New Size(24, 24)
-        btnDatabase.TabIndex = 2
-        btnDatabase.Text = ".."
-        btnDatabase.UseVisualStyleBackColor = True
-        ' 
-        ' lblDatabase
-        ' 
-        lblDatabase.AutoSize = True
-        lblDatabase.Location = New Point(6, 15)
-        lblDatabase.Name = "lblDatabase"
-        lblDatabase.Size = New Size(77, 15)
-        lblDatabase.TabIndex = 1
-        lblDatabase.Text = "Database file:"
-        ' 
-        ' txtDatabase
-        ' 
-        txtDatabase.Anchor = AnchorStyles.Top Or AnchorStyles.Left Or AnchorStyles.Right
-        txtDatabase.Location = New Point(108, 12)
-        txtDatabase.Name = "txtDatabase"
-        txtDatabase.Size = New Size(946, 23)
-        txtDatabase.TabIndex = 0
-        ' 
-        ' dlgOpenFile
-        ' 
-        dlgOpenFile.FileName = "dlgOpenFile"
-        ' 
-        ' MenuStrip1
-        ' 
-        MenuStrip1.ImageScalingSize = New Size(24, 24)
-        MenuStrip1.Items.AddRange(New ToolStripItem() {ToolsToolStripMenuItem, DatabaseToolStripMenuItem, AboutToolStripMenuItem})
-        MenuStrip1.Location = New Point(0, 0)
-        MenuStrip1.Name = "MenuStrip1"
-        MenuStrip1.Padding = New Padding(4, 1, 0, 1)
-        MenuStrip1.Size = New Size(1124, 24)
-        MenuStrip1.TabIndex = 4
-        MenuStrip1.Text = "MenuStrip1"
-        ' 
-        ' ToolsToolStripMenuItem
-        ' 
-        ToolsToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {GISToolStripMenuItem})
-        ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        ToolsToolStripMenuItem.Size = New Size(46, 22)
-        ToolsToolStripMenuItem.Text = "Tools"
-        ' 
-        ' GISToolStripMenuItem
-        ' 
-        GISToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {SpatialJoinToolStripMenuItem, SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem})
-        GISToolStripMenuItem.Name = "GISToolStripMenuItem"
-        GISToolStripMenuItem.Size = New Size(91, 22)
-        GISToolStripMenuItem.Text = "GIS"
-        ' 
-        ' SpatialJoinToolStripMenuItem
-        ' 
-        SpatialJoinToolStripMenuItem.Name = "SpatialJoinToolStripMenuItem"
-        SpatialJoinToolStripMenuItem.Size = New Size(433, 22)
-        SpatialJoinToolStripMenuItem.Text = "Spatial Join"
-        ' 
-        ' SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem
-        ' 
-        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Name = "SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem"
-        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Size = New Size(433, 22)
-        SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Text = "Spatial interpolation of point statistics from database to geopackage"
-        ' 
-        ' DatabaseToolStripMenuItem
-        ' 
-        DatabaseToolStripMenuItem.DropDownItems.AddRange(New ToolStripItem() {SpatialInterpolationToolStripMenuItem})
-        DatabaseToolStripMenuItem.Name = "DatabaseToolStripMenuItem"
-        DatabaseToolStripMenuItem.Size = New Size(97, 22)
-        DatabaseToolStripMenuItem.Text = "GIS Operations"
-        ' 
-        ' SpatialInterpolationToolStripMenuItem
-        ' 
-        SpatialInterpolationToolStripMenuItem.Name = "SpatialInterpolationToolStripMenuItem"
-        SpatialInterpolationToolStripMenuItem.Size = New Size(180, 22)
-        SpatialInterpolationToolStripMenuItem.Text = "Spatial Interpolation"
-        ' 
-        ' AboutToolStripMenuItem
-        ' 
-        AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        AboutToolStripMenuItem.Size = New Size(52, 22)
-        AboutToolStripMenuItem.Text = "About"
-        ' 
-        ' TabControl1
-        ' 
-        TabControl1.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
-        TabControl1.Controls.Add(tabSettings)
-        TabControl1.Controls.Add(tabMaatlatten)
-        TabControl1.Controls.Add(tabRekenregels)
-        TabControl1.Location = New Point(12, 27)
-        TabControl1.Name = "TabControl1"
-        TabControl1.SelectedIndex = 0
-        TabControl1.Size = New Size(1100, 447)
-        TabControl1.TabIndex = 6
-        ' 
-        ' tabSettings
-        ' 
-        tabSettings.Controls.Add(txtDatabase)
-        tabSettings.Controls.Add(lblDatabase)
-        tabSettings.Controls.Add(btnDatabase)
-        tabSettings.Controls.Add(btnConfigFile)
-        tabSettings.Controls.Add(lblConfigFile)
-        tabSettings.Controls.Add(txtConfigFile)
-        tabSettings.Location = New Point(4, 24)
-        tabSettings.Name = "tabSettings"
-        tabSettings.Padding = New Padding(3)
-        tabSettings.Size = New Size(1092, 419)
-        tabSettings.TabIndex = 0
-        tabSettings.Text = "Instellingen"
-        tabSettings.UseVisualStyleBackColor = True
-        ' 
-        ' tabMaatlatten
-        ' 
-        tabMaatlatten.Controls.Add(Label2)
-        tabMaatlatten.Controls.Add(cmbRekenregels)
-        tabMaatlatten.Location = New Point(4, 24)
-        tabMaatlatten.Name = "tabMaatlatten"
-        tabMaatlatten.Padding = New Padding(3)
-        tabMaatlatten.Size = New Size(1092, 419)
-        tabMaatlatten.TabIndex = 1
-        tabMaatlatten.Text = "Maatlatten"
-        tabMaatlatten.UseVisualStyleBackColor = True
-        ' 
-        ' Label2
-        ' 
-        Label2.AutoSize = True
-        Label2.Location = New Point(17, 15)
-        Label2.Name = "Label2"
-        Label2.Size = New Size(68, 15)
-        Label2.TabIndex = 7
-        Label2.Text = "Rekenregel:"
-        ' 
-        ' cmbRekenregels
-        ' 
-        cmbRekenregels.FormattingEnabled = True
-        cmbRekenregels.Location = New Point(145, 10)
-        cmbRekenregels.Name = "cmbRekenregels"
-        cmbRekenregels.Size = New Size(300, 23)
-        cmbRekenregels.TabIndex = 0
-        ' 
-        ' tabRekenregels
-        ' 
-        tabRekenregels.Location = New Point(4, 24)
-        tabRekenregels.Name = "tabRekenregels"
-        tabRekenregels.Size = New Size(1092, 419)
-        tabRekenregels.TabIndex = 2
-        tabRekenregels.Text = "Rekenregels"
-        tabRekenregels.UseVisualStyleBackColor = True
-        ' 
-        ' frmKlimaatatlas
-        ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
-        AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1124, 540)
-        Controls.Add(TabControl1)
-        Controls.Add(lblProgress)
-        Controls.Add(prProgress)
-        Controls.Add(btnExecute)
-        Controls.Add(MenuStrip1)
-        Icon = CType(resources.GetObject("$this.Icon"), Icon)
-        MainMenuStrip = MenuStrip1
-        Name = "frmKlimaatatlas"
-        Text = "Klimaatatlas"
-        WindowState = FormWindowState.Maximized
-        MenuStrip1.ResumeLayout(False)
-        MenuStrip1.PerformLayout()
-        TabControl1.ResumeLayout(False)
-        tabSettings.ResumeLayout(False)
-        tabSettings.PerformLayout()
-        tabMaatlatten.ResumeLayout(False)
-        tabMaatlatten.PerformLayout()
-        ResumeLayout(False)
-        PerformLayout()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmKlimaatatlas))
+        Me.btnExecute = New System.Windows.Forms.Button()
+        Me.prProgress = New System.Windows.Forms.ProgressBar()
+        Me.lblProgress = New System.Windows.Forms.Label()
+        Me.btnConfigFile = New System.Windows.Forms.Button()
+        Me.txtConfigFile = New System.Windows.Forms.TextBox()
+        Me.lblConfigFile = New System.Windows.Forms.Label()
+        Me.btnDatabase = New System.Windows.Forms.Button()
+        Me.lblDatabase = New System.Windows.Forms.Label()
+        Me.txtDatabase = New System.Windows.Forms.TextBox()
+        Me.dlgOpenFile = New System.Windows.Forms.OpenFileDialog()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GISToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SpatialJoinToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DatabaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SpatialInterpolationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.dlgSaveFile = New System.Windows.Forms.SaveFileDialog()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.tabSettings = New System.Windows.Forms.TabPage()
+        Me.tabMaatlatten = New System.Windows.Forms.TabPage()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.cmbRekenregels = New System.Windows.Forms.ComboBox()
+        Me.tabRekenregels = New System.Windows.Forms.TabPage()
+        Me.MenuStrip1.SuspendLayout()
+        Me.TabControl1.SuspendLayout()
+        Me.tabSettings.SuspendLayout()
+        Me.tabMaatlatten.SuspendLayout()
+        Me.SuspendLayout()
+        '
+        'btnExecute
+        '
+        Me.btnExecute.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnExecute.Location = New System.Drawing.Point(1146, 498)
+        Me.btnExecute.Name = "btnExecute"
+        Me.btnExecute.Size = New System.Drawing.Size(125, 65)
+        Me.btnExecute.TabIndex = 0
+        Me.btnExecute.Text = "Execute"
+        Me.btnExecute.UseVisualStyleBackColor = True
+        '
+        'prProgress
+        '
+        Me.prProgress.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.prProgress.Location = New System.Drawing.Point(14, 539)
+        Me.prProgress.Name = "prProgress"
+        Me.prProgress.Size = New System.Drawing.Size(1113, 25)
+        Me.prProgress.TabIndex = 1
+        '
+        'lblProgress
+        '
+        Me.lblProgress.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.lblProgress.AutoSize = True
+        Me.lblProgress.Location = New System.Drawing.Point(14, 512)
+        Me.lblProgress.Name = "lblProgress"
+        Me.lblProgress.Size = New System.Drawing.Size(62, 16)
+        Me.lblProgress.TabIndex = 2
+        Me.lblProgress.Text = "Progress"
+        '
+        'btnConfigFile
+        '
+        Me.btnConfigFile.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnConfigFile.Location = New System.Drawing.Point(1214, 44)
+        Me.btnConfigFile.Name = "btnConfigFile"
+        Me.btnConfigFile.Size = New System.Drawing.Size(27, 26)
+        Me.btnConfigFile.TabIndex = 5
+        Me.btnConfigFile.Text = ".."
+        Me.btnConfigFile.UseVisualStyleBackColor = True
+        '
+        'txtConfigFile
+        '
+        Me.txtConfigFile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtConfigFile.Location = New System.Drawing.Point(123, 45)
+        Me.txtConfigFile.Name = "txtConfigFile"
+        Me.txtConfigFile.Size = New System.Drawing.Size(1081, 22)
+        Me.txtConfigFile.TabIndex = 4
+        '
+        'lblConfigFile
+        '
+        Me.lblConfigFile.AutoSize = True
+        Me.lblConfigFile.Location = New System.Drawing.Point(7, 48)
+        Me.lblConfigFile.Name = "lblConfigFile"
+        Me.lblConfigFile.Size = New System.Drawing.Size(68, 16)
+        Me.lblConfigFile.TabIndex = 3
+        Me.lblConfigFile.Text = "Config file:"
+        '
+        'btnDatabase
+        '
+        Me.btnDatabase.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnDatabase.Location = New System.Drawing.Point(1214, 12)
+        Me.btnDatabase.Name = "btnDatabase"
+        Me.btnDatabase.Size = New System.Drawing.Size(27, 26)
+        Me.btnDatabase.TabIndex = 2
+        Me.btnDatabase.Text = ".."
+        Me.btnDatabase.UseVisualStyleBackColor = True
+        '
+        'lblDatabase
+        '
+        Me.lblDatabase.AutoSize = True
+        Me.lblDatabase.Location = New System.Drawing.Point(7, 16)
+        Me.lblDatabase.Name = "lblDatabase"
+        Me.lblDatabase.Size = New System.Drawing.Size(90, 16)
+        Me.lblDatabase.TabIndex = 1
+        Me.lblDatabase.Text = "Database file:"
+        '
+        'txtDatabase
+        '
+        Me.txtDatabase.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtDatabase.Location = New System.Drawing.Point(123, 13)
+        Me.txtDatabase.Name = "txtDatabase"
+        Me.txtDatabase.Size = New System.Drawing.Size(1081, 22)
+        Me.txtDatabase.TabIndex = 0
+        '
+        'dlgOpenFile
+        '
+        Me.dlgOpenFile.FileName = "dlgOpenFile"
+        '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(24, 24)
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolsToolStripMenuItem, Me.DatabaseToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(5, 1, 0, 1)
+        Me.MenuStrip1.Size = New System.Drawing.Size(1285, 26)
+        Me.MenuStrip1.TabIndex = 4
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'ToolsToolStripMenuItem
+        '
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GISToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(58, 24)
+        Me.ToolsToolStripMenuItem.Text = "Tools"
+        '
+        'GISToolStripMenuItem
+        '
+        Me.GISToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpatialJoinToolStripMenuItem, Me.SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem})
+        Me.GISToolStripMenuItem.Name = "GISToolStripMenuItem"
+        Me.GISToolStripMenuItem.Size = New System.Drawing.Size(114, 26)
+        Me.GISToolStripMenuItem.Text = "GIS"
+        '
+        'SpatialJoinToolStripMenuItem
+        '
+        Me.SpatialJoinToolStripMenuItem.Name = "SpatialJoinToolStripMenuItem"
+        Me.SpatialJoinToolStripMenuItem.Size = New System.Drawing.Size(550, 26)
+        Me.SpatialJoinToolStripMenuItem.Text = "Spatial Join"
+        '
+        'SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem
+        '
+        Me.SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Name = "SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem"
+        Me.SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Size = New System.Drawing.Size(550, 26)
+        Me.SpatiallyInterpolatePointStatisticsToGeopackageToolStripMenuItem.Text = "Spatial interpolation of point statistics from database to geopackage"
+        '
+        'DatabaseToolStripMenuItem
+        '
+        Me.DatabaseToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpatialInterpolationToolStripMenuItem})
+        Me.DatabaseToolStripMenuItem.Name = "DatabaseToolStripMenuItem"
+        Me.DatabaseToolStripMenuItem.Size = New System.Drawing.Size(122, 24)
+        Me.DatabaseToolStripMenuItem.Text = "GIS Operations"
+        '
+        'SpatialInterpolationToolStripMenuItem
+        '
+        Me.SpatialInterpolationToolStripMenuItem.Name = "SpatialInterpolationToolStripMenuItem"
+        Me.SpatialInterpolationToolStripMenuItem.Size = New System.Drawing.Size(228, 26)
+        Me.SpatialInterpolationToolStripMenuItem.Text = "Spatial Interpolation"
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(64, 24)
+        Me.AboutToolStripMenuItem.Text = "About"
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TabControl1.Controls.Add(Me.tabSettings)
+        Me.TabControl1.Controls.Add(Me.tabMaatlatten)
+        Me.TabControl1.Controls.Add(Me.tabRekenregels)
+        Me.TabControl1.Location = New System.Drawing.Point(14, 29)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(1257, 463)
+        Me.TabControl1.TabIndex = 6
+        '
+        'tabSettings
+        '
+        Me.tabSettings.Controls.Add(Me.txtDatabase)
+        Me.tabSettings.Controls.Add(Me.lblDatabase)
+        Me.tabSettings.Controls.Add(Me.btnDatabase)
+        Me.tabSettings.Controls.Add(Me.btnConfigFile)
+        Me.tabSettings.Controls.Add(Me.lblConfigFile)
+        Me.tabSettings.Controls.Add(Me.txtConfigFile)
+        Me.tabSettings.Location = New System.Drawing.Point(4, 25)
+        Me.tabSettings.Name = "tabSettings"
+        Me.tabSettings.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabSettings.Size = New System.Drawing.Size(1249, 434)
+        Me.tabSettings.TabIndex = 0
+        Me.tabSettings.Text = "Instellingen"
+        Me.tabSettings.UseVisualStyleBackColor = True
+        '
+        'tabMaatlatten
+        '
+        Me.tabMaatlatten.Controls.Add(Me.Label2)
+        Me.tabMaatlatten.Controls.Add(Me.cmbRekenregels)
+        Me.tabMaatlatten.Location = New System.Drawing.Point(4, 25)
+        Me.tabMaatlatten.Name = "tabMaatlatten"
+        Me.tabMaatlatten.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabMaatlatten.Size = New System.Drawing.Size(1249, 448)
+        Me.tabMaatlatten.TabIndex = 1
+        Me.tabMaatlatten.Text = "Maatlatten"
+        Me.tabMaatlatten.UseVisualStyleBackColor = True
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(19, 16)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(81, 16)
+        Me.Label2.TabIndex = 7
+        Me.Label2.Text = "Rekenregel:"
+        '
+        'cmbRekenregels
+        '
+        Me.cmbRekenregels.FormattingEnabled = True
+        Me.cmbRekenregels.Location = New System.Drawing.Point(166, 11)
+        Me.cmbRekenregels.Name = "cmbRekenregels"
+        Me.cmbRekenregels.Size = New System.Drawing.Size(342, 24)
+        Me.cmbRekenregels.TabIndex = 0
+        '
+        'tabRekenregels
+        '
+        Me.tabRekenregels.Location = New System.Drawing.Point(4, 25)
+        Me.tabRekenregels.Name = "tabRekenregels"
+        Me.tabRekenregels.Size = New System.Drawing.Size(1249, 448)
+        Me.tabRekenregels.TabIndex = 2
+        Me.tabRekenregels.Text = "Rekenregels"
+        Me.tabRekenregels.UseVisualStyleBackColor = True
+        '
+        'frmKlimaatatlas
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.ClientSize = New System.Drawing.Size(1285, 576)
+        Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.lblProgress)
+        Me.Controls.Add(Me.prProgress)
+        Me.Controls.Add(Me.btnExecute)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MainMenuStrip = Me.MenuStrip1
+        Me.Name = "frmKlimaatatlas"
+        Me.Text = "Klimaatatlas"
+        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
+        Me.TabControl1.ResumeLayout(False)
+        Me.tabSettings.ResumeLayout(False)
+        Me.tabSettings.PerformLayout()
+        Me.tabMaatlatten.ResumeLayout(False)
+        Me.tabMaatlatten.PerformLayout()
+        Me.ResumeLayout(False)
+        Me.PerformLayout()
+
     End Sub
 
     Friend WithEvents btnExecute As Button

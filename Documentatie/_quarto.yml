@@ -4,42 +4,48 @@ project:
 
 website:
   title: "Klimaatatlas"
+  search: true
   navbar:
     left:
-      - index.qmd
-  sidebar:
-    logo: img/rijnland_logo.jpg
-    logo-href: https://www.rijnland.net
+      - text: "Handleiding"
+        href: handleiding.qmd
+      - text: "Implementatie Rijnland" 
+        href: rijnland.qmd
+
+  sidebar: 
+
     style: "docked"
-    search: true
+    collapse-level: 1
     contents:
-      - section: "Tutorial"
+      - section: "Gebruikshandleiding"
+        collapse: true
         contents:
-      - section: "Gebruikershandleiding"
-        contents:
-          - href: gebruikershandleiding/installatie.qmd
+          - href: gebruikshandleiding/installatie.qmd
             text: "Klimaatatlas installeren"
-          - href: gebruikershandleiding/basisgebruik.qmd
+          - href: gebruikshandleiding/basisgebruik.qmd
             text: "Basisgebruik"
-      - section: "Risicofactoren"
-        contents:
-          - href: risicofactoren/inleiding.qmd
-            text: "Inleiding"
-          - href: risicofactoren/biomassa.qmd
-            text: "Biomassa"
-      - section: "Technische documentatie"
+      - section: "Technisch"
+        collapse: true
         contents:
           - href: technische_documentatie/configuratiebestand.qmd
             text: "Configuratiebestand"
-      - section: "voorbewerkingen"
+      - section: "Voorbewerkingen"
+        collapse: true
         contents:
           - href: voorbewerkingen/sobek.qmd
             text: "SOBEK exporteren"
       - section: "Nabewerkingen"
+        collapse: true
         contents:
           - href: nabewerkingen/arcgis_online.qmd
             text: "ArcGIS online"
-
+      - section: "Implementatie Rijnland"
+        collapse: true
+        contents:
+          - href: rijnland.qmd
+            text: "Inleiding"
+          - href: rijnland/biomassa.qmd
+            text: "Biomassa"
 
 format:
   html:

@@ -1,0 +1,57 @@
+---
+title: "Klimaatatlas installeren"
+author: "Siebe Bosch"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"  # This will print the current date in a more readable format
+format: html
+---
+
+## Stappenplan
+
+Het installatiebestand van Klimaatatlas versie 1.2.0, inclusief voorbeeldbestanden, vindt u [hier](https://www.dropbox.com/scl/fi/96cz0e10j3xoodfcyyzif/KlimaatatlasSetup-v1.2.0-x64.zip?rlkey=4dvc8u8ws2c3rhb1qm4dgj2wu&dl=0).
+Pak het .zip-bestand uit en installeer het programma door het bestand KlimaatatlasSetup-[versienummer]-x64.exe te starten.
+
+volg de instructies:
+
+::: {.columns}
+::: {.column width="50%"}
+* stel de installatietaal in en klik op 'ok'
+:::
+::: {.column width="50%"}
+![Installatietaal instellen.](img/frm_installatietaal.png)
+:::
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+* neem kennis van de release notes en klik op 'volgende'
+:::
+::: {.column width="50%"}
+![Kennis nemen van de release notes.](img/frm_releasenotes.png)
+:::
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+* neem kennis van de locatie waar het programma wordt geïnstalleerd en klik op 'installeren'
+:::
+::: {.column width="50%"}
+![Kennis nemen van de installatielocatie.](img/frm_installatiemap.png)
+:::
+:::
+
+::: {.columns}
+::: {.column width="50%"}
+* als de installatie compleet is hebt u de optie om het programma automatisch te starten.
+:::
+::: {.column width="50%"}
+![De installatie is compleet.](img/frm_installatie_compleet.png)
+:::
+:::
+
+Na installatie is het programma te vinden in het startmenu onder Hydroconsult of door te zoeken naar 'Klimaatatlas'. Onderstaand tonen we het opstartscherm.
+
+![het opstartscherm van Klimaatatlas.](img/frm_klimaatatlas.png)
+
+
+
+

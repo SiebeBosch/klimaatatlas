@@ -1,0 +1,75 @@
+{
+  "scenarios": ["K2023", "K2050", "K2100"],
+  "features_dataset": {
+    "_comment": "this attribute describes the water area polygons",
+    "id": "watervlakken",
+    "data_type": "polygons",
+    "storage_type": "geopackage",
+    "path": "c:\\SYNC\\PROJECTEN\\H3114.Wateratlas.Rijnland\\99.Implementatie4\\Watervlakken_Plus7.gpkg",
+	"tablename":"Watervlakken_Plus7",
+    "fields": [
+      {"fieldtype": "id", "datatype":"SQLITETEXT", "fieldname": "CODE"},
+      {"fieldtype": "featureidx", "datatype":"SQLITEINT", "fieldname": "FEATUREIDX"},
+      {"fieldtype": "depth", "datatype":"SQLITEREAL", "fieldname": "Waterdiepte"},
+      {"fieldtype": "width", "datatype":"SQLITEREAL", "fieldname": "BREEDTE"},
+      {"fieldtype": "deadend", "datatype":"SQLITETEXT", "fieldname": "doodlopend"},
+      {"fieldtype": "watertype", "datatype":"SQLITETEXT", "fieldname": "type_water"},
+      {"fieldtype": "temperature", "datatype":"SQLITEREAL", "fieldname": "Tex14"},
+      {"fieldtype": "temperature", "datatype":"SQLITEREAL", "fieldname": "Tex85"}
+    ]
+  },
+  "rules": [
+	{
+	  "name": "dl",
+	  "benchmarks":[
+		{
+			"name":"Tepi",
+			"comment":"maximumtemperatuur toplaag, afhankelijk van klimaat en diepte.",
+			"constants": [
+				{"scenario":"K2023", "value":"25"},
+				{"scenario":"K2050", "value":"27"},
+				{"scenario":"K2100", "value":"29"}				
+			],
+			"classification":"continuous",
+			"filter":"[waterdiepte]>=3",
+			"valuesRange": [{"value":15,"verdict":0},{"value":27,"verdict":1},{"value":35,"verdict":0}]
+		},
+		{
+			"name":"Nepi",
+			"comment":"stikstof in de toplaag, afhankelijk van klimaat en diepte.",
+			"fieldname": [
+				{"scenario":"K2023", "field":"K2023_Nt_50pct"},
+				{"scenario":"K2050", "field":"K2050_Nt_50pct"},
+				{"scenario":"K2100", "field":"K2100_Nt_50pct"}				
+			],
+			"classification":"continuous", 
+			"filter":"[waterdiepte]>=3",
+			"valuesRange": [{"value":0,"verdict":0},{"value":15,"verdict":1}],
+			"nullValue":0
+		},
+		{
+			"name":"Pepi",
+			"comment":"fosfor in de toplaag, afhankelijk van klimaat en diepte.",
+			"fieldname": [
+				{"scenario":"K2023", "field":"K2023_Pt_50pct"},
+				{"scenario":"K2050", "field":"K2050_Pt_50pct"},
+				{"scenario":"K2100", "field":"K2100_Pt_50pct"}				
+			],
+			"classification":"continuous", 
+			"filter":"[waterdiepte]>=3",
+			"valuesRange": [{"value":0,"verdict":0},{"value":1.5,"verdict":1}],
+			"nullValue":0
+		}
+	  ],
+      "resultsfield": "dldef",
+      "components": [
+        {"benchmark": "Tepi", "weight": 1, "resultsfield": "Tepi", "comment":"Temperatuur toplaag."},
+        {"benchmark": "Nepi", "weight": 1, "resultsfield": "Nepi", "comment":"Stikstof toplaag."},
+        {"benchmark": "Pepi", "weight": 1, "resultsfield": "Pepi", "comment":"Fosfor toplaag."}
+      ]
+	}
+  ],
+  "results": {
+    "dataset": "watervlakken"
+  }
+}

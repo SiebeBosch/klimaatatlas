@@ -1,0 +1,19 @@
+---
+title: "Implementatie Rijnland"
+author: "Siebe Bosch"
+date: "`r Sys.Date()`"  # This will print the current date
+format: html
+---
+
+## Inleiding
+
+Deze sectie beschrijft hoe het Hoogheemraadschap van Rijnland de klimaatatlas heeft geïmplementeerd.
+
+Het hoogheemraadschap van Rijnland definieert de volgende risicofactoren voor slechte waterkwaliteit:
+
+* biomassa (de hoeveelheid algen in de waterkolom)
+* kroos
+* zuurstofloosheid
+
+In de volgende hoofstukken werken we elk van deze risicofactoren uit en beschrijven we de maatlatten waarmee het risico-oordeel wordt berekend.
+

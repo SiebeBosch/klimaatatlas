@@ -9,6 +9,7 @@ Public Class clsRule
     Friend Name As String
     Friend Benchmarks As New Dictionary(Of String, clsBenchmark)
     Friend EquationComponents As New List(Of clsEquationComponent)
+    Friend Filter As New clsFilter()
     Private Setup As clsKlimaatatlas
 
     Public Sub New(ByRef mySetup As clsKlimaatatlas)
@@ -38,9 +39,14 @@ Public Class clsRule
                     Dim dt As New DataTable()
                     Dim columnsToUpdate As New List(Of String)    'keep track of the fields that are needed for the results of this rule
 
-                    'establisch a list of fields needed for this rule
+                    'establish a list of fields needed for this rule
                     Dim Fields As List(Of String) = getFieldNamesForScenario(Scenario)
                     Setup.Log.WriteToDiagnosticsFile("Field names collected for scenario " & Scenario.Name)
+
+                    'establish a list of constants needed for this rule
+                    Dim Constants As List(Of Double) = getConstantsForScenario(Scenario)
+                    Setup.Log.WriteToDiagnosticsFile("Constants collected for scenario " & Scenario.Name)
+
 
                     'Ensure necessary columns exist before calculations and add them to the list
                     EnsureColumnExists(Setup.GpkgTable, $"{Scenario.Name}_{Name}", "REAL")
@@ -57,13 +63,37 @@ Public Class clsRule
                         Setup.Log.WriteToDiagnosticsFile("Field for component " & Component.ResultsFieldName & " created.")
                     Next
 
-                    ' Execute a query to retrieve all features and necessary fields
-                    Using cmdSelect As New SQLiteCommand("SELECT fid, " & String.Join(", ", Fields) & " FROM " & Setup.GpkgTable & ";", Setup.GpkgCon)
-                        Setup.Log.WriteToDiagnosticsFile("Executing query " & cmdSelect.CommandText & ")")
-                        Using adapter As New SQLiteDataAdapter(cmdSelect)
-                            adapter.Fill(dt)
+                    If Filter.filterFieldName = "" Then
+                        'no filter applied. Simply select all records from the table
+                        ' Execute a query to retrieve all features and necessary fields
+                        Using cmdSelect As New SQLiteCommand("SELECT fid, " & String.Join(", ", Fields) & " FROM " & Setup.GpkgTable & ";", Setup.GpkgCon)
+                            Setup.Log.WriteToDiagnosticsFile("Executing query " & cmdSelect.CommandText & ")")
+                            Using adapter As New SQLiteDataAdapter(cmdSelect)
+                                adapter.Fill(dt)
+                            End Using
                         End Using
-                    End Using
+                    Else
+                        'a filter is applied. Select only the records that match the filter
+                        Dim filterClause As String = ""
+                        Select Case Filter.filterOperator.ToUpper()
+                            Case "=", "<>", "<", ">", "<=", ">="
+                                Using cmdSelect As New SQLiteCommand()
+                                    cmdSelect.Connection = Setup.GpkgCon
+                                    cmdSelect.CommandText = "SELECT fid, " & String.Join(", ", Fields) &
+                                      " FROM " & Setup.GpkgTable &
+                                      " WHERE " & Filter.filterFieldName & " " & Filter.filterOperator & " @filterValue;"
+                                    cmdSelect.Parameters.AddWithValue("@filterValue", Filter.filterOperand)
+
+                                    Setup.Log.WriteToDiagnosticsFile("Executing filtered query " & cmdSelect.CommandText & " with value " & Filter.filterOperand)
+                                    Using adapter As New SQLiteDataAdapter(cmdSelect)
+                                        adapter.Fill(dt)
+                                    End Using
+                                End Using
+                            Case Else
+                                Throw New Exception("Unsupported filter operator: " & Filter.filterOperator)
+                        End Select
+                    End If
+
 
                     Me.Setup.Generalfunctions.UpdateProgressBar($"Processing rule {Name} for scenario {Scenario.Name}...", 0, 10, True)
                     Dim iRow As Integer = 0, nRow As Integer = dt.Rows.Count
@@ -77,19 +107,33 @@ Public Class clsRule
                         Dim totalWeight As Double = 0
                         Dim ResultSum As Double = 0
 
+                        'debugging section
+                        'Debug.Print("Processing row " & iRow)
+                        If fid = 82741 Then Stop 'Broekvelden Vettebroek
+
                         For Each Component As clsEquationComponent In EquationComponents
-                            Dim FieldName As String = Component.Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper)
-                            Dim Transformation As String = Component.Benchmark.TransformationPerScenario.Item(Scenario.Name.Trim.ToUpper)
-                            Dim value As Object = row(FieldName)
-                            If Transformation <> "" Then
-                                If Not Setup.Generalfunctions.EvaluateSecondDegreePolynomeExpression(Transformation, value, value) Then
-                                    Throw New Exception($"Error evaluating mathematical expression {Transformation}. Please check if your equation obeys the a * x^2 + b * x + c format convention.")
+
+                            ' Get the field name and transformation for this component. If not found, see if a constant value was assigned
+                            Dim value As Object = Nothing
+                            If Component.Benchmark.FieldNamesPerScenario.ContainsKey(Scenario.Name.Trim.ToUpper) Then
+                                Dim FieldName As String = Component.Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper)
+                                Dim Transformation As String = Component.Benchmark.TransformationPerScenario.Item(Scenario.Name.Trim.ToUpper)
+                                value = row(FieldName)
+                                If IsDBNull(value) Then value = Component.Benchmark.nullValue
+                                If Transformation <> "" Then
+                                    If Not Setup.Generalfunctions.EvaluateSecondDegreePolynomeExpression(Transformation, value, value) Then
+                                        Throw New Exception($"Error evaluating mathematical expression {Transformation}. Please check if your equation obeys the a * x^2 + b * x + c format convention.")
+                                    End If
                                 End If
+                            ElseIf Component.Benchmark.ConstantsPerScenario.ContainsKey(Scenario.Name.Trim.ToUpper) Then
+                                value = Component.Benchmark.ConstantsPerScenario.Item(Scenario.Name.Trim.ToUpper)
                             End If
 
-                            totalWeight += Component.Weight
-                            Component.Result = Component.Benchmark.getResult(value) * Component.Weight
-                            ResultSum += Component.Result
+                            If Not IsDBNull(value) Then
+                                totalWeight += Component.Weight
+                                Component.Result = Component.Benchmark.getResult(value) * Component.Weight
+                                ResultSum += Component.Result
+                            End If
                         Next
 
                         For Each Component As clsEquationComponent In EquationComponents
@@ -177,9 +221,18 @@ Public Class clsRule
         'returns the field names that are needed for this rule and scenario
         Dim Fields As New List(Of String)
         For Each Benchmark As clsBenchmark In Benchmarks.Values
-            Fields.Add(Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper))
+            If Benchmark.FieldNamesPerScenario.ContainsKey(Scenario.Name.Trim.ToUpper) Then Fields.Add(Benchmark.FieldNamesPerScenario.Item(Scenario.Name.Trim.ToUpper))
         Next
         Return Fields
+    End Function
+
+    Public Function getConstantsForScenario(Scenario As clsScenario) As List(Of Double)
+        'returns the constants that are needed for this rule and scenario
+        Dim Constants As New List(Of Double)
+        For Each Benchmark As clsBenchmark In Benchmarks.Values
+            If Benchmark.ConstantsPerScenario.ContainsKey(Scenario.Name.Trim.ToUpper) Then Constants.Add(Benchmark.ConstantsPerScenario.Item(Scenario.Name.Trim.ToUpper))
+        Next
+        Return Constants
     End Function
 
 End Class

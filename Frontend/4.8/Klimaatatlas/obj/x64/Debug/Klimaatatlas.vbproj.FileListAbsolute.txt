@@ -13,7 +13,6 @@ C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\bin\x64\Debug\EntityFramework.S
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\bin\x64\Debug\Newtonsoft.Json.xml
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\bin\x64\Debug\System.Data.SQLite.xml
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.vbproj.AssemblyReference.cache
-C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.vbproj.SuggestedBindingRedirects.cache
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Interop.MapWinGIS.dll
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.vbproj.ResolveComReference.cache
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.frmAbout.resources
@@ -22,7 +21,6 @@ C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.frmS
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.Resources.resources
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.vbproj.GenerateResource.cache
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.vbproj.CoreCompileInputs.cache
-C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.vbproj.CopyComplete
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.exe
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.xml
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaatatlas.pdb
@@ -34,3 +32,4 @@ C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\bin\x64\Debug\System.Buffers.xm
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\bin\x64\Debug\System.Memory.xml
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\bin\x64\Debug\System.Numerics.Vectors.xml
 C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\bin\x64\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\GITHUB\klimaatatlas\Frontend\4.8\Klimaatatlas\obj\x64\Debug\Klimaata.D1061F6D.Up2Date

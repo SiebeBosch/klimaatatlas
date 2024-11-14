@@ -64,7 +64,7 @@
 				{"scenario":"K2100", "field":"waterdiept", "transformation":"1683.6*EXP(-0.578*x)"}			
 			],
 			"classification": "continuous",
-			"valuesRange": [{"value":0,"verdict":0},{"value":1400,"verdict":1}],
+			"valuesRange": [{"value":0,"verdict":0},{"value":1683.6,"verdict":1}],
 		}
 	],
       "resultsfield": "bm",

@@ -369,20 +369,39 @@ Public Class clsKlimaatatlas
                 For Each benchmarkItem As JObject In benchmarksArray
                     Dim classification As enmClassificationType = If(benchmarkItem("classification").ToString().ToLower() = "discrete", enmClassificationType.Discrete, enmClassificationType.Continuous)
 
+                    'determine the data filter in order to select the records on which our rule applies
+                    Dim filterStr As String = If(benchmarkItem.ContainsKey("filter"), benchmarkItem("filter").ToString(), "*")
+
+                    Dim filter As New clsFilter
+                    filter.parseFromString(filterStr)
+                    myRule.filter = filter
+
                     ' Process fieldnames per scenario
                     Dim fieldNamesPerScenario As New Dictionary(Of String, String)
                     Dim transformationPerScenario As New Dictionary(Of String, String)
-                    For Each fieldnameItem As JObject In CType(benchmarkItem("fieldname"), JArray)
-                        Dim scenario As String = fieldnameItem("scenario").ToString()
-                        Dim field As String = fieldnameItem("field").ToString()
-                        fieldNamesPerScenario.Add(scenario.Trim.ToUpper, field)
+                    If benchmarkItem("fieldname") IsNot Nothing AndAlso TypeOf benchmarkItem("fieldname") Is JArray Then
+                        For Each fieldnameItem As JObject In CType(benchmarkItem("fieldname"), JArray)
+                            Dim scenario As String = fieldnameItem("scenario").ToString()
+                            Dim field As String = fieldnameItem("field").ToString()
+                            fieldNamesPerScenario.Add(scenario.Trim.ToUpper, field)
 
-                        Dim transformation As String = If(fieldnameItem.ContainsKey("transformation"), fieldnameItem("transformation").ToString(), String.Empty)
-                        transformationPerScenario.Add(scenario.Trim.ToUpper, transformation)
-                    Next
+                            Dim transformation As String = If(fieldnameItem.ContainsKey("transformation"), fieldnameItem("transformation").ToString(), String.Empty)
+                            transformationPerScenario.Add(scenario.Trim.ToUpper, transformation)
+                        Next
+                    End If
+
+                    'Process constants per scenario
+                    Dim constantsPerScenario As New Dictionary(Of String, Double)
+                    If benchmarkItem("constants") IsNot Nothing AndAlso TypeOf benchmarkItem("constants") Is JArray Then
+                        For Each constantItem As JObject In CType(benchmarkItem("constants"), JArray)
+                            Dim scenario As String = constantItem("scenario").ToString()
+                            Dim constant As Double = Convert.ToDouble(constantItem("value"))
+                            constantsPerScenario.Add(scenario.Trim.ToUpper, constant)
+                        Next
+                    End If
 
                     'create the benchmark class instance
-                    Dim myBenchmark As New clsBenchmark(Me, benchmarkItem("name").ToString(), fieldNamesPerScenario, transformationPerScenario, classification)
+                    Dim myBenchmark As New clsBenchmark(Me, benchmarkItem("name").ToString(), fieldNamesPerScenario, transformationPerScenario, constantsPerScenario, classification)
 
                     'process the classification of our benchmark
                     If classification = enmClassificationType.Discrete Then
@@ -398,6 +417,9 @@ Public Class clsKlimaatatlas
                         Next
                         myBenchmark.SetContinuousClasses(valuesRange)
                     End If
+
+                    'set the replacement value for DbNull values
+                    If benchmarkItem.ContainsKey("nullValue") Then myBenchmark.NullValue = Convert.ToDouble(benchmarkItem("nullvalue"))
 
                     ' Add the created benchmark to the current rule
                     myRule.Benchmarks.Add(myBenchmark.Name.Trim.ToUpper(), myBenchmark)
@@ -473,9 +495,9 @@ Public Class clsKlimaatatlas
                 myRule.Filter = New clsFilter()
                 If rule.ContainsKey("filter") Then
                     Dim myFilter As JObject = rule("filter")
-                    myRule.Filter.fieldType = CType([Enum].Parse(GetType(enmFieldType), myFilter("field_type").ToString()), enmFieldType)
-                    myRule.Filter.evaluation = myFilter("evaluation")
-                    myRule.Filter.value = myFilter("value")
+                    myRule.Filter.filterFieldType = CType([Enum].Parse(GetType(enmFieldType), myFilter("field_type").ToString()), enmFieldType)
+                    myRule.Filter.filterOperator = myFilter("evaluation")
+                    myRule.Filter.filterOperand = myFilter("value")
                 End If
 
                 'set the rule's execution methodology

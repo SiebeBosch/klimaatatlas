@@ -143,11 +143,11 @@ Public Class clsOldRule
     Public Function ApplyFilter(ByRef featureindexList As List(Of Integer)) As Boolean
         'this function applies the rule's filter to the dataset and adjusts the list of feature indices accordingly
         Try
-            Dim Field As clsSQLiteField = InputDataset.getFieldByType(Filter.fieldType)
-            Select Case Filter.evaluation
+            Dim Field As clsSQLiteField = InputDataset.getFieldByType(Filter.filterFieldType)
+            Select Case Filter.filterOperator
                 Case Is = "="
                     'checks if the value is equal to the filter value
-                    featureindexList.RemoveAll(Function(featureidx) Not InputDataset.Values(Field.fieldIdx, featureidx) = Filter.value)
+                    featureindexList.RemoveAll(Function(featureidx) Not InputDataset.Values(Field.fieldIdx, featureidx) = Filter.filterOperand)
             End Select
 
             Return True
